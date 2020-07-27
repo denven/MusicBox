@@ -1,0 +1,11 @@
+// flex layout functions
+@mixin flex-align(
+	$direction: row,
+	$main-axis: space-between,
+	$cross-axis: center
+) {
+	display: flex;
+	flex-direction: $direction;
+	justify-content: $main-axis;
+	align-items: $cross-axis;
+}
