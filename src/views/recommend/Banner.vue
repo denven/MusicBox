@@ -15,7 +15,9 @@
 				</el-carousel-item>
 			</el-carousel>
 		</div>
-		<div class="download"></div>
+		<div class="download">
+			<span>PC Mac Android IOS WP</span>
+		</div>
 	</div>
 </template>
 
@@ -59,8 +61,10 @@ export default {
 .banners .carousel {
 	// flex: 1;
 	width: 100%;
+	background-size: 6000px;
 	img {
 		width: $banner-img-width;
+		height: $banner-height;
 	}
 }
 
@@ -69,6 +73,8 @@ export default {
 	height: $banner-height;
 	background: url("https://s2.music.126.net/style/web2/img/index/download.png?cd16c2604966d52e53a40d1aae974c9a")
 		no-repeat top center;
+	color: white;
+	padding-top: 252px;
 }
 
 // .el-carousel__item:nth-child(2n) {
