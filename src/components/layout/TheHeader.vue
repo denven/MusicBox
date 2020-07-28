@@ -1,14 +1,12 @@
 <template>
 	<div class="header">
 		<div class="left">
-			<div class="icon screen-buttons">
-				<i class="icon el-icon-s-home"></i>
-				<i class="icon el-icon-full-screen"></i>
-			</div>
 			<div class="icon nav-buttons">
+				<i class="icon el-icon-s-home"></i>
+				<i class="icon el-icon-full-screen" @click="toggleFullScreen"></i>
+				<i class="icon el-icon-arrow-down"></i>
 				<i class="icon el-icon-arrow-left"></i>
 				<i class="icon el-icon-arrow-right"></i>
-				<i class="icon el-icon-arrow-down"></i>
 			</div>
 		</div>
 		<div class="right">
@@ -21,7 +19,42 @@
 </template>
 
 <script>
-export default {};
+export default {
+	methods: {
+		toggleFullScreen() {
+			const ele = document.documentElement;
+
+			/* Enter Fullscrenn */
+			if (ele.requestFullscreen) {
+				ele.requestFullscreen();
+			} else if (ele.mozRequestFullScreen) {
+				/* Firefox */
+				ele.mozRequestFullScreen();
+			} else if (ele.webkitRequestFullscreen) {
+				/* Chrome, Safari and Opera */
+				ele.webkitRequestFullscreen();
+			} else if (ele.msRequestFullscreen) {
+				/* IE/Edge */
+				ele.msRequestFullscreen();
+			}
+
+			/* Exit fullscreen */
+			if (document.fullscreenElement) {
+				document.exitFullscreen();
+			} else if (document.mozCancelFullScreen) {
+				/* Firefox */
+				document.mozCancelFullScreen();
+			} else if (document.webkitExitFullscreen) {
+				/* Chrome, Safari and Opera */
+				console.log("Chrome, Safari and Opera");
+				document.webkitExitFullscreen();
+			} else if (document.msExitFullscreen) {
+				/* IE/Edge */
+				document.msExitFullscreen();
+			}
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>
@@ -38,10 +71,9 @@ export default {};
 	.left {
 		@include flex-align();
 		width: $header-left-width;
-		.screen-buttons,
 		.nav-buttons {
-			width: 50px;
-			@include flex-align(row, space-around, center);
+			width: 180px;
+			@include flex-align(row, space-between, center);
 		}
 	}
 
