@@ -1,0 +1,108 @@
+<template>
+	<div class="card">
+		<div class="card-image">
+			<span class="card-caption">
+				{{ caption }}
+			</span>
+			<img :src="picUrl" />
+			<div class="played-info">
+				<div class="played-count">
+					<i class="iconfont icon-artist"> </i>
+					<span>{{ calcPlayedCount(playCount) }}</span>
+				</div>
+				<i class="iconfont icon-artist play-music"> </i>
+			</div>
+		</div>
+
+		<p class="card-desc">{{ songName }}</p>
+	</div>
+</template>
+
+<script>
+export default {
+	name: "SectionCard",
+	props: ["caption", "picUrl", "playCount", "songName"],
+	methods: {
+		calcPlayedCount(count) {
+			if (count >= 1000 * 1000) {
+				return (count / 1000000).toFixed(3).slice(0, 3) + `M`;
+			} else if (count >= 1000) {
+				return (
+					parseInt(count / 1000)
+						.toFixed(3)
+						.slice(0, 3) + `K`
+				);
+			}
+
+			return count;
+		},
+	},
+};
+</script>
+
+<style lang="scss" scoped>
+@import "@/assets/styles/mixin.scss";
+
+.card {
+	width: 200px;
+	margin: 20px 0;
+	position: relative;
+	overflow: hidden;
+
+	.card-image {
+		position: relative;
+
+		.card-caption {
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding: 5px;
+			color: white;
+			text-align: left;
+			line-height: 25px;
+			max-height: 50px;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			background: rgba(0, 0, 0, 0.3);
+			border-radius: 5px 5px 0 0;
+		}
+
+		.played-info {
+			color: red;
+			position: absolute;
+			bottom: 3px;
+			left: 0px;
+			width: 100%;
+			padding: 0 20px;
+			height: 50px;
+			background: rgba(0, 0, 0, 0.3);
+			border-radius: 0 0 5px 5px;
+
+			@include flex-align(row, space-between);
+
+			.played-count {
+				@include flex-align(row, flex-start);
+				width: 70%;
+			}
+
+			i {
+				font-size: 25px;
+			}
+
+			.play-music {
+				cursor: pointer;
+			}
+		}
+
+		img {
+			width: 200px;
+			height: 200px;
+			border-radius: 5px;
+		}
+	}
+
+	.card-desc {
+		padding: 5px;
+	}
+}
+</style>
