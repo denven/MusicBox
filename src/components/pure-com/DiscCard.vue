@@ -85,26 +85,34 @@ export default {
 				content: "";
 				position: absolute;
 				z-index: 1;
-				width: 226px;
-				height: 200px;
 				top: 0;
 				left: 0;
 				bottom: 0;
 				right: 0;
 				background: url(../../assets/images/disc.png) no-repeat top center;
 				background-size: 226px 200px;
-				opacity: 0.2;
+				// opacity: 0.7;
 			}
 
 			img {
-				width: 83%;
-				// height: 200px;
 				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-46%, -50%);
+				z-index: 2;
+				width: 194px;
+				height: 194px;
+				top: 3px;
+				left: 23px;
 				border-radius: 50%;
 			}
+
+			// img {
+			// 	width: 83%;
+			// 	// height: 200px;
+			// 	position: absolute;
+			// 	top: 50%;
+			// 	left: 50%;
+			// 	transform: translate(-46%, -50%);
+			// 	border-radius: 50%;
+			// }
 		}
 	}
 
