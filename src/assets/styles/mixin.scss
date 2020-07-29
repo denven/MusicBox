@@ -2,10 +2,19 @@
 @mixin flex-align(
 	$direction: row,
 	$main-axis: space-between,
-	$cross-axis: center
+	$cross-axis: center,
+	$wrap: no-wrap
 ) {
 	display: flex;
 	flex-direction: $direction;
 	justify-content: $main-axis;
 	align-items: $cross-axis;
+	flex-wrap: $wrap;
+}
+
+@mixin grid-align-cards() {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 200px);
+	place-content: space-between;
+	column-gap: 20px;
 }
