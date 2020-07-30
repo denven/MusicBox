@@ -12,9 +12,9 @@
 	flex-wrap: $wrap;
 }
 
-@mixin grid-align-cards() {
+@mixin grid-align-cards($cell-width: 200px) {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, 200px);
+	grid-template-columns: repeat(auto-fill, $cell-width);
 	place-content: space-between;
 	column-gap: 20px;
 }

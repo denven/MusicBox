@@ -2,15 +2,31 @@
 	<div class="header">
 		<div class="left">
 			<div class="icon nav-buttons">
-				<i class="icon el-icon-s-home"></i>
-				<i class="icon el-icon-full-screen" @click="toggleFullScreen"></i>
+				<i
+					class="icon el-icon-s-home"
+					@click="gotoHomePage"
+					title="Return to Home"
+				></i>
+				<i
+					class="icon el-icon-full-screen"
+					@click="toggleFullScreen"
+					title="Toogle Fullscrenn"
+				></i>
 				<i class="icon el-icon-arrow-down"></i>
 				<i class="icon el-icon-arrow-left"></i>
 				<i class="icon el-icon-arrow-right"></i>
 			</div>
 		</div>
 		<div class="right">
-			<input class="search" type="text" />
+			<div class="search-wrapper">
+				<input
+					class="search"
+					@click.enter="search"
+					type="text"
+					placeholder="Song Artist Album"
+				/>
+				<i class="icon el-icon-search" title="Return to Home"></i>
+			</div>
 			<div class="theme">
 				<i class="icon el-icon-s-custom"></i>
 			</div>
@@ -21,6 +37,12 @@
 <script>
 export default {
 	methods: {
+		gotoHomePage() {
+			// if ("/recommend" === this.$route.path) {
+			// 	return;
+			// }
+			this.$router.push(`/`);
+		},
 		toggleFullScreen() {
 			const ele = document.documentElement;
 
@@ -63,7 +85,9 @@ export default {
 
 .header {
 	@include flex-align();
-
+	position: fixed;
+	z-index: 10000;
+	width: 100vw;
 	height: $header-height;
 	padding: 0 20px;
 	background-color: #c33f18;
@@ -74,6 +98,7 @@ export default {
 		.nav-buttons {
 			width: 180px;
 			@include flex-align(row, space-between, center);
+			cursor: pointer;
 		}
 	}
 
@@ -86,8 +111,23 @@ export default {
 		color: white;
 	}
 
-	.search {
-		border-radius: 10px;
+	.search-wrapper {
+		position: relative;
+
+		input {
+			height: 1.5rem;
+			padding-left: 30px;
+			border-radius: 20px;
+			border: none;
+			outline: none;
+		}
+
+		i {
+			position: absolute;
+			color: grey;
+			top: 5px;
+			left: 10px;
+		}
 	}
 }
 </style>

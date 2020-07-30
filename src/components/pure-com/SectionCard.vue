@@ -15,6 +15,7 @@
 		</div>
 
 		<p class="card-desc">{{ songName }}</p>
+		<slot></slot>
 	</div>
 </template>
 
@@ -48,6 +49,7 @@ export default {
 	margin: 20px 0;
 	position: relative;
 	overflow: hidden;
+	font-size: 14px;
 
 	.card-image {
 		position: relative;
@@ -59,7 +61,7 @@ export default {
 			padding: 5px;
 			color: white;
 			text-align: left;
-			line-height: 25px;
+			line-height: 20px;
 			max-height: 50px;
 			text-overflow: ellipsis;
 			overflow: hidden;
@@ -102,7 +104,11 @@ export default {
 	}
 
 	.card-desc {
-		padding: 5px;
+		padding: 7px;
+		width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 }
 </style>

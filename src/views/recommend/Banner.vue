@@ -8,7 +8,7 @@
 				:interval="5000"
 				arrow="always"
 				height="281px"
-				@change="changeBanner"
+				@change="onBannerChange"
 			>
 				<el-carousel-item v-for="slide in banners" :key="slide.url">
 					<img :src="slide.imageUrl" />
@@ -34,12 +34,12 @@ export default {
 
 	async created() {
 		let { data } = await getBannerCarousel();
-		console.log(data);
+		// console.log(`banner:`, data);
 		this.banners = data.banners;
 	},
 
 	methods: {
-		changeBanner(index) {
+		onBannerChange(index) {
 			this.bgImageUrl = this.banners[index].imageUrl + `?imageView&blur=40x20`;
 		},
 	},
@@ -48,10 +48,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/variables.scss";
+@import "@/assets/styles/universal.scss";
 @import "@/assets/styles/mixin.scss";
 
 .banners {
-	width: 90%;
 	height: $banner-height;
 	margin: 0 auto;
 

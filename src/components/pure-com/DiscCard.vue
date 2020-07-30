@@ -89,7 +89,7 @@ export default {
 				left: 0;
 				bottom: 0;
 				right: 0;
-				background: url(../../assets/images/disc.png) no-repeat top center;
+				background: url(../../assets/images/disc-clear.png) no-repeat top center;
 				background-size: 226px 200px;
 				// opacity: 0.7;
 			}
@@ -114,6 +114,16 @@ export default {
 			// 	border-radius: 50%;
 			// }
 		}
+	}
+
+	&:nth-child(even) .disc::after {
+		background: url(../../assets/images/disc.png) no-repeat top center;
+		background-size: 226px 200px;
+	}
+
+	&:nth-child(odd) .disc::after {
+		background: url(../../assets/images/disc-clear.png) no-repeat top center;
+		background-size: 226px 200px;
 	}
 
 	.card-desc {
