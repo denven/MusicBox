@@ -38,8 +38,38 @@
 			</el-table>
 		</el-tab-pane>
 
-		<el-tab-pane label="Artists" name="artists">Artists</el-tab-pane>
-		<el-tab-pane label="Albums" name="albums">Albums</el-tab-pane>
+		<el-tab-pane label="Artists" name="artists">
+			<el-table
+				:data="artists.data"
+				stripe
+				style="width: 100%"
+				:row-class-name="setRowIndex"
+			>
+				<el-table-column type="index" widh="100px"> </el-table-column>
+				<el-table-column prop="name" label="Artist"> </el-table-column>
+				<el-table-column prop="picUrl" label="picUrl"> </el-table-column>
+				<el-table-column prop="img1v1Url" label="img1v1Url"> </el-table-column>
+			</el-table>
+		</el-tab-pane>
+
+		<!-- { id, name, artist, picUrl, blurPicUrl, briefDesc, company, publishTime, }; -->
+		<el-tab-pane label="Albums" name="albums">
+			<el-table
+				:data="albums.data"
+				stripe
+				style="width: 100%"
+				:row-class-name="setRowIndex"
+			>
+				<el-table-column type="index" widh="100px"> </el-table-column>
+				<el-table-column prop="name" label="Album"> </el-table-column>
+				<el-table-column prop="artist" label="Artist"> </el-table-column>
+				<el-table-column prop="picUrl" label="picUrl"> </el-table-column>
+				<el-table-column prop="blurPicUrl" label="blurPicUrl">
+				</el-table-column>
+				<el-table-column prop="publishTime" label="publishTime">
+				</el-table-column>
+			</el-table>
+		</el-tab-pane>
 
 		<!-- id, name, cover: coverImgUrl, creator: creator.nickname, track: track.name,
 		trackCount, description, bookCount, playCount, -->
@@ -62,7 +92,23 @@
 				</el-table-column>
 			</el-table>
 		</el-tab-pane>
-		<el-tab-pane label="Podcasts" name="podcasts">Podcasts</el-tab-pane>
+
+		<!-- { id, name, djname, category, nickname, categoryId, createdTime, desc, picUrl, subCount,
+		rcmdText, } -->
+		<el-tab-pane label="Podcasts" name="podcasts">
+			<el-table
+				:data="podcasts.data"
+				stripe
+				style="width: 100%"
+				:row-class-name="setRowIndex"
+			>
+				<el-table-column type="index" widh="100px"> </el-table-column>
+				<el-table-column prop="name" label="Channel"> </el-table-column>
+				<el-table-column prop="djname" label="Creator"> </el-table-column>
+				<el-table-column prop="category" label="Category"> </el-table-column>
+				<el-table-column prop="picUrl" label="picUrl"> </el-table-column>
+			</el-table>
+		</el-tab-pane>
 	</el-tabs>
 </template>
 
@@ -77,7 +123,10 @@ export default {
 			keywords: "",
 			tracks: { count: 0, data: [] },
 			videos: { count: 0, data: [] },
+			artists: { count: 0, data: [] },
+			albums: { count: 0, data: [] },
 			playlists: { count: 0, data: [] },
+			podcasts: { count: 0, data: [] },
 		};
 	},
 
@@ -111,7 +160,6 @@ export default {
 			// offset : 偏移数量，用于分页 , 如 : 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
 			// type: 搜索类型；默认为 1 即单曲 , 取值意义 :
 			// 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
-			console.log("search by type:----------", typeName);
 			let type = 1,
 				limit = 30,
 				offset = 0;
@@ -201,14 +249,71 @@ export default {
 						playCount,
 					};
 				});
+			} else if (typeName === "artists") {
+				this.artists.count = data.result.artistCount;
+				this.artists.data = data.result.artists.map((artist) => {
+					let { id, name, picUrl, img1v1Url, mvSize, albumSize } = artist;
+					return { id, name, picUrl, img1v1Url, mvSize, albumSize };
+				});
+			} else if (typeName === "albums") {
+				console.log(typeName);
+				this.albums.count = data.result.albumCount;
+				this.albums.data = data.result.albums.map((album) => {
+					let {
+						id,
+						name,
+						artist,
+						picUrl,
+						blurPicUrl,
+						briefDesc,
+						company,
+						publishTime,
+					} = album;
+					return {
+						id,
+						name,
+						artist: artist.name,
+						picUrl,
+						blurPicUrl,
+						briefDesc,
+						company,
+						publishTime,
+					};
+				});
+			} else if (typeName === "podcasts") {
+				console.log(typeName);
+				this.podcasts.count = data.result.djRadiosCount;
+				this.podcasts.data = data.result.djRadios.map((channel) => {
+					let {
+						id,
+						dj,
+						name,
+						category,
+						categoryId,
+						createdTime,
+						desc,
+						picUrl,
+						subCount,
+						rcmdText,
+					} = channel;
+					return {
+						id,
+						djname: dj.nickname,
+						name,
+						category,
+						categoryId,
+						createdTime,
+						desc,
+						picUrl,
+						subCount,
+						rcmdText,
+					};
+				});
 			}
-			// } else if (typeName === "artists") {
-			// } else if (typeName === "albums") {
-			// } else if (typeName === "podcasts") {
 			// } else if (typeName === "all") {
 			// }
 
-			console.log(typeName, data);
+			// console.log(typeName, data);
 		},
 	},
 
