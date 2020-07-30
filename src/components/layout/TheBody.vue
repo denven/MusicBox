@@ -41,6 +41,7 @@
 
 		<div class="content">
 			<!-- :key is added for forcing updating view when search submisions are more than once -->
+			<!-- but the keywords should be different to activate a new search -->
 			<router-view
 				class="content-vertical-align"
 				:key="$route.path + $route.query.keywords"
@@ -64,10 +65,9 @@ export default {
 
 .body {
 	width: 100vw;
-	// height: calc(100vh - #{$header-height});
-	height: 100vh;
+	height: calc(100vh - #{$header-height});
 	background-color: beige;
-	padding: 50px 0;
+	padding-top: $header-height;
 
 	@include flex-align(row, space-between, flex-start);
 

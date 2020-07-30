@@ -77,7 +77,7 @@ export default {
 				document.mozCancelFullScreen();
 			} else if (document.webkitExitFullscreen) {
 				/* Chrome, Safari and Opera */
-				console.log("Chrome, Safari and Opera");
+				// console.log("Chrome, Safari and Opera");
 				document.webkitExitFullscreen();
 			} else if (document.msExitFullscreen) {
 				/* IE/Edge */
