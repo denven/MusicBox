@@ -2,7 +2,11 @@
 	<div class="header">
 		<div class="left">
 			<div class="icon nav-buttons">
-				<div class="logo" @click="gotoHomePage" title="Return to Home"></div>
+				<div
+					class="logo"
+					@keyup.enter="gotoHomePage"
+					title="Return to Home"
+				></div>
 				<!-- <i
 					class="icon el-icon-s-home"
 					@click="gotoHomePage"
@@ -22,8 +26,9 @@
 			<div class="search-wrapper">
 				<input
 					class="search"
-					@click.enter="search"
+					@keyup.enter="search"
 					type="text"
+					v-model="keywords"
 					placeholder="Song Artist Album"
 				/>
 				<i class="icon el-icon-search" title="Return to Home"></i>
@@ -37,6 +42,12 @@
 
 <script>
 export default {
+	data() {
+		return {
+			keywords: "",
+		};
+	},
+
 	methods: {
 		gotoHomePage() {
 			this.$router.push(`/`);
@@ -71,6 +82,17 @@ export default {
 			} else if (document.msExitFullscreen) {
 				/* IE/Edge */
 				document.msExitFullscreen();
+			}
+		},
+		search() {
+			if (this.keywords) {
+				this.$router.push(`/search?keywords=${this.keywords}`);
+			} else {
+				this.$message({
+					type: "warning",
+					message: "Please type some keywords to search!",
+					duration: 3000,
+				});
 			}
 		},
 	},

@@ -40,8 +40,11 @@
 		</ul>
 
 		<div class="content">
-			<!-- <Recommend class="content-vertical-align" /> -->
-			<router-view class="content-vertical-align" />
+			<!-- :key is added for forcing updating view when search submisions are more than once -->
+			<router-view
+				class="content-vertical-align"
+				:key="$route.path + $route.query.keywords"
+			/>
 		</div>
 	</div>
 </template>
