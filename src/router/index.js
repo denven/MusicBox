@@ -22,10 +22,10 @@ Vue.use(VueRouter);
 // but we need re-submission for searching feature, so this isn't the right solution
 // The final solution is add key on the router-view tag:
 //         <router-view :key="$route.path + $route.query.keywords"
-// const originalPush = VueRouter.prototype.push;
-// VueRouter.prototype.push = function push(location) {
-// 	return originalPush.call(this, location).catch((err) => err);
-// };
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+	return originalPush.call(this, location).catch((err) => err);
+};
 
 const routes = [
 	{
