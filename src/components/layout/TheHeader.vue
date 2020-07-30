@@ -2,11 +2,12 @@
 	<div class="header">
 		<div class="left">
 			<div class="icon nav-buttons">
-				<i
+				<div class="logo" @click="gotoHomePage" title="Return to Home"></div>
+				<!-- <i
 					class="icon el-icon-s-home"
 					@click="gotoHomePage"
 					title="Return to Home"
-				></i>
+				></i> -->
 				<i
 					class="icon el-icon-full-screen"
 					@click="toggleFullScreen"
@@ -38,9 +39,6 @@
 export default {
 	methods: {
 		gotoHomePage() {
-			// if ("/recommend" === this.$route.path) {
-			// 	return;
-			// }
 			this.$router.push(`/`);
 		},
 		toggleFullScreen() {
@@ -99,6 +97,14 @@ export default {
 			width: 180px;
 			@include flex-align(row, space-between, center);
 			cursor: pointer;
+		}
+
+		.logo {
+			width: 25px;
+			height: 25px;
+			background: url("../../assets/images/logo.png") no-repeat top center;
+			background-size: 25px;
+			border-radius: 50%;
 		}
 	}
 
