@@ -58,6 +58,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
      - Styled aside Navigation list
      - Styled Main Content Area
 
-3. July 29th: Added routes for Home and Recommend page
+3. July 29th: Added routes for Home and Featured page
 
-4. July 30th: Added vuex store, implemented search feature, footer audio play feature
+4. July 30th:
+
+   - Added vuex store, implemented search feature, footer audio play feature
+   - Added leadboards table, search result table
+
+5.
