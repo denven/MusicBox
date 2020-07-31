@@ -16,6 +16,13 @@ export const getBannerCarousel = () => axios.post(`/banner?type=0`);
 export const getSearchResults = (params) =>
 	axios.get(`/search`, { params: params });
 
+// get leadboards, use `/playlislt/detail?id=xxxx` instead of `/toplist?id=xxxx`
+// export const getToplist = () => axios.get(`/toplist?id=19723756`);
+// why it returns the same playlist?
+export const getToplist = (params) =>
+	axios.get(`/playlist/detail`, { params: params });
+
+// get song media file link address
 export const getAudioUrl = (songId) => {
 	return axios.get(`song/url`, { params: { id: songId, br: 999000 } });
 };

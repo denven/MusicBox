@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<SectionTitle :title="'Recommended'">
+		<SectionTitle :title="'Featured Playlists'">
 			<i class="iconfont icon-rebang"> </i>
 		</SectionTitle>
 
@@ -22,7 +22,7 @@
 import SectionTitle from "@/components/pure-com/SectionTitle";
 import SectionCard from "@/components/pure-com/SectionCard";
 
-import { getRecommendList } from "@/network/request";
+import { getFeaturedList } from "@/network/request";
 
 export default {
 	data() {
@@ -37,7 +37,7 @@ export default {
 	},
 
 	async created() {
-		let { data } = await getRecommendList();
+		let { data } = await getFeaturedList();
 		// console.log(`toplist`, data.result);
 		this.toplist = data.result;
 	},

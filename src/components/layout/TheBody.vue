@@ -3,35 +3,48 @@
 		<ul class="nav">
 			<!-- Use iconfont icons -->
 			<li class="nav-item">
-				<router-link to="/recommend">
-					<i class="iconfont icon-rebang"> Recommend </i>
+				<!-- 0.Discover Music contains playlists, albums, leadboards -->
+				<router-link to="/featured">
+					<i class="iconfont icon-rebang"> Featured </i>
 				</router-link>
 			</li>
+
+			<!-- 1. Leadboards by category id -->
 			<li class="nav-item">
-				<router-link to="/leadboard">
+				<router-link to="/leadboards">
 					<i class="iconfont icon-paihangbang1"> Leadboard </i>
 				</router-link>
 			</li>
+
+			<!-- 2. Playlists by category -->
 			<li class="nav-item">
-				<router-link to="/categories">
-					<i class="iconfont icon-gedan"> Categories </i>
+				<router-link to="/playlists">
+					<i class="iconfont icon-gedan"> Playlists </i>
 				</router-link>
 			</li>
+
+			<!-- 3. Singers -->
 			<li class="nav-item">
 				<router-link to="/artists">
 					<i class="iconfont icon-artist"> All Artists </i>
 				</router-link>
 			</li>
+
+			<!-- 4. MVs -->
 			<li class="nav-item">
 				<router-link to="/music-videos">
 					<i class="iconfont icon-ziyuan"> Music Videos </i>
 				</router-link>
 			</li>
+
+			<!-- 5. Albums -->
 			<li class="nav-item">
-				<router-link to="/latest-releases">
-					<i class="iconfont icon-ziyuan"> Latest Releases </i>
+				<router-link to="/albums">
+					<i class="iconfont icon-ziyuan"> Albums</i>
 				</router-link>
 			</li>
+
+			<!-- 6. Podcasts Channels -->
 			<li class="nav-item">
 				<router-link to="/podcasts">
 					<i class="iconfont icon-podcast"> Podcasts </i>
@@ -51,10 +64,10 @@
 </template>
 
 <script>
-// import Recommend from "@/views/recommend/";
+// import Featured from "@/views/featured/";
 
 export default {
-	// components: { Recommend },
+	// components: { Featured },
 };
 </script>
 

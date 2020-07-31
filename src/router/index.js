@@ -4,8 +4,8 @@ import VueRouter from "vue-router";
 // for lazy loading
 // this generates a separate chunk (componnet.[hash].js) for this route
 // which is lazy-loaded when the route is visited.
-const showRecommend = () =>
-	import(/* webpackChunkName: "recommend" */ "@/views/recommend/");
+const showFeatured = () =>
+	import(/* webpackChunkName: "featured" */ "@/views/featured/");
 
 const showSearchResults = () =>
 	import(/* webpackChunkName: "search" */ "@/views/search/");
@@ -13,7 +13,7 @@ const showSearchResults = () =>
 //const showLatestReleases = () =>
 //	import(/* webpackChunkName: "latest-release" */ "views/latest-releases/");
 
-const showHomePage = showRecommend;
+const showHomePage = showFeatured;
 
 Vue.use(VueRouter);
 
@@ -39,9 +39,9 @@ const routes = [
 		component: showSearchResults,
 	},
 	{
-		path: "/recommend",
-		name: "Recommend",
-		component: showRecommend,
+		path: "/featured",
+		name: "Featured",
+		component: showFeatured,
 	},
 	// {
 	// 	path: "/latest-releases",

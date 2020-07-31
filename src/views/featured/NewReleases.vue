@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<SectionTitle :title="'Latest Releases'">
+		<SectionTitle :title="'New Realeases'">
 			<i class="iconfont icon-ziyuan"> </i>
 		</SectionTitle>
 
@@ -37,7 +37,7 @@ export default {
 
 	async created() {
 		let { data } = await getNewReleases();
-		console.log(`new albums`, data.albums);
+		// console.log(`new albums`, data.albums);
 		this.newAlbums = data.albums;
 	},
 };

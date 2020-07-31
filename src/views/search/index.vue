@@ -143,7 +143,7 @@ export default {
 		},
 
 		async playAudio({ index }) {
-			const { data: audio } = await getAudioUrl(this.trackData[index].id);
+			const { data: audio } = await getAudioUrl(this.tracks.data[index].id);
 			if (!audio.data[0].url) {
 				return this.$message.error(
 					"This track is only available to VIP user！"
@@ -256,7 +256,6 @@ export default {
 					return { id, name, picUrl, img1v1Url, mvSize, albumSize };
 				});
 			} else if (typeName === "albums") {
-				console.log(typeName);
 				this.albums.count = data.result.albumCount;
 				this.albums.data = data.result.albums.map((album) => {
 					let {
@@ -281,7 +280,6 @@ export default {
 					};
 				});
 			} else if (typeName === "podcasts") {
-				console.log(typeName);
 				this.podcasts.count = data.result.djRadiosCount;
 				this.podcasts.data = data.result.djRadios.map((channel) => {
 					let {
@@ -320,7 +318,7 @@ export default {
 	watch: {
 		// Update data when user inputs new keywords
 		keywords() {
-			console.log(this.keywords);
+			// console.log(this.keywords);
 			this.searchByType(this.activeTab);
 		},
 
