@@ -1,54 +1,190 @@
 <template>
-	<div class="audio-wrapper">
+	<div class="audio-player">
 		<!-- The original audio element: donot use attribute `controls` -->
-		<!--
-			size="#4.50MB"
-			duration="#01:57"
-			filename="#Launch_Kan R. Gao.mp3"
-			-->
-		<!-- <audio ref="audio" @play="play" @pause="pause" controls> -->
-		<audio :src="musicUrl" ref="audio"></audio>
+		<audio
+			:src="musicUrl"
+			@pause="paused"
+			@play="played"
+			autoplay
+			ref="audio"
+		></audio>
 
 		<!-- Add new contents to override the H5 auido tag's controls -->
-		<div class="audio-left" @click="play">
-			<img id="audioPlayer" src="../../assets/images/play.png" />
-		</div>
-		<div class="audio-right">
-			<p style="max-width: 536px;">Launch_Kan R. Gao.mp3</p>
-			<div class="progress-bar-bg" id="progressBarBg">
-				<span id="progressDot"></span>
-				<div class="progress-bar" id="progressBar"></div>
+		<!-- Part 1: Left, for audio information, text description 30% width -->
+		<div class="audio-info">Current Music</div>
+
+		<!-- Part 2: Middle, controls and play progress bar, 50% width, minimum width: 300px? -->
+		<!-- This part is divided into 3 parts: buttons(fixed width), progress bar, time(fixed width) -->
+		<div class="play-controls">
+			<div class="play-button" @click="controlPlay">
+				<img
+					v-if="!isplaying"
+					class="control-button"
+					src="../../assets/images/play.png"
+				/>
+				<img
+					v-else
+					class="control-button"
+					src="../../assets/images/pause.png"
+				/>
 			</div>
-			<div class="audio-time">
-				<span class="audio-length-current" id="audioCurTime">00:00</span>
-				<span class="audio-length-total">01:57</span>
+
+			<!-- A wrapper added as el-progress uses relative position -->
+			<div class="progress-bar">
+				<!-- the percentage is only updated by change the property value -->
+				<!-- we need an internal event or timer to trigger the calculation of percentage -->
+
+				<el-slider v-model="percentage" :step="1" @change="seekAudio">
+				</el-slider>
+				<!-- <el-progress
+					:percentage="percentage"
+					:color="progressColor"
+					:stroke-width="4"
+					:show-text="false"
+				></el-progress> -->
+			</div>
+
+			<div class="played-time" v-if="duration > 0">
+				<span>{{ timeString }}</span>
 			</div>
 		</div>
+
+		<!-- Part 3: Right part, Volume adjustment...etc, fixed width: 200px? -->
+		<div class="right-part">Volume</div>
 	</div>
 </template>
 
 <script>
-export default {
-	methods: {
-		play() {
-			if (!this.audio.src) {
-				return;
-			}
-			this.audio.play();
-		},
+import { convertSecToMinutes } from "@/common/helpers";
 
-		pause() {
-			this.$refs.audio.pause();
-		},
+export default {
+	data() {
+		return {
+			isplaying: false,
+			percentage: 0,
+			progressColor: "#409eff",
+			// this property needs to be initialized at mounted() instead of defining it as a computed property
+			audio: this.$refs.audio,
+			duration: 0,
+			timeString: "",
+			timer: null,
+		};
 	},
 
-	watch: {},
+	methods: {
+		async play() {
+			if (!this.audio) {
+				console.log("Music is not ready yet...");
+				return;
+			}
+
+			// calling audio.play() or audio.pause() won't trigger event
+			// wo we need assign this.isplaying value after the call
+			try {
+				await this.audio.play();
+				this.isplaying = true;
+			} catch (error) {
+				console.log("Target resource is not playable!");
+			}
+		},
+
+		async pause() {
+			try {
+				await this.audio.pause();
+				this.isplaying = false;
+			} catch (error) {
+				console.log("Failed to pause the music playing!");
+			}
+		},
+
+		played() {
+			this.isplaying = true;
+		},
+
+		paused() {
+			this.isplaying = false;
+		},
+
+		seekAudio() {
+			this.currentTime = Math.min((this.percentage * this.duration) / 100);
+			this.audio.currentTime = this.currentTime;
+		},
+
+		// Click button to play or pause
+		controlPlay() {
+			if (!this.audio) return;
+			console.log(this.$refs.audio.duration, this.$refs.audio.currentTime);
+
+			if (this.audio.src) {
+				if (this.isplaying) {
+					this.pause();
+				} else {
+					this.play();
+				}
+			}
+		},
+
+		// percentage() {
+		// 	let value = 0;
+
+		// 	try {
+		// 		if (this.audio.duration > 0) value = parseInt(this.audio.duration);
+
+		// 		console.log(value);
+		// 	} catch (error) {
+		// 		console.log("Audio is not ready!");
+		// 	}
+
+		// 	return Math.min(value, 100);
+		// },
+	},
+
+	mounted() {
+		// console.log("mounted:", this.$refs, this.$refs.audio);
+		this.audio = this.$refs.audio;
+
+		this.timer = setInterval(() => {
+			if (!isNaN(this.audio.duration)) {
+				this.currentTime = this.audio.currentTime;
+				this.duration = this.audio.duration;
+				this.percentage = Math.ceil((100 * this.currentTime) / this.duration);
+
+				this.timeString =
+					convertSecToMinutes(this.currentTime) +
+					"/" +
+					convertSecToMinutes(this.duration);
+				// console.log(this.percentage);
+			}
+		}, 1000);
+	},
+
+	beforeDestroy() {
+		this.timer = null;
+	},
 
 	computed: {
-		// Return $refs.audio to make it as local property, then we can use this.audio
-		audio() {
-			return this.$refs.audio;
-		},
+		// Return $refs.audio to make it as a local property, then we can use this.audio
+		// audio() {
+		// 	// the audio element is not mounted here when there is no music attached, it's undefined
+		// 	// and it will not be updated even when this.$refs.audio has a valid source, why?
+		// 	console.log("computed auido:", this.$refs.audio);
+		// 	if (!this.$store.state.audioUrl) {
+		// 		return this.$refs.audio;
+		// 	} else {
+		// 		return "undefined";
+		// 	}
+		// },
+
+		// duration() {
+		// 	console.log("duration:", this.$refs.audio);
+		// 	if (!this.$refs.audio) return 0;
+		// 	return this.$refs.audio.duration;
+		// },
+
+		// currentTime() {
+		// 	return convertMsToMinutes(this.$refs.audio.currentTime);
+		// },
+
 		musicUrl() {
 			console.log(this.$store.state.audioUrl);
 			// To call this.$refs.audio.play(); is not allowed, because play() is a async call.
@@ -57,98 +193,95 @@ export default {
 			// this.audio.play();
 			return this.$store.state.audioUrl;
 		},
+
+		// played progress percentage
+		// percentage() {
+
+		// 	console.log("calculate");
+		// 	if (this.audio && this.audio.duration > 0) {
+		// 		console.log(this.audio.currentTime);
+
+		// 		let value = parseInt(
+		// 			(100 * this.audio.currentTime) / this.audio.duration
+		// 		);
+		// 		console.log(value);
+
+		// 		return value;
+		// 	}
+
+		// 	return 20;
+		// },
+	},
+
+	watch: {
+		currentTime() {
+			return this.audio.currentTime;
+		},
+
+		duration() {
+			console.log("duration:", this.$refs.audio);
+			if (!this.$refs.audio) return 0;
+			return this.$refs.audio.duration;
+		},
 	},
 };
 </script>
 
 <style lang="scss">
 @import "@/assets/styles/variables.scss";
+@import "@/assets/styles/mixin.scss";
+
 /* #fcfcfc is the default audio element tag color */
-.audio-wrapper {
-	background-color: black;
-	margin: 10px auto;
-	max-width: 670px;
-	height: 50px;
-	border: 1px solid #e0e0e0;
-	color: #3e3e3e;
-}
+.audio-player {
+	// background-color: black;
+	margin: 100px auto;
+	padding: 0 20px;
 
-.audio-left {
-	float: left;
-	text-align: center;
-	width: 18%;
-	height: 100%;
-}
+	width: 100%;
+	// height: 200px;
+	height: $header-height;
+	// color: white;
+	border: 5px solid red;
+	@include flex-align(row, space-bewteen, center);
 
-.audio-left img {
-	width: 40px;
-	position: relative;
-	top: 15px;
-	margin: 0;
-	display: initial; /* 解除与app的样式冲突 */
-	cursor: pointer;
-}
+	.audio-info {
+		width: 400px;
+	}
 
-.audio-right {
-	margin-right: 2%;
-	float: right;
-	width: 80%;
-	height: 100%;
-}
+	.play-controls {
+		flex: 1;
+		border: 1px solid blue;
+		min-width: 350px;
+		padding: 0 5px;
+		// background-color: black;
+		// color: white;
+		@include flex-align(row, space-between, center);
 
-.audio-right p {
-	font-size: 15px;
-	height: 35%;
-	margin: 12px 0 2px 0;
+		.play-button {
+			width: 30px;
+			height: 30px;
+			cursor: pointer;
+		}
 
-	/* 歌曲名称只显示在一行，超出部分显示为省略号 */
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	max-width: 243px; /* 要适配小屏幕手机，所以最大宽度先设小一点，后面js根据屏幕大小重新设置 */
-}
+		.progress-bar {
+			flex: 1;
+			padding: 0 5px;
+		}
 
-.progress-bar-bg {
-	background-color: #d9d9d9;
-	position: relative;
-	height: 2px;
-	cursor: pointer;
-}
+		.played-time {
+			min-width: 80px;
+			font-size: 14px;
+		}
 
-.progress-bar {
-	background-color: #649fec;
-	width: 0;
-	height: 2px;
-}
+		img {
+			width: 100%;
+			display: block；;
+		}
+	}
 
-.progress-bar-bg span {
-	content: " ";
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	-moz-border-radius: 50%;
-	-webkit-border-radius: 50%;
-	background-color: #3e87e8;
-	position: absolute;
-	left: 0;
-	top: 50%;
-	margin-top: -5px;
-	margin-left: -5px;
-	cursor: pointer;
-}
-
-.audio-time {
-	overflow: hidden;
-	margin-top: 1px;
-}
-
-.audio-length-total {
-	float: right;
-	font-size: 12px;
-}
-
-.audio-length-current {
-	float: left;
-	font-size: 12px;
+	.right-part {
+		width: 400px;
+		text-align-last: right;
+	}
 }
 </style>

@@ -10,4 +10,17 @@ const convertMsToMinutes = (duration) => {
 	return `${min}:${sec}`;
 };
 
-module.exports = { convertMsToMinutes };
+const convertSecToMinutes = (duration) => {
+	let min = parseInt(duration / 60);
+	if (min < 10) {
+		min = "0" + min;
+	}
+
+	let sec = parseInt(duration % 60);
+	if (sec < 10) {
+		sec = "0" + sec;
+	}
+	return `${min}:${sec}`;
+};
+
+module.exports = { convertMsToMinutes, convertSecToMinutes };
