@@ -27,6 +27,6 @@ export const getAudioUrl = (songId) => {
 	return axios.get(`song/url`, { params: { id: songId, br: 999000 } });
 };
 
-export const getRecommendList = () => axios.get(`/personalized?limit=15`);
+export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
 
 export const getNewReleases = () => axios.get(`/album/newest`);

@@ -21,6 +21,7 @@ export default {
 };
 </script>
 
+// scoped is needed here
 <style lang="scss" scoped>
 @import "@/assets/styles/mixin.scss";
 
