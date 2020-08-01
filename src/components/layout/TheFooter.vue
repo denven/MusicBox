@@ -5,7 +5,9 @@
 			:src="musicUrl"
 			@pause="paused"
 			@play="played"
+			@timeupdate="updateProgress"
 			autoplay
+			loop
 			ref="audio"
 		></audio>
 
@@ -34,7 +36,7 @@
 				<!-- the percentage is only updated by change the property value -->
 				<!-- we need an internal event or timer to trigger the calculation of percentage -->
 
-				<el-slider v-model="percentage" :step="1" @change="seekAudio">
+				<el-slider v-model="percentage" :step="0.1" @change="seekAudio">
 				</el-slider>
 				<!-- <el-progress
 					:percentage="percentage"
@@ -67,7 +69,7 @@ export default {
 			audio: this.$refs.audio,
 			duration: 0,
 			timeString: "",
-			timer: null,
+			// timer: null,
 		};
 	},
 
@@ -110,6 +112,16 @@ export default {
 			this.audio.currentTime = this.currentTime;
 		},
 
+		updateProgress() {
+			this.currentTime = this.audio.currentTime;
+			this.duration = this.audio.duration;
+			this.percentage = Math.ceil((100 * this.currentTime) / this.duration);
+			this.timeString =
+				convertSecToMinutes(this.currentTime) +
+				"/" +
+				convertSecToMinutes(this.duration);
+		},
+
 		// Click button to play or pause
 		controlPlay() {
 			if (!this.audio) return;
@@ -143,24 +155,24 @@ export default {
 		// console.log("mounted:", this.$refs, this.$refs.audio);
 		this.audio = this.$refs.audio;
 
-		this.timer = setInterval(() => {
-			if (!isNaN(this.audio.duration)) {
-				this.currentTime = this.audio.currentTime;
-				this.duration = this.audio.duration;
-				this.percentage = Math.ceil((100 * this.currentTime) / this.duration);
+		// this.timer = setInterval(() => {
+		// 	if (!isNaN(this.audio.duration)) {
+		// 		this.currentTime = this.audio.currentTime;
+		// 		this.duration = this.audio.duration;
+		// 		this.percentage = Math.ceil((100 * this.currentTime) / this.duration);
 
-				this.timeString =
-					convertSecToMinutes(this.currentTime) +
-					"/" +
-					convertSecToMinutes(this.duration);
-				// console.log(this.percentage);
-			}
-		}, 1000);
+		// 		this.timeString =
+		// 			convertSecToMinutes(this.currentTime) +
+		// 			"/" +
+		// 			convertSecToMinutes(this.duration);
+		// 		// console.log(this.percentage);
+		// 	}
+		// }, 1000);
 	},
 
-	beforeDestroy() {
-		this.timer = null;
-	},
+	// beforeDestroy() {
+	// 	this.timer = null;
+	// },
 
 	computed: {
 		// Return $refs.audio to make it as a local property, then we can use this.audio
