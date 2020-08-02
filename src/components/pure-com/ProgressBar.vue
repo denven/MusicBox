@@ -1,162 +1,265 @@
 <template>
-	<div class="progress-bar" ref="progressbar">
-		<div class="progress-line" :style="updateBarPosition" ref="progressline">
-			<div
-				class="progress-dot"
-				:style="updateDotPosition"
-				ref="progressdot"
-			></div>
-		</div>
-	</div>
+  <div class="progress-bar" v-model @click="mouseClick" ref="progressbar">
+    <div class="progress-line" :style="updateBarPosition" ref="progressline">
+      <div class="progress-dot" :style="updateDotPosition" @mousedown="mouseDown" ref="progressdot"></div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-	name: "ProgressBar",
-	props: {
-		dotSize: {
-			type: Number,
-			default: 6,
-			required: false,
-			validator: (val) => {
-				return val >= 6;
-			},
-		},
-		barHeight: {
-			type: Number,
-			default: 4,
-			required: false,
-			validator: (val) => {
-				return val >= 4;
-			},
-		},
-		barColor: {
-			type: String,
-			default: "red",
-			required: false,
-		},
-		barBgColor: {
-			type: String,
-			default: "black",
-			required: false,
-		},
-		percent: {
-			type: Number,
-			default: 0,
-			required: false,
-		},
-	},
+  name: "ProgressBar",
+  props: {
+    dotSize: {
+      type: Number,
+      default: 6,
+      required: false,
+      validator: val => {
+        return val >= 6;
+      }
+    },
+    barHeight: {
+      type: Number,
+      default: 4,
+      required: false,
+      validator: val => {
+        return val >= 4;
+      }
+    },
+    barColor: {
+      type: String,
+      default: "red",
+      required: false
+    },
+    barBgColor: {
+      type: String,
+      default: "black",
+      required: false
+    },
+    percent: {
+      type: Number,
+      default: 0,
+      required: false
+    }
+  },
 
-	data() {
-		return {
-			curBarWidth: 0,
-			curDotPosition: 0,
-			barTotalWidth: 10,
-		};
-	},
+  data() {
+    return {
+      curBarWidth: 0,
+      barTotalWidth: 10,
+      curDotPosition: {
+        isDrag: false,
+        left: 0,
+        xOffest: 0
+      }
+    };
+  },
 
-	methods: {
-		loadCustomizedStyles() {
-			if (this.barHeight > this.dotSize) {
-				this.dotSize = this.barHeight; //not suggested to override default prop
-			}
+  methods: {
+    loadCustomizedStyles() {
+      if (this.barHeight > this.dotSize) {
+        this.dotSize = this.barHeight; //not suggested to override default prop
+      }
 
-			this.percentage = this.percent; // default percentage
+      this.percentage = this.percent; // default percentage
 
-			this.$refs.progressline.style.height = this.barHeight + "px";
+      this.$refs.progressline.style.height = this.barHeight + "px";
 
-			this.$refs.progressdot.style.width = this.dotSize + "px";
-			this.$refs.progressdot.style.height = this.dotSize + "px";
+      this.$refs.progressdot.style.width = this.dotSize + "px";
+      this.$refs.progressdot.style.height = this.dotSize + "px";
 
-			this.$refs.progressdot.style.top =
-				"-" + (this.dotSize - this.barHeight) / 2 + "px";
-			this.$refs.progressbar.style.borderRadius = this.barHeight / 2 + "px";
-			this.$refs.progressline.style.borderRadiusLeft =
-				this.barHeight / 2 + "px";
-			this.$refs.progressline.style.borderBottomLeftRadius =
-				this.barHeight / 2 + "px";
+      this.$refs.progressdot.style.top =
+        "-" + (this.dotSize - this.barHeight) / 2 + "px";
+      this.$refs.progressbar.style.borderRadius = this.barHeight / 2 + "px";
+      this.$refs.progressline.style.borderRadiusLeft =
+        this.barHeight / 2 + "px";
+      this.$refs.progressline.style.borderBottomLeftRadius =
+        this.barHeight / 2 + "px";
 
-			this.$refs.progressline.style.borderTopLeftRadius =
-				this.barHeight / 2 + "px";
+      this.$refs.progressline.style.borderTopLeftRadius =
+        this.barHeight / 2 + "px";
 
-			this.$refs.progressbar.style.backgroundColor = this.barBgColor;
-			this.$refs.progressline.style.backgroundColor = this.barColor;
-			this.$refs.progressdot.style.backgroundColor = this.barColor;
+      this.$refs.progressbar.style.backgroundColor = this.barBgColor;
+      this.$refs.progressline.style.backgroundColor = this.barColor;
+      this.$refs.progressdot.style.backgroundColor = this.barColor;
 
-			this.curBarWidth = this.dotSize / 2;
-			this.curDotPosition = 0;
+      this.curBarWidth = this.dotSize / 2;
 
-			// console.log(this.$refs.progressbar.getBoundingClientRect());
-			this.barTotalWidth = this.$refs.progressbar.getBoundingClientRect().width;
-		},
+      // console.log(this.$refs.progressbar.getBoundingClientRect());
+      this.barTotalWidth = this.$refs.progressbar.getBoundingClientRect().width;
+    },
 
-		screenResize() {
-			console.log("Resizing");
-			try {
-				let barTotalWidth = this.$refs.progressbar.getBoundingClientRect()
-					.width;
-				this.barTotalWidth = barTotalWidth;
-			} catch (error) {
-				console.log("Cannot get elements reference");
-			}
-		},
-	},
+    removePxInString(str) {
+      if (!str) {
+        return 0;
+      }
 
-	computed: {
-		percentage() {
-			// console.log("new percentage", this.percent);
-			return this.percent;
-		},
+      return parseInt(str.slice(0, str.length - 2));
+    },
 
-		// change progress-line styles by progress percentage
-		updateBarPosition() {
-			let dotRadius = this.dotSize / 2;
-			// console.log("computed bar postion:", dotRadius, this.barTotalWidth);
+    mouseDown(event) {
+      console.log("start dragging............");
 
-			// Cannot assign this.dotCurPosition =, it will generate side-effects
-			// let barTotalWidth = this.getBarTotalWidth();
-			let dotCurPosition =
-				((this.barTotalWidth - this.dotSize) * this.percentage) / 100;
-			let barCurrentWidth = dotCurPosition + dotRadius;
+      this.curDotPosition.isDrag = true;
 
-			return {
-				width: barCurrentWidth + "px",
-			};
-		},
+      const dotEle = this.$refs.progressdot;
 
-		// change progress-dot styles
-		updateDotPosition() {
-			let dotCurPosition =
-				((this.barTotalWidth - this.dotSize) * this.percentage) / 100;
+      this.curDotPosition.left = this.removePxInString(dotEle.style.left);
+      console.log("Initial left: ", this.curDotPosition.left);
+      this.curDotPosition.xOffest = event.touches
+        ? event.touches[0].clientX
+        : event.clientX;
 
-			return {
-				left: dotCurPosition + "px",
-			};
-		},
-	},
+      event.preventDefault();
+      event.stopPropagation();
+    },
 
-	mounted() {
-		this.loadCustomizedStyles();
-		window.addEventListener("resize", this.screenResize, false);
-	},
+    mouseMove(event) {
+      // only response when dot is clicked
+      if (this.curDotPosition.isDrag) {
+        console.log("in dragging...");
+
+        const clientX = event.touches
+          ? event.touches[0].clientX
+          : event.clientX;
+
+        let xDistance = clientX - this.curDotPosition.xOffest;
+        let maxValidDistance = this.barTotalWidth - this.dotSize;
+        let xMaxValidRight = maxValidDistance - this.curDotPosition.left;
+        let xMaxValidLeft = this.curDotPosition.left;
+
+        console.log(
+          "clientX",
+          clientX,
+          "XOffset:",
+          this.curDotPosition.xOffest,
+          "moved XDistance:",
+          xDistance,
+          "ValidMaxDistance:",
+          maxValidDistance,
+          "xMaxValidRight:",
+          xMaxValidRight,
+          "xMaxValidLeft",
+          xMaxValidLeft,
+          "OriginLeft:",
+          this.curDotPosition.left
+        );
+
+        if (xDistance > 0) {
+          if (xDistance > xMaxValidRight) {
+            console.log("超出右边界");
+            this.curDotPosition.xOffest += xMaxValidRight;
+            this.curDotPosition.left = maxValidDistance;
+          } else {
+            console.log("合理右移动");
+            this.curDotPosition.xOffest = clientX;
+            console.log("合理右移动", this.curDotPosition.left);
+            this.curDotPosition.left += xDistance;
+            console.log("合理右移动", this.curDotPosition.left, xDistance);
+          }
+        } else {
+          if (xDistance + xMaxValidLeft <= 0) {
+            this.curDotPosition.xOffest -= this.curDotPosition.left;
+            this.curDotPosition.left = 0;
+          } else {
+            this.curDotPosition.xOffest = clientX;
+            this.curDotPosition.left += xDistance;
+          }
+        }
+        console.log("New Left is:", this.curDotPosition.left);
+        this.percent = (
+          (100 * this.curDotPosition.left) /
+          maxValidDistance
+        ).toFixed(2);
+        console.log(
+          this.percent,
+          this.curDotPosition.left,
+          this.curDotPosition.xOffest,
+          maxValidDistance
+        );
+      }
+    },
+
+    mouseUp() {
+      console.log("drag done!");
+      this.curDotPosition.isDrag = false;
+    },
+
+    mouseClick(event) {
+      console.log("CLicked...", event.clientX);
+      let maxValidDistance = this.barTotalWidth - this.dotSize;
+      console.log(this.barTotalWidth, maxValidDistance);
+    },
+
+    screenResize() {
+      try {
+        let barTotalWidth = this.$refs.progressbar.getBoundingClientRect()
+          .width;
+        this.barTotalWidth = barTotalWidth;
+      } catch (error) {
+        console.log("Cannot get elements reference");
+      }
+    }
+  },
+
+  computed: {
+    percentage() {
+      console.log("new percentage", this.percent);
+      return this.percent;
+    },
+
+    // change progress-line styles by progress percentage
+    updateBarPosition() {
+      let dotRadius = this.dotSize / 2;
+      // console.log("computed bar postion:", dotRadius, this.barTotalWidth);
+
+      // Cannot assign this.dotCurPosition =, it will generate side-effects
+      // let barTotalWidth = this.getBarTotalWidth();
+      let dotCurPosition =
+        ((this.barTotalWidth - this.dotSize) * this.percentage) / 100;
+      let barCurrentWidth = dotCurPosition + dotRadius;
+
+      return {
+        width: barCurrentWidth + "px"
+      };
+    },
+
+    // change progress-dot styles
+    updateDotPosition() {
+      let dotCurPosition =
+        ((this.barTotalWidth - this.dotSize) * this.percentage) / 100;
+
+      return {
+        left: dotCurPosition + "px"
+      };
+    }
+  },
+
+  mounted() {
+    this.loadCustomizedStyles();
+    window.addEventListener("resize", this.screenResize, false);
+    document.addEventListener("mousemove", this.mouseMove, false);
+    document.addEventListener("mouseup", this.mouseUp, false);
+  }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 .progress-bar {
-	// margin: 0 auto;
-	// width: 50%;
+  // margin: 0 auto;
+  width: 50%;
 
-	.progress-line {
-		position: relative;
+  .progress-line {
+    position: relative;
 
-		.progress-dot {
-			position: absolute;
-			top: -3px;
-			left: -3px;
-			border-radius: 50%;
-		}
-	}
+    .progress-dot {
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
 }
 </style>
