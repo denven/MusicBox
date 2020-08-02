@@ -50,6 +50,7 @@ export default {
     return {
       curBarWidth: 0,
       barTotalWidth: 10,
+      // changes during dragging(when dot is selected and moved)
       curDotPosition: {
         isDrag: false,
         left: 0,
@@ -100,6 +101,7 @@ export default {
       return parseInt(str.slice(0, str.length - 2));
     },
 
+    // prepare initial position values for latter calculation of dot and bar move
     mouseDown(event) {
       console.log("start dragging............");
 
@@ -117,6 +119,9 @@ export default {
       event.stopPropagation();
     },
 
+    // the purpose is to calculate the new percent value, then the position will be updated
+    // simultaneously by the computed properties(attached to the dot/line style properties)
+    // it also emits a change event with new a value to notify the component user
     mouseMove(event) {
       // only response when dot is clicked
       if (this.curDotPosition.isDrag) {
@@ -194,10 +199,45 @@ export default {
       this.curDotPosition.isDrag = false;
     },
 
+    // Update percent prop here as mouseMove
     mouseClick(event) {
-      console.log("CLicked...", event.clientX);
+      console.log(
+        "CLicked...",
+        event.clientX,
+        this.$refs.progressbar.getBoundingClientRect()
+      );
+      let mouseClientX = event.clientX;
+
+      // this left value is not the dot style.left value.
+      const {
+        x: dotClientX,
+        left: dotLeft
+      } = this.$refs.progressdot.getBoundingClientRect();
+      console.log(
+        "dotX dotLeft, clickX, totalWidth",
+        dotClientX,
+        dotLeft,
+        mouseClientX,
+        this.barTotalWidth
+      );
+
       let maxValidDistance = this.barTotalWidth - this.dotSize;
-      console.log(this.barTotalWidth, maxValidDistance);
+      let oldPercent = this.percent;
+      let dotOldStyleLeft = (oldPercent * maxValidDistance) / 100;
+      let dotNewStyleLeft = dotOldStyleLeft + mouseClientX - dotClientX;
+
+      let newPercent = Math.min(
+        ((100 * dotNewStyleLeft) / maxValidDistance).toFixed(2),
+        100
+      );
+
+      console.log("old and new left", dotOldStyleLeft, dotNewStyleLeft);
+      console.log("old and new percent", oldPercent, newPercent);
+
+      this.percent = newPercent;
+      if (Math.abs(this.percent - oldPercent) > 0.1) {
+        this.$emit("change", this.percent);
+      }
     },
 
     screenResize() {
