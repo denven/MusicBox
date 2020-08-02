@@ -31,20 +31,29 @@
 				/>
 			</div>
 
-			<!-- A wrapper added as el-progress uses relative position -->
-			<div class="progress-bar">
-				<!-- the percentage is only updated by change the property value -->
-				<!-- we need an internal event or timer to trigger the calculation of percentage -->
+			<ProgressBar
+				:dotSize="10"
+				:barHeight="6"
+				:barColor="'green'"
+				:barBgColor="'black'"
+				:percent="percentage"
+			/>
 
-				<el-slider v-model="percentage" :step="0.1" @change="seekAudio">
-				</el-slider>
-				<!-- <el-progress
+			<!-- A wrapper added as el-progress uses relative position -->
+			<!-- <div class="progress-bar"> -->
+			<!-- the percentage is only updated by change the property value -->
+			<!-- we need an internal event or timer to trigger the calculation of percentage -->
+
+			<!-- <el-slider v-model="percentage" :step="0.1" @change="seekAudio">
+				</el-slider> -->
+
+			<!-- <el-progress
 					:percentage="percentage"
 					:color="progressColor"
 					:stroke-width="4"
 					:show-text="false"
 				></el-progress> -->
-			</div>
+			<!-- </div> -->
 
 			<div class="played-time" v-if="duration > 0">
 				<span>{{ timeString }}</span>
@@ -58,8 +67,12 @@
 
 <script>
 import { convertSecToMinutes } from "@/common/helpers";
+import ProgressBar from "@/components/pure-com/ProgressBar";
 
 export default {
+	components: {
+		ProgressBar,
+	},
 	data() {
 		return {
 			isplaying: false,
@@ -115,7 +128,8 @@ export default {
 		updateProgress() {
 			this.currentTime = this.audio.currentTime;
 			this.duration = this.audio.duration;
-			this.percentage = Math.ceil((100 * this.currentTime) / this.duration);
+			this.percentage = (100 * this.currentTime) / this.duration;
+			console.log(this.percentage, "%");
 			this.timeString =
 				convertSecToMinutes(this.currentTime) +
 				"/" +
@@ -277,7 +291,27 @@ export default {
 
 		.progress-bar {
 			flex: 1;
-			padding: 0 5px;
+			margin: 0 5px;
+			background-color: #2c2c2c;
+
+			.progress-line {
+				width: 80%;
+
+				// progress-bar height setting
+				height: 20px;
+				background-color: red;
+				position: relative;
+
+				.progress-dot {
+					position: absolute;
+					background-color: blue;
+					width: 26px;
+					height: 26px;
+					top: -3px;
+					left: 50px;
+					border-radius: 50%;
+				}
+			}
 		}
 
 		.played-time {
