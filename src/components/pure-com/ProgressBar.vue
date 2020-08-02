@@ -86,25 +86,25 @@ export default {
 			this.curBarWidth = this.dotSize / 2;
 			this.curDotPosition = 0;
 
-			console.log(this.$refs.progressbar.getBoundingClientRect());
+			// console.log(this.$refs.progressbar.getBoundingClientRect());
 			this.barTotalWidth = this.$refs.progressbar.getBoundingClientRect().width;
 		},
 
 		screenResize() {
-			let barTotalWidth = this.barTotalWidth;
+			console.log("Resizing");
 			try {
-				barTotalWidth = this.$refs.progressbar.getBoundingClientRect().width;
+				let barTotalWidth = this.$refs.progressbar.getBoundingClientRect()
+					.width;
+				this.barTotalWidth = barTotalWidth;
 			} catch (error) {
-				barTotalWidth = this.barTotalWidth;
 				console.log("Cannot get elements reference");
 			}
-			this.barTotalWidth = barTotalWidth;
 		},
 	},
 
 	computed: {
 		percentage() {
-			console.log("new percentage", this.percent);
+			// console.log("new percentage", this.percent);
 			return this.percent;
 		},
 
@@ -137,7 +137,7 @@ export default {
 
 	mounted() {
 		this.loadCustomizedStyles();
-		document.addEventListener("resize", this.screenResize, false);
+		window.addEventListener("resize", this.screenResize, false);
 	},
 };
 </script>
