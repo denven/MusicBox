@@ -42,7 +42,10 @@ export default {
       required: false
     }
   },
-
+  model: {
+    prop: "percent",
+    event: "change"
+  },
   data() {
     return {
       curBarWidth: 0,
@@ -205,6 +208,7 @@ export default {
   computed: {
     percentage() {
       console.log("new percentage", this.percent);
+      this.$emit("change", this.percent);
       return this.percent;
     },
 
