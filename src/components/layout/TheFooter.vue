@@ -120,13 +120,20 @@ export default {
       this.isplaying = false;
     },
 
-    // Do not assign this.percentage
+    // Do not assign this.percentage directly here as it is a computed property
     seekAudio(newVal) {
       this.percentage = newVal;
-      console.log("New Percentage", this.percentage);
 
-      this.currentTime = Math.min((this.percentage * this.duration) / 100);
+      this.currentTime = (this.percentage * this.duration) / 100;
+      console.log(
+        "New Percentage",
+        this.percentage,
+        this.currentTime,
+        this.duration
+      );
+
       this.audio.currentTime = this.currentTime;
+      this.audio.muted = true; // disable sound when adjusting from progress bar
     },
 
     updateProgress() {
@@ -244,6 +251,7 @@ export default {
 
   watch: {
     currentTime() {
+      console.log(this.audio.currentTime);
       return this.audio.currentTime;
     },
 

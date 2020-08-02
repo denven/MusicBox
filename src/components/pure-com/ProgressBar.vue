@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       curBarWidth: 0,
-      barTotalWidth: 10,
+      barTotalWidth: 0,
       // changes during dragging(when dot is selected and moved)
       curDotPosition: {
         isDrag: false,
@@ -96,6 +96,11 @@ export default {
 
       // console.log(this.$refs.progressbar.getBoundingClientRect());
       this.barTotalWidth = this.$refs.progressbar.getBoundingClientRect().width;
+      console.log(
+        "总宽",
+        this.$refs.progressbar.getBoundingClientRect(),
+        this.barTotalWidth
+      );
     },
 
     removePxInString(str) {
@@ -213,7 +218,7 @@ export default {
       if (this.disabled) return;
 
       console.log(
-        "CLicked...",
+        "Clicked...",
         event.clientX,
         this.$refs.progressbar.getBoundingClientRect()
       );
@@ -232,6 +237,7 @@ export default {
         this.barTotalWidth
       );
 
+      this.barTotalWidth = this.$refs.progressbar.getBoundingClientRect().width;
       let maxValidDistance = this.barTotalWidth - this.dotSize;
       let oldPercent = this.percent;
       let dotOldStyleLeft = (oldPercent * maxValidDistance) / 100;
@@ -256,10 +262,19 @@ export default {
         let barTotalWidth = this.$refs.progressbar.getBoundingClientRect()
           .width;
         this.barTotalWidth = barTotalWidth;
+        console.log("resizing get elements reference");
       } catch (error) {
         console.log("Cannot get elements reference");
       }
     }
+
+    // pageFresh() {
+    //   this.curDotPosition.isDrag = false;
+    //   this.curDotPosition.left = 0;
+    //   this.curDotPosition.xOffest = 0;
+    //   console.log("page refresh");
+    //   this.percent = 0;
+    // }
   },
 
   computed: {
@@ -279,6 +294,15 @@ export default {
         ((this.barTotalWidth - this.dotSize) * this.percentage) / 100;
       let barCurrentWidth = dotCurPosition + dotRadius;
 
+      if (this.percentage === 0)
+        console.log(
+          "updatebarpostion:",
+          this.barTotalWidth,
+          dotCurPosition,
+          dotRadius,
+          barCurrentWidth
+        );
+
       return {
         width: barCurrentWidth + "px"
       };
@@ -296,10 +320,11 @@ export default {
   },
 
   mounted() {
-    this.loadCustomizedStyles();
+    this.loadCustomizedStyles(); // this.barTotalWidth is loaded here
     window.addEventListener("resize", this.screenResize, false);
     document.addEventListener("mousemove", this.mouseMove, false);
     document.addEventListener("mouseup", this.mouseUp, false);
+    // window.addEventListener("beforeunload", this.pageFresh, false);
   }
 };
 </script>
