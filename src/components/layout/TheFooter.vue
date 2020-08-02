@@ -6,6 +6,7 @@
       @pause="paused"
       @play="played"
       @timeupdate="updateProgress"
+      @canplay="prepared"
       autoplay
       loop
       ref="audio"
@@ -29,6 +30,7 @@
         :barColor="'green'"
         :barBgColor="'black'"
         :percent="percentage"
+        :disabled="adjustDisabled"
         @change="seekAudio"
       />
 
@@ -74,7 +76,8 @@ export default {
       // this property needs to be initialized at mounted() instead of defining it as a computed property
       audio: this.$refs.audio,
       duration: 0,
-      timeString: ""
+      timeString: "",
+      adjustDisabled: true
       // timer: null,
     };
   },
@@ -103,6 +106,10 @@ export default {
       } catch (error) {
         console.log("Failed to pause the music playing!");
       }
+    },
+
+    prepared() {
+      this.adjustDisabled = false;
     },
 
     played() {

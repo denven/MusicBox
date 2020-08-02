@@ -40,6 +40,11 @@ export default {
       type: Number,
       default: 0,
       required: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   model: {
@@ -105,6 +110,8 @@ export default {
     mouseDown(event) {
       console.log("start dragging............");
 
+      if (this.disabled) return;
+
       this.curDotPosition.isDrag = true;
 
       const dotEle = this.$refs.progressdot;
@@ -123,6 +130,8 @@ export default {
     // simultaneously by the computed properties(attached to the dot/line style properties)
     // it also emits a change event with new a value to notify the component user
     mouseMove(event) {
+      if (this.disabled) return;
+
       // only response when dot is clicked
       if (this.curDotPosition.isDrag) {
         console.log("in dragging...");
@@ -201,6 +210,8 @@ export default {
 
     // Update percent prop here as mouseMove
     mouseClick(event) {
+      if (this.disabled) return;
+
       console.log(
         "CLicked...",
         event.clientX,
