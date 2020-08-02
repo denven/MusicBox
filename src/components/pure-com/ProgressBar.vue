@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-bar" v-model @click="mouseClick" ref="progressbar">
+  <div class="progress-bar" @click="mouseClick" ref="progressbar">
     <div class="progress-line" :style="updateBarPosition" ref="progressline">
       <div class="progress-dot" :style="updateDotPosition" @mousedown="mouseDown" ref="progressdot"></div>
     </div>
@@ -170,10 +170,16 @@ export default {
           }
         }
         console.log("New Left is:", this.curDotPosition.left);
+        let prePercent = this.percent;
         this.percent = (
           (100 * this.curDotPosition.left) /
           maxValidDistance
         ).toFixed(2);
+
+        // Do not emit too frequently
+        if (Math.abs(this.percent - prePercent) > 0.1) {
+          this.$emit("change", this.percent);
+        }
         console.log(
           this.percent,
           this.curDotPosition.left,
@@ -208,7 +214,6 @@ export default {
   computed: {
     percentage() {
       console.log("new percentage", this.percent);
-      this.$emit("change", this.percent);
       return this.percent;
     },
 
