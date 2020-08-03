@@ -252,9 +252,9 @@ export default {
       console.log("old and new left", dotOldStyleLeft, dotNewStyleLeft);
       console.log("old and new percent", oldPercent, newPercent);
 
-      this.percent = newPercent;
+      // this.percent = newPercent;  //no need to change the prop (not good)
       if (Math.abs(this.percent - oldPercent) > 0.1) {
-        this.$emit("change", this.percent);
+        this.$emit("change", newPercent);
       }
     },
 
@@ -272,7 +272,7 @@ export default {
 
   computed: {
     percentage() {
-      console.log("new percentage", this.percent);
+      // console.log("new percentage", this.percent);
       return this.percent;
     },
 
