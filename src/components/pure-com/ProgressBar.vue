@@ -197,7 +197,8 @@ export default {
 
         // Do not emit too frequently
         if (Math.abs(newPercent - oldPercent) > 0.1) {
-          this.$emit("change", newPercent);
+          // this.$emit("change", newPercent === "0.00" ? 0 : newPercent);
+          this.$emit("change", +newPercent);
         }
         console.log(
           this.percent,
@@ -254,7 +255,8 @@ export default {
 
       // this.percent = newPercent;  //no need to change the prop
       if (Math.abs(newPercent - oldPercent) > 0.1) {
-        this.$emit("change", newPercent);
+        // this.$emit("change", newPercent === "0.00" ? 0 : newPercent);
+        this.$emit("change", +newPercent);
       }
     },
 

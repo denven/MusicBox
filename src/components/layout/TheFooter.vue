@@ -65,8 +65,10 @@
 
     <!-- Part 3: Right part, Volume adjustment...etc, fixed width: 200px? -->
     <div class="right-part">
-      <i v-if="volumeRatio > 0" class="iconfont icon-yinliang"></i>
-      <i v-else class="iconfont icon-jingyin"></i>
+      <div class="volume" @click="toggleMuted">
+        <i v-if="volumeRatio > 0" class="iconfont icon-yinliang"></i>
+        <i v-else class="iconfont icon-jingyin"></i>
+      </div>
 
       <ProgressBar
         :dotSize="12"
@@ -99,7 +101,8 @@ export default {
       timeString: "",
       adjustDisabled: true,
       // timer: null,
-      volumeRatio: 0
+      volumeRatio: 30,
+      volumeMuted: 0
     };
   },
 
@@ -184,8 +187,27 @@ export default {
     },
 
     adjustVolume(percent) {
+      console.log("percent:", percent);
       this.volumeRatio = percent;
-      this.$refs.audio.volume = percent / 100;
+      this.volumeMuted = percent;
+      this.$refs.audio.volume = parseInt(percent / 100);
+    },
+
+    toggleMuted() {
+      if (this.volumeRatio > 0) {
+        this.volumeMuted = this.volumeRatio; // backup position
+        this.volumeRatio = 0; // bar goes to 0
+        this.$refs.audio.volume = 0; // muted
+      } else {
+        if (this.volumeMuted === 0) {
+          this.volumeMuted = 30; // set a default volume
+        }
+        this.volumeRatio = this.volumeMuted; // restore bar position
+        // console.log(this.volumeMuted, this.volumeRatio);
+        this.$refs.audio.volume = this.volumeRatio / 100; // restore volume
+      }
+
+      // console.log(this.volumeRatio);
     }
   },
 
