@@ -20,7 +20,7 @@
       <img :src="song.picUrl" alt />
       <div class="song-info">
         <div>{{song.name ? 'Playing: ' + song.name : ""}}</div>
-        <div>{{song.name ? 'Artist: ' + song.artist : ""}}</div>
+        <div>{{song.artist ? 'Artist: ' + song.artist : ""}}</div>
       </div>
     </div>
 
@@ -28,8 +28,8 @@
     <!-- This part is divided into 3 parts: buttons(fixed width), progress bar, time(fixed width) -->
     <div class="play-controls">
       <div class="play-button" @click="controlPlay">
-        <img v-if="!isplaying" class="control-button" src="../../assets/images/play.png" />
-        <img v-else class="control-button" src="../../assets/images/pause.png" />
+        <i v-if="!isplaying" class="iconfont icon-bofang control-button" />
+        <i v-else class="iconfont icon-stop control-button" />
       </div>
 
       <ProgressBar
@@ -64,7 +64,19 @@
     </div>
 
     <!-- Part 3: Right part, Volume adjustment...etc, fixed width: 200px? -->
-    <div class="right-part">Volume</div>
+    <div class="right-part">
+      <i v-if="volumeRatio > 0" class="iconfont icon-yinliang"></i>
+      <i v-else class="iconfont icon-jingyin"></i>
+
+      <ProgressBar
+        :dotSize="12"
+        :barHeight="4"
+        :barColor="'#c33f18'"
+        :barBgColor="'grey'"
+        :percent="volumeRatio"
+        @change="adjustVolume"
+      />
+    </div>
   </div>
 </template>
 
@@ -85,8 +97,9 @@ export default {
       audio: this.$refs.audio,
       duration: 0,
       timeString: "",
-      adjustDisabled: true
+      adjustDisabled: true,
       // timer: null,
+      volumeRatio: 0
     };
   },
 
@@ -128,7 +141,6 @@ export default {
       this.isplaying = false;
     },
 
-    // Do not assign this.percentage directly here as it is a computed property
     seekAudio(newVal) {
       this.percentage = newVal;
       this.currentTime = (this.percentage * this.duration) / 100;
@@ -169,6 +181,11 @@ export default {
           this.play();
         }
       }
+    },
+
+    adjustVolume(percent) {
+      this.volumeRatio = percent;
+      this.$refs.audio.volume = percent / 100;
     }
   },
 
@@ -228,11 +245,17 @@ export default {
     }
 
     .song-info {
+      width: calc(100% - 40px);
       height: 100%;
       @include flex-align(column, space-around, flex-start);
       padding-left: 10px;
       font-size: 14px;
       text-align: left;
+      div {
+        @include text-ellipsis;
+
+        width: 100%;
+      }
     }
   }
 
@@ -246,8 +269,9 @@ export default {
     @include flex-align(row, space-between, center);
 
     .play-button {
-      width: 30px;
+      width: 40px;
       height: 30px;
+      padding: 0 5px;
       cursor: pointer;
     }
 
@@ -287,9 +311,14 @@ export default {
     }
   }
 
+  i {
+    font-size: 30px;
+  }
+
   .right-part {
-    width: 400px;
+    width: 200px;
     text-align-last: right;
+    @include flex-align(row, flex-end, center);
   }
 }
 </style>
