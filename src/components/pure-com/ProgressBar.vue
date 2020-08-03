@@ -113,8 +113,6 @@ export default {
 
     // prepare initial position values for latter calculation of dot and bar move
     mouseDown(event) {
-      console.log("start dragging............");
-
       if (this.disabled) return;
 
       this.curDotPosition.isDrag = true;
@@ -189,20 +187,23 @@ export default {
           }
         }
         console.log("New Left is:", this.curDotPosition.left);
-        let prePercent = this.percent;
-        this.percent = (
+        let oldPercent = this.percent;
+
+        // this behavior changes the prop value which is not favarable
+        let newPercent = (
           (100 * this.curDotPosition.left) /
           maxValidDistance
         ).toFixed(2);
 
         // Do not emit too frequently
-        if (Math.abs(this.percent - prePercent) > 0.1) {
+        if (Math.abs(newPercent - oldPercent) > 0.1) {
           this.$emit("change", this.percent);
         }
         console.log(
           this.percent,
           this.curDotPosition.left,
           this.curDotPosition.xOffest,
+          newPercent,
           maxValidDistance
         );
       }
@@ -267,14 +268,6 @@ export default {
         console.log("Cannot get elements reference");
       }
     }
-
-    // pageFresh() {
-    //   this.curDotPosition.isDrag = false;
-    //   this.curDotPosition.left = 0;
-    //   this.curDotPosition.xOffest = 0;
-    //   console.log("page refresh");
-    //   this.percent = 0;
-    // }
   },
 
   computed: {
@@ -293,15 +286,6 @@ export default {
       let dotCurPosition =
         ((this.barTotalWidth - this.dotSize) * this.percentage) / 100;
       let barCurrentWidth = dotCurPosition + dotRadius;
-
-      if (this.percentage === 0)
-        console.log(
-          "updatebarpostion:",
-          this.barTotalWidth,
-          dotCurPosition,
-          dotRadius,
-          barCurrentWidth
-        );
 
       return {
         width: barCurrentWidth + "px"
@@ -334,6 +318,7 @@ export default {
 .progress-bar {
   // margin: 0 auto;
   width: 50%;
+  cursor: pointer;
 
   .progress-line {
     position: relative;
@@ -343,7 +328,6 @@ export default {
       top: -3px;
       left: -3px;
       border-radius: 50%;
-      cursor: pointer;
     }
   }
 }

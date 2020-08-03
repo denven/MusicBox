@@ -2,11 +2,13 @@
   <div class="audio-player">
     <!-- The original audio element: donot use attribute `controls` -->
     <audio
-      :src="musicUrl"
+      :src="song.audioUrl"
       @pause="paused"
       @play="played"
       @timeupdate="updateProgress"
       @canplay="prepared"
+      @seeking="seeking"
+      @seeked="seeked"
       autoplay
       loop
       ref="audio"
@@ -14,7 +16,13 @@
 
     <!-- Add new contents to override the H5 auido tag's controls -->
     <!-- Part 1: Left, for audio information, text description 30% width -->
-    <div class="audio-info">Current Music</div>
+    <div class="audio-info">
+      <img :src="song.picUrl" alt />
+      <div class="song-info">
+        <div>{{song.name ? 'Playing: ' + song.name : ""}}</div>
+        <div>{{song.name ? 'Artist: ' + song.artist : ""}}</div>
+      </div>
+    </div>
 
     <!-- Part 2: Middle, controls and play progress bar, 50% width, minimum width: 300px? -->
     <!-- This part is divided into 3 parts: buttons(fixed width), progress bar, time(fixed width) -->
@@ -50,7 +58,7 @@
       ></el-progress>-->
       <!-- </div> -->
 
-      <div class="played-time" v-if="duration > 0">
+      <div class="played-time">
         <span>{{ timeString }}</span>
       </div>
     </div>
@@ -123,27 +131,30 @@ export default {
     // Do not assign this.percentage directly here as it is a computed property
     seekAudio(newVal) {
       this.percentage = newVal;
-
       this.currentTime = (this.percentage * this.duration) / 100;
-      console.log(
-        "New Percentage",
-        this.percentage,
-        this.currentTime,
-        this.duration
-      );
-
       this.audio.currentTime = this.currentTime;
+    },
+
+    seeking() {
       this.audio.muted = true; // disable sound when adjusting from progress bar
+    },
+
+    seeked() {
+      this.audio.muted = false; // unmute when seek compleleted
     },
 
     updateProgress() {
       this.currentTime = this.audio.currentTime;
       this.duration = this.audio.duration;
       this.percentage = (100 * this.currentTime) / this.duration;
-      this.timeString =
-        convertSecToMinutes(this.currentTime) +
-        "/" +
-        convertSecToMinutes(this.duration);
+      if (this.duration > 0) {
+        this.timeString =
+          convertSecToMinutes(this.currentTime) +
+          " / " +
+          convertSecToMinutes(this.duration);
+      } else {
+        this.timeString = `00:00 / 00:00`;
+      }
     },
 
     // Click button to play or pause
@@ -159,94 +170,21 @@ export default {
         }
       }
     }
-
-    // percentage() {
-    // 	let value = 0;
-
-    // 	try {
-    // 		if (this.audio.duration > 0) value = parseInt(this.audio.duration);
-
-    // 		console.log(value);
-    // 	} catch (error) {
-    // 		console.log("Audio is not ready!");
-    // 	}
-
-    // 	return Math.min(value, 100);
-    // },
   },
 
   mounted() {
-    // console.log("mounted:", this.$refs, this.$refs.audio);
     this.audio = this.$refs.audio;
-
-    // this.timer = setInterval(() => {
-    // 	if (!isNaN(this.audio.duration)) {
-    // 		this.currentTime = this.audio.currentTime;
-    // 		this.duration = this.audio.duration;
-    // 		this.percentage = Math.ceil((100 * this.currentTime) / this.duration);
-
-    // 		this.timeString =
-    // 			convertSecToMinutes(this.currentTime) +
-    // 			"/" +
-    // 			convertSecToMinutes(this.duration);
-    // 		// console.log(this.percentage);
-    // 	}
-    // }, 1000);
   },
 
-  // beforeDestroy() {
-  // 	this.timer = null;
-  // },
-
   computed: {
-    // Return $refs.audio to make it as a local property, then we can use this.audio
-    // audio() {
-    // 	// the audio element is not mounted here when there is no music attached, it's undefined
-    // 	// and it will not be updated even when this.$refs.audio has a valid source, why?
-    // 	console.log("computed auido:", this.$refs.audio);
-    // 	if (!this.$store.state.audioUrl) {
-    // 		return this.$refs.audio;
-    // 	} else {
-    // 		return "undefined";
-    // 	}
-    // },
-
-    // duration() {
-    // 	console.log("duration:", this.$refs.audio);
-    // 	if (!this.$refs.audio) return 0;
-    // 	return this.$refs.audio.duration;
-    // },
-
-    // currentTime() {
-    // 	return convertMsToMinutes(this.$refs.audio.currentTime);
-    // },
-
-    musicUrl() {
-      console.log(this.$store.state.audioUrl);
+    song() {
+      console.log(this.$store.state.song);
       // To call this.$refs.audio.play(); is not allowed, because play() is a async call.
       // async call is not allowed in computed properties.
       // this.$refs.audio.play();
       // this.audio.play();
-      return this.$store.state.audioUrl;
+      return this.$store.state.song;
     }
-
-    // played progress percentage
-    // percentage() {
-
-    // 	console.log("calculate");
-    // 	if (this.audio && this.audio.duration > 0) {
-    // 		console.log(this.audio.currentTime);
-
-    // 		let value = parseInt(
-    // 			(100 * this.audio.currentTime) / this.audio.duration
-    // 		);
-    // 		console.log(value);
-
-    // 		return value;
-    // 	}
-
-    // 	return 20;
-    // },
   },
 
   watch: {
@@ -270,24 +208,37 @@ export default {
 
 /* #fcfcfc is the default audio element tag color */
 .audio-player {
-  // background-color: black;
-  margin: 100px auto;
-  padding: 0 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  margin: 0px auto;
+  padding: 5px 20px;
 
   width: 100%;
-  // height: 200px;
   height: $header-height;
-  // color: white;
-  border: 5px solid red;
   @include flex-align(row, space-bewteen, center);
 
   .audio-info {
     width: 400px;
+    height: 100%;
+    color: white;
+
+    @include flex-align(row, flex-start, center);
+    img {
+      width: 40px;
+      border-radius: 2px;
+    }
+
+    .song-info {
+      height: 100%;
+      @include flex-align(column, space-around, flex-start);
+      padding-left: 10px;
+      font-size: 14px;
+      text-align: left;
+    }
   }
 
   .play-controls {
     flex: 1;
-    border: 1px solid blue;
+    // border: 1px solid blue;
     min-width: 350px;
     padding: 0 5px;
     // background-color: black;
@@ -303,7 +254,6 @@ export default {
     .progress-bar {
       flex: 1;
       margin: 0 5px;
-      background-color: #2c2c2c;
 
       .progress-line {
         width: 80%;
@@ -328,6 +278,7 @@ export default {
     .played-time {
       min-width: 80px;
       font-size: 14px;
+      color: white;
     }
 
     img {
