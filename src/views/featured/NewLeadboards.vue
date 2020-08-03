@@ -15,8 +15,8 @@
               <div class="item-wrapper">
                 <span class="name">{{ track.name }}</span>
                 <div class="buttons">
-                  <i class="iconfont icon-rebang" @click="playAudio(track)"></i>
-                  <i class="iconfont icon-rebang"></i>
+                  <i class="iconfont icon-bofang1" @click="playAudio(track)"></i>
+                  <i class="iconfont icon-add1"></i>
                 </div>
               </div>
             </div>
@@ -67,7 +67,7 @@ export default {
 
         const audioUrl = res[0].data.data[0].url;
         const { picUrl } = res[1].data.songs[0].al; //album pic
-        const { name } = track;
+        const { name, artist } = track;
         if (!audioUrl) {
           return this.$message.error(
             "This track is only available to VIP user！"
@@ -75,7 +75,7 @@ export default {
         } else {
           this.$store.state.song = {
             name,
-            artist: "",
+            artist,
             audioUrl,
             picUrl
           };
@@ -110,12 +110,29 @@ export default {
     });
 
     this.leadboards = data;
+
     for (let i = 0; i < 20; i++) {
       this.tableData.push([
-        { name: data[0].tracks[i].name, id: data[0].trackIds[i].id },
-        { name: data[1].tracks[i].name, id: data[1].trackIds[i].id },
-        { name: data[2].tracks[i].name, id: data[2].trackIds[i].id },
-        { name: data[3].tracks[i].name, id: data[3].trackIds[i].id }
+        {
+          name: data[0].tracks[i].name,
+          artist: data[0].tracks[i].al.name,
+          id: data[0].trackIds[i].id
+        },
+        {
+          name: data[1].tracks[i].name,
+          artist: data[1].tracks[i].al.name,
+          id: data[1].trackIds[i].id
+        },
+        {
+          name: data[2].tracks[i].name,
+          artist: data[2].tracks[i].al.name,
+          id: data[2].trackIds[i].id
+        },
+        {
+          name: data[3].tracks[i].name,
+          artist: data[3].tracks[i].al.name,
+          id: data[3].trackIds[i].id
+        }
       ]);
     }
 
@@ -134,27 +151,31 @@ export default {
   .playlist {
     display: flex;
     span.no {
+      align-self: center;
+      justify-self: end;
       width: 20px;
-      padding-right: 10px;
+      margin-right: 10px;
       text-align: right;
+      vertical-align: middle;
     }
 
     .item-wrapper {
       flex: 1;
-      @include flex-align(row, space-between, flex-start);
-      .buttons {
-        visibility: hidden;
-      }
+      @include flex-align(row, space-between, center);
+      // .buttons {
+      //   visibility: hidden;
+      // }
+
       &:hover {
         cursor: pointer;
         .name {
           text-decoration: underline;
         }
-        .buttons {
-          visibility: visible;
-          i {
-            padding: 0 5px;
-          }
+      }
+
+      .buttons {
+        i {
+          padding: 0 5px;
         }
       }
     }
@@ -167,8 +188,8 @@ export default {
   }
 
   .el-table td {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     width: 25%;
   }
 

@@ -1,6 +1,7 @@
 <template>
   <!-- <el-tabs type="border-card"> -->
   <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
+    <!-- First Tab's table list content -->
     <el-tab-pane label="Tracks" name="tracks">
       <el-table
         :data="tracks.data"
@@ -11,7 +12,12 @@
       >
         <!-- <el-table-column prop="no" label="No."> </el-table-column> -->
         <el-table-column type="index" widh="100px"></el-table-column>
-        <el-table-column prop="name" label="Track"></el-table-column>
+        <el-table-column prop="name" label="Track">
+          <template slot-scope="scope">
+            <i class="iconfont icon-bofang"></i>
+            <span style="margin-left: 10px">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="artist" label="Artist"></el-table-column>
         <el-table-column prop="album" label="Album"></el-table-column>
         <el-table-column prop="duration" label="Duration" width="100px"></el-table-column>
@@ -21,7 +27,12 @@
     <el-tab-pane label="Videos" name="videos">
       <el-table :data="videos.data" stripe style="width: 100%" :row-class-name="setRowIndex">
         <el-table-column type="index" widh="100px"></el-table-column>
-        <el-table-column prop="name" label="Track"></el-table-column>
+        <el-table-column prop="name" label="Track">
+          <template slot-scope="scope">
+            <i class="iconfont icon-mv3"></i>
+            <span style="margin-left: 10px">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="artistsNames" label="Artists"></el-table-column>
         <el-table-column prop="briefDesc" label="Description"></el-table-column>
         <el-table-column prop="playCount" label="Played" width="150px"></el-table-column>
@@ -333,8 +344,21 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import "@/assets/styles/variables.scss";
+
 el-tabs {
   background-color: beige !important;
+
+  // el-table-column /deep/ template /deep/ i {
+  //   color: $header-bg-color;
+  //   cursor: pointer;
+  // }
+}
+
+// use this method to make style in effect
+td i {
+  color: $header-bg-color;
+  cursor: pointer;
 }
 </style>
