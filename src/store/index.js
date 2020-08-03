@@ -5,7 +5,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		audioUrl: "",
+		song: {
+			audioUrl: "",
+			picUrl: "",
+			name: "",
+			artist: "",
+		},
 		curSearchTab: "tracks",
 	},
 	mutations: {},

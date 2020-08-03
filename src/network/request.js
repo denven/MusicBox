@@ -24,7 +24,11 @@ export const getToplist = (params) =>
 
 // get song media file link address
 export const getAudioUrl = (songId) => {
-	return axios.get(`song/url`, { params: { id: songId, br: 999000 } });
+	return axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
+};
+
+export const getAudioDetail = (songIds) => {
+	return axios.get(`/song/detail`, { params: { ids: songIds } });
 };
 
 export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
