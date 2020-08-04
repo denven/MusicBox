@@ -70,7 +70,8 @@ export default {
         this.dotSize = this.barHeight; //not suggested to override default prop
       }
 
-      this.percentage = this.percent; // default percentage
+      // Do not assigne value to computed property outisde of computed: {}
+      // this.percentage = this.percent; // default percentage
 
       this.$refs.progressline.style.height = this.barHeight + "px";
 
@@ -199,6 +200,7 @@ export default {
         if (Math.abs(newPercent - oldPercent) > 0.1) {
           // this.$emit("change", newPercent === "0.00" ? 0 : newPercent);
           this.$emit("change", +newPercent);
+          console.log("New percentage sent", oldPercent, +newPercent);
         }
         console.log(
           this.percent,
@@ -257,6 +259,7 @@ export default {
       if (Math.abs(newPercent - oldPercent) > 0.1) {
         // this.$emit("change", newPercent === "0.00" ? 0 : newPercent);
         this.$emit("change", +newPercent);
+        console.log("New percentage sent", oldPercent, +newPercent);
       }
     },
 
@@ -281,7 +284,6 @@ export default {
     // change progress-line styles by progress percentage
     updateBarPosition() {
       let dotRadius = this.dotSize / 2;
-      // console.log("computed bar postion:", dotRadius, this.barTotalWidth);
 
       // Cannot assign this.dotCurPosition =, it will generate side-effects
       // let barTotalWidth = this.getBarTotalWidth();
