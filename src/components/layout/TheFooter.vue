@@ -201,24 +201,13 @@ export default {
 
   computed: {
     song() {
-      console.log(this.$store.state.song);
+      // console.log("Song Observer in computed: ", this.$store.state.song);
       // To call this.$refs.audio.play(); is not allowed, because play() is a async call.
       // async call is not allowed in computed properties.
       // this.$refs.audio.play();
       // this.audio.play();
       return this.$store.state.song;
     }
-
-    // 为什么不响应值变化？所以无法后续进行收集
-    // volumeRatio() {
-    //   if (!this.$refs.audio) {
-    //     console.log("Initial volume");
-    //     return 30;
-    //   }
-    //   console.log("========volume changed:", this.$refs.audio.volume);
-
-    //   return this.$refs.audio.volume;
-    // }
   },
 
   watch: {
