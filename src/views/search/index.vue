@@ -11,7 +11,7 @@
         @row-click="playAudio"
       >
         <!-- <el-table-column prop="no" label="No."> </el-table-column> -->
-        <el-table-column type="index" widh="100px"></el-table-column>
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Track">
           <template slot-scope="scope">
             <i class="iconfont icon-bofang"></i>
@@ -26,8 +26,8 @@
 
     <el-tab-pane label="Videos" name="videos">
       <el-table :data="videos.data" stripe style="width: 100%" :row-class-name="setRowIndex">
-        <el-table-column type="index" widh="100px"></el-table-column>
-        <el-table-column prop="name" label="Track">
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column prop="name" label="Track" width="400px">
           <template slot-scope="scope">
             <i class="iconfont icon-mv3"></i>
             <span style="margin-left: 10px">{{ scope.row.name }}</span>
@@ -42,7 +42,7 @@
 
     <el-tab-pane label="Artists" name="artists">
       <el-table :data="artists.data" stripe style="width: 100%" :row-class-name="setRowIndex">
-        <el-table-column type="index" widh="100px"></el-table-column>
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Artist"></el-table-column>
         <el-table-column prop="picUrl" label="picUrl"></el-table-column>
         <el-table-column prop="img1v1Url" label="img1v1Url"></el-table-column>
@@ -52,7 +52,7 @@
     <!-- { id, name, artist, picUrl, blurPicUrl, briefDesc, company, publishTime, }; -->
     <el-tab-pane label="Albums" name="albums">
       <el-table :data="albums.data" stripe style="width: 100%" :row-class-name="setRowIndex">
-        <el-table-column type="index" widh="100px"></el-table-column>
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Album"></el-table-column>
         <el-table-column prop="artist" label="Artist"></el-table-column>
         <el-table-column prop="picUrl" label="picUrl"></el-table-column>
@@ -65,7 +65,7 @@
     trackCount, description, bookCount, playCount,-->
     <el-tab-pane label="Playlists" name="playlists">
       <el-table :data="playlists.data" stripe style="width: 100%" :row-class-name="setRowIndex">
-        <el-table-column type="index" widh="100px"></el-table-column>
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Name"></el-table-column>
         <el-table-column prop="creator" label="Creator"></el-table-column>
         <el-table-column prop="track" label="Track"></el-table-column>
@@ -79,7 +79,7 @@
     rcmdText, }-->
     <el-tab-pane label="Podcasts" name="podcasts">
       <el-table :data="podcasts.data" stripe style="width: 100%" :row-class-name="setRowIndex">
-        <el-table-column type="index" widh="100px"></el-table-column>
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Channel"></el-table-column>
         <el-table-column prop="djname" label="Creator"></el-table-column>
         <el-table-column prop="category" label="Category"></el-table-column>
@@ -346,15 +346,19 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/variables.scss";
+@import "@/assets/styles/mixin.scss";
 
 el-tabs {
   background-color: beige !important;
-
-  // el-table-column /deep/ template /deep/ i {
-  //   color: $header-bg-color;
-  //   cursor: pointer;
-  // }
 }
+
+/deep/.el-table .cell {
+  @include text-ellipsis;
+}
+
+// td div {
+//   @include text-ellipsis;
+// }
 
 // use this method to make style in effect
 td i {
