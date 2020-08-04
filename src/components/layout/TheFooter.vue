@@ -5,7 +5,7 @@
       :src="song.audioUrl"
       @pause="paused"
       @play="played"
-      @timeupdate="updateProgress"
+      @timeupdate="updatePlayedTime"
       @canplay="prepared"
       @seeking="seeking"
       @seeked="seeked"
@@ -42,22 +42,6 @@
         @change="seekAudio"
       />
 
-      <!-- A wrapper added as el-progress uses relative position -->
-      <!-- <div class="progress-bar"> -->
-      <!-- the percentage is only updated by change the property value -->
-      <!-- we need an internal event or timer to trigger the calculation of percentage -->
-
-      <!-- <el-slider v-model="percentage" :step="0.1" @change="seekAudio">
-      </el-slider>-->
-
-      <!-- <el-progress
-					:percentage="percentage"
-					:color="progressColor"
-					:stroke-width="4"
-					:show-text="false"
-      ></el-progress>-->
-      <!-- </div> -->
-
       <div class="played-time">
         <span>{{ timeString }}</span>
       </div>
@@ -69,13 +53,13 @@
         <i v-if="volumeRatio > 0" class="iconfont icon-yinliang"></i>
         <i v-else class="iconfont icon-jingyin"></i>
       </div>
-
+      <!-- For volume adjustment -->
       <ProgressBar
         :dotSize="12"
         :barHeight="4"
         :barColor="'#c33f18'"
         :barBgColor="'grey'"
-        :percent="volumeRatio"
+        :percent="volumeRatio * 100"
         @change="adjustVolume"
       />
     </div>
@@ -92,17 +76,19 @@ export default {
   },
   data() {
     return {
+      // properties for music play
       isplaying: false,
       percentage: 0,
       progressColor: "#409eff",
       // this property needs to be initialized at mounted() instead of defining it as a computed property
-      audio: this.$refs.audio,
+      audio: "",
       duration: 0,
       timeString: "",
       adjustDisabled: true,
-      // timer: null,
-      volumeRatio: 30,
-      volumeMuted: 0
+      // properties for audio volume adjustment
+      volumeRatio: 1,
+      volumeMuted: 0,
+      currentTime: 0
     };
   },
 
@@ -143,7 +129,7 @@ export default {
     paused() {
       this.isplaying = false;
     },
-
+    // response to play bar adjustment
     seekAudio(newVal) {
       this.percentage = newVal;
       this.currentTime = (this.percentage * this.duration) / 100;
@@ -158,7 +144,8 @@ export default {
       this.audio.muted = false; // unmute when seek compleleted
     },
 
-    updateProgress() {
+    // reponse to audio play process changes
+    updatePlayedTime() {
       this.currentTime = this.audio.currentTime;
       this.duration = this.audio.duration;
       this.percentage = (100 * this.currentTime) / this.duration;
@@ -186,28 +173,25 @@ export default {
       }
     },
 
+    // when getting a percent from progress bar
     adjustVolume(percent) {
-      console.log("percent:", percent);
-      this.volumeRatio = percent;
-      this.volumeMuted = percent;
-      this.$refs.audio.volume = parseInt(percent / 100);
+      console.log(percent);
+      this.$refs.audio.volume = (percent / 100).toFixed(2); // volume： 0-1
+      this.volumeRatio = this.$refs.audio.volume;
     },
 
     toggleMuted() {
-      if (this.volumeRatio > 0) {
-        this.volumeMuted = this.volumeRatio; // backup position
-        this.volumeRatio = 0; // bar goes to 0
-        this.$refs.audio.volume = 0; // muted
+      if (this.$refs.audio.volume > 0) {
+        this.volumeMuted = this.$refs.audio.volume; // backup position value
+        this.volumeRatio = 0; // let bar go to start point
+        this.$refs.audio.volume = 0; //make sound muted
       } else {
         if (this.volumeMuted === 0) {
-          this.volumeMuted = 30; // set a default volume
+          this.volumeMuted = 0.3; // set a default volume
         }
-        this.volumeRatio = this.volumeMuted; // restore bar position
-        // console.log(this.volumeMuted, this.volumeRatio);
-        this.$refs.audio.volume = this.volumeRatio / 100; // restore volume
+        this.$refs.audio.volume = this.volumeMuted;
+        this.volumeRatio = this.$refs.audio.volume;
       }
-
-      // console.log(this.volumeRatio);
     }
   },
 
@@ -224,16 +208,21 @@ export default {
       // this.audio.play();
       return this.$store.state.song;
     }
+
+    // 为什么不响应值变化？所以无法后续进行收集
+    // volumeRatio() {
+    //   if (!this.$refs.audio) {
+    //     console.log("Initial volume");
+    //     return 30;
+    //   }
+    //   console.log("========volume changed:", this.$refs.audio.volume);
+
+    //   return this.$refs.audio.volume;
+    // }
   },
 
   watch: {
-    currentTime() {
-      console.log(this.audio.currentTime);
-      return this.audio.currentTime;
-    },
-
     duration() {
-      console.log("duration:", this.$refs.audio);
       if (!this.$refs.audio) return 0;
       return this.$refs.audio.duration;
     }
@@ -341,6 +330,9 @@ export default {
     width: 200px;
     text-align-last: right;
     @include flex-align(row, flex-end, center);
+    .volume {
+      cursor: pointer;
+    }
   }
 }
 </style>
