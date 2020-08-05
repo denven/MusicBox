@@ -1,6 +1,6 @@
 <template>
   <div id="newleadboards">
-    <SectionTitle :title="'Latest Leadboards'" :routePath="'/leadboards'">
+    <SectionTitle :title="'Latest Leadboards'">
       <i class="iconfont icon-paihangbang1"></i>
     </SectionTitle>
     <table class="el-table">

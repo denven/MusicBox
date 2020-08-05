@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "SectionCard",
+  name: "DiscCard",
   props: ["caption", "picUrl", "songName"]
 };
 </script>

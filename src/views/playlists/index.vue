@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SectionTitle :title="'Featured Playlists'" :routePath="'/playlists'">
+    <SectionTitle :title="'Featured Playlists'">
       <i class="iconfont icon-rebang"></i>
     </SectionTitle>
 

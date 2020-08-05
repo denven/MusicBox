@@ -10,8 +10,20 @@ const showFeatured = () =>
 const showSearchResults = () =>
 	import(/* webpackChunkName: "search" */ "@/views/search/");
 
+const showLeadboards = () =>
+	import(/* webpackChunkName: "leadboards" */ "@/views/leadboards/");
+
+const showPlaylists = () =>
+	import(/* webpackChunkName: "playlists" */ "@/views/playlists/");
+
+const showAllAlbums = () =>
+	import(/* webpackChunkName: "albums" */ "@/views/albums/");
+
 const showLatestMvs = () =>
 	import(/* webpackChunkName: "latestMvs" */ "@/views/latest-mvs/");
+
+const showPodcasts = () =>
+	import(/* webpackChunkName: "podcasts" */ "@/views/podcasts/");
 
 // const showLatestReleases = () =>
 // 	import(/* webpackChunkName: "latest-releases" */ "views/latest-releases/");
@@ -47,9 +59,29 @@ const routes = [
 		component: showFeatured,
 	},
 	{
+		path: "/playlists",
+		name: "Playlists",
+		component: showPlaylists,
+	},
+	{
 		path: "/mvs",
 		name: "LatestMvs",
 		component: showLatestMvs,
+	},
+	{
+		path: "/albums",
+		name: "Albums",
+		component: showAllAlbums,
+	},
+	{
+		path: "/leadboards",
+		name: "Leadboards",
+		component: showLeadboards,
+	},
+	{
+		path: "/podcasts",
+		name: "Podcasts",
+		component: showPodcasts,
 	},
 	// {
 	// 	path: "/latest-releases",

@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "SectionCard",
+  name: "MvCard",
   props: ["width", "height", "caption", "picUrl", "playCount", "mvName"],
   methods: {
     calcPlayedCount(count) {
@@ -47,7 +47,7 @@ export default {
 @import "@/assets/styles/variables.scss";
 
 .card {
-  // width: 200px;
+  width: 100%;
   margin: 20px 0;
   position: relative;
   overflow: hidden;
@@ -74,7 +74,7 @@ export default {
     }
 
     .play-video {
-      @include position-abs-center;
+      @include position-abs-center();
       padding: 0 !important;
       color: $theme-primary-color;
       font-size: 35px;
@@ -90,9 +90,7 @@ export default {
   .card-desc {
     padding: 7px;
     width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @include text-ellipsis();
   }
 }
 </style>

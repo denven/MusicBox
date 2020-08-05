@@ -12,7 +12,7 @@
       <!-- 1. Leadboards by category id -->
       <li class="nav-item">
         <router-link to="/leadboards">
-          <i class="iconfont icon-paihangbang1">Leadboard</i>
+          <i class="iconfont icon-paihangbang1">Leadboards</i>
         </router-link>
       </li>
 

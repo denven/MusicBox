@@ -1,7 +1,7 @@
 <template>
   <div>
-    <SectionTitle :title="'New Realeases'" :routePath="'/albums'">
-      <i class="iconfont icon-album"></i>
+    <SectionTitle :title="'Latest Releases'">
+      <i class="iconfont icon-ziyuan"></i>
     </SectionTitle>
 
     <div class="cards">
