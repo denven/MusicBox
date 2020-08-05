@@ -47,7 +47,7 @@ export default {
 @import "@/assets/styles/variables.scss";
 
 .card {
-  width: 100%;
+  width: 250px;
   margin: 20px 0;
   position: relative;
   overflow: hidden;

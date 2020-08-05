@@ -37,11 +37,12 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/styles/mixin.scss";
 
 .cards {
   // image size is 250px*140px
+  width: 100%;
   @include grid-align-cards(250px);
 }
 </style>
