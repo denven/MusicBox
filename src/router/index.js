@@ -10,8 +10,11 @@ const showFeatured = () =>
 const showSearchResults = () =>
 	import(/* webpackChunkName: "search" */ "@/views/search/");
 
-//const showLatestReleases = () =>
-//	import(/* webpackChunkName: "latest-release" */ "views/latest-releases/");
+const showLatestMvs = () =>
+	import(/* webpackChunkName: "latestMvs" */ "@/views/latest-mvs/");
+
+// const showLatestReleases = () =>
+// 	import(/* webpackChunkName: "latest-releases" */ "views/latest-releases/");
 
 const showHomePage = showFeatured;
 
@@ -42,6 +45,11 @@ const routes = [
 		path: "/featured",
 		name: "Featured",
 		component: showFeatured,
+	},
+	{
+		path: "/mvs",
+		name: "LatestMvs",
+		component: showLatestMvs,
 	},
 	// {
 	// 	path: "/latest-releases",

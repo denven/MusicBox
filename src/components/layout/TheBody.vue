@@ -26,14 +26,14 @@
       <!-- 3. Singers -->
       <li class="nav-item">
         <router-link to="/artists">
-          <i class="iconfont icon-artist">All Artists</i>
+          <i class="iconfont icon-artist">Artists</i>
         </router-link>
       </li>
 
       <!-- 4. MVs -->
       <li class="nav-item">
-        <router-link to="/music-videos">
-          <i class="iconfont icon-mv4">Music Videos</i>
+        <router-link to="/mvs">
+          <i class="iconfont icon-mv4">Latest Videos</i>
         </router-link>
       </li>
 

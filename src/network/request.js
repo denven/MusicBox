@@ -33,4 +33,6 @@ export const getAudioDetail = (songIds) => {
 
 export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
 
+export const getLatestMvs = () => axios.get(`/mv/first`);
+
 export const getNewReleases = () => axios.get(`/album/newest`);
