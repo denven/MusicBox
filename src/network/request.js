@@ -1,6 +1,4 @@
-import axios from "axios";
-
-axios.defaults.baseURL = "https://api.mtnhao.com/";
+import axios from "./config";
 
 // the api supports `post` to get data, but the timestamp is suggested to put in the parameter
 // otherwise, the requests will be cached and will not get latest data each time
