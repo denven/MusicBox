@@ -316,7 +316,7 @@ export default {
   }
 
   .right-part {
-    width: 200px;
+    width: 400px;
     text-align-last: right;
     @include flex-align(row, flex-end, center);
     .volume {

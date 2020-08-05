@@ -3,7 +3,7 @@
 	$direction: row,
 	$main-axis: space-between,
 	$cross-axis: center,
-	$wrap: no-wrap
+	$wrap: nowrap
 ) {
 	display: flex;
 	flex-direction: $direction;
@@ -24,4 +24,11 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	word-break: unset;
+}
+
+@mixin position-abs-center() {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }

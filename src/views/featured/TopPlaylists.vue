@@ -5,21 +5,21 @@
     </SectionTitle>
 
     <div class="cards">
-      <SectionCard
+      <PlaylistCard
         v-for="item in toplist"
         :key="item.id"
         :caption="item.copywriter"
         :picUrl="item.picUrl"
         :playCount="item.playCount"
         :songName="item.name"
-      ></SectionCard>
+      ></PlaylistCard>
     </div>
   </div>
 </template>
 
 <script>
 import SectionTitle from "@/components/pure-com/SectionTitle";
-import SectionCard from "@/components/pure-com/SectionCard";
+import PlaylistCard from "@/components/pure-com/PlaylistCard";
 
 import { getFeaturedList } from "@/network/request";
 
@@ -32,7 +32,7 @@ export default {
 
   components: {
     SectionTitle,
-    SectionCard
+    PlaylistCard
   },
 
   async created() {

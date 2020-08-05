@@ -146,6 +146,7 @@ export default {
 
 <style lang="scss">
 @import "@/assets/styles/mixin.scss";
+@import "@/assets/styles/variables.scss";
 
 #newleadboards {
   .playlist {
@@ -176,6 +177,9 @@ export default {
       .buttons {
         i {
           padding: 0 5px;
+          &:nth-child(1) {
+            color: $theme-primary-color;
+          }
         }
       }
     }

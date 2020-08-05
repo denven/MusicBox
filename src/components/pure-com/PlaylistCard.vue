@@ -19,21 +19,25 @@
 
 <script>
 export default {
-  name: "SectionCard",
+  name: "PlaylistCard",
   props: ["caption", "picUrl", "playCount", "songName"],
   methods: {
     calcPlayedCount(count) {
       if (count >= 1000 * 1000) {
-        return (count / 1000000).toFixed(3).slice(0, 3) + `M`;
+        return (
+          (count / 1000000)
+            .toFixed(3)
+            .slice(0, 3)
+            .replace(/\.$/, "") + `M`
+        );
       } else if (count >= 1000) {
         return (
           parseInt(count / 1000)
             .toFixed(3)
-            .slice(0, 3) + `K`
+            .slice(0, 3)
+            .replace(/\.$/, "") + `K`
         );
       }
-
-      return count;
     }
   }
 };
@@ -41,16 +45,22 @@ export default {
 
 <style lang="scss">
 @import "@/assets/styles/mixin.scss";
+@import "@/assets/styles/variables.scss";
 
 .card {
   width: 200px;
   margin: 20px 0;
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
   font-size: 14px;
 
   .card-image {
     position: relative;
+
+    &:hover .card-caption,
+    &:hover .played-info {
+      visibility: visible;
+    }
 
     .card-caption {
       position: absolute;
@@ -65,6 +75,7 @@ export default {
       overflow: hidden;
       background: rgba(0, 0, 0, 0.3);
       border-radius: 5px 5px 0 0;
+      visibility: hidden;
     }
 
     .played-info {
@@ -77,6 +88,7 @@ export default {
       height: 50px;
       background: rgba(0, 0, 0, 0.3);
       border-radius: 0 0 5px 5px;
+      visibility: hidden;
 
       @include flex-align(row, space-between);
 
@@ -93,6 +105,7 @@ export default {
       .play-music {
         font-size: 20px;
         cursor: pointer;
+        color: $theme-primary-color;
       }
     }
 
