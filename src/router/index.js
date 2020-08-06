@@ -20,13 +20,13 @@ const showAllAlbums = () =>
 	import(/* webpackChunkName: "albums" */ "@/views/albums/");
 
 const showLatestMvs = () =>
-	import(/* webpackChunkName: "latestMvs" */ "@/views/latest-mvs/");
+	import(/* webpackChunkName: "videos" */ "@/views/videos/");
 
 const showPodcasts = () =>
 	import(/* webpackChunkName: "podcasts" */ "@/views/podcasts/");
 
-// const showLatestReleases = () =>
-// 	import(/* webpackChunkName: "latest-releases" */ "views/latest-releases/");
+const showMvDetail = () =>
+	import(/* webpackChunkName: "/videos/" */ "@/views/videos/MvPage.vue");
 
 const showHomePage = showFeatured;
 
@@ -64,7 +64,7 @@ const routes = [
 		component: showPlaylists,
 	},
 	{
-		path: "/mvs",
+		path: "/videos",
 		name: "LatestMvs",
 		component: showLatestMvs,
 	},
@@ -83,6 +83,8 @@ const routes = [
 		name: "Podcasts",
 		component: showPodcasts,
 	},
+	{ path: "/videos/detail", name: "mv", component: showMvDetail },
+
 	// {
 	// 	path: "/latest-releases",
 	// 	name: "LatestReleases",

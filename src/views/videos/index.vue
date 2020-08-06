@@ -8,6 +8,7 @@
       :picUrl="item.cover"
       :playCount="item.playCount"
       :mvName="item.name"
+      @click.native="playMv(item)"
     >
       <p class="artist">by: {{ item.artistName }}</p>
     </MvCard>
@@ -23,6 +24,12 @@ export default {
     return {
       latestMvs: []
     };
+  },
+
+  methods: {
+    playMv(video) {
+      this.$router.push(`/videos/detail` + `?id=${video.id}`);
+    }
   },
 
   components: {

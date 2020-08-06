@@ -1,12 +1,12 @@
 <template>
-  <div class="card">
+  <div class="mv-card">
     <div class="card-image">
       <img :src="picUrl" :style="{'height': height}" />
       <div class="played-count">
         <i class="iconfont icon-yiguankan"></i>
         <span>{{ calcPlayedCount(playCount) }}</span>
       </div>
-      <i class="play-video iconfont icon-mv4" @click="playMv"></i>
+      <i class="play-video iconfont icon-mv4"></i>
     </div>
 
     <p class="card-desc">{{ mvName }}</p>
@@ -46,8 +46,8 @@ export default {
 @import "@/assets/styles/mixin.scss";
 @import "@/assets/styles/variables.scss";
 
-.card {
-  width: 250px;
+.mv-card {
+  // width: 250px;
   margin: 20px 0;
   position: relative;
   overflow: hidden;

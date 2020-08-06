@@ -32,7 +32,7 @@
 
       <!-- 4. MVs -->
       <li class="nav-item">
-        <router-link to="/mvs">
+        <router-link to="/videos">
           <i class="iconfont icon-mv4">Latest Videos</i>
         </router-link>
       </li>
