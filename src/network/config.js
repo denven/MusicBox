@@ -42,9 +42,11 @@ function updateLoaderStatus(res) {
 	curReqCount--;
 	if (curReqCount === 0) {
 		setTimeout(() => {
-			loader.close();
-			loader = null;
-		}, 1000);
+			if (loader) {
+				loader.close();
+				loader = null;
+			}
+		}, 500);
 	}
 
 	return res;

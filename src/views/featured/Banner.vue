@@ -11,7 +11,7 @@
 				@change="onBannerChange"
 			>
 				<el-carousel-item v-for="slide in banners" :key="slide.url">
-					<img :src="slide.imageUrl" />
+					<img v-lazy="slide.imageUrl" />
 				</el-carousel-item>
 			</el-carousel>
 		</div>

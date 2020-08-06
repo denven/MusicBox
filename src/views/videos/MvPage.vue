@@ -106,8 +106,8 @@ export default {
       return convertMsToMinutes(duration);
     },
 
+    // Switch to play a different Mv in the same page
     playMv(id) {
-      console.log("Play new video==================", id);
       this.$router.push(`/videos/detail` + `?id=${id}`);
     },
 
