@@ -6,6 +6,9 @@
         <i class="iconfont icon-yiguankan"></i>
         <span>{{ calcPlayedCount(playCount) }}</span>
       </div>
+      <div class="mv-duration">
+        <span>{{ duration }}</span>
+      </div>
       <i class="play-video iconfont icon-mv4"></i>
     </div>
 
@@ -17,7 +20,15 @@
 <script>
 export default {
   name: "MvCard",
-  props: ["width", "height", "caption", "picUrl", "playCount", "mvName"],
+  props: [
+    "width",
+    "height",
+    "caption",
+    "picUrl",
+    "playCount",
+    "mvName",
+    "duration"
+  ],
   methods: {
     calcPlayedCount(count) {
       if (count >= 1000 * 1000) {
@@ -48,7 +59,7 @@ export default {
 
 .mv-card {
   // width: 250px;
-  margin: 20px 0;
+  // margin: 20px 0;
   position: relative;
   overflow: hidden;
   font-size: 14px;
@@ -71,6 +82,13 @@ export default {
     img {
       width: 100%;
       border-radius: 5px;
+    }
+
+    .mv-duration {
+      color: white;
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
     }
 
     .play-video {

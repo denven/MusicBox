@@ -45,9 +45,30 @@ const formatNumberWithTS = (number) => {
 	return number.toString().replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, "$1,");
 };
 
+const convertPlayedCount = (count) => {
+	if (count >= 1000 * 1000) {
+		return (
+			(count / 1000000)
+				.toFixed(3)
+				.slice(0, 3)
+				.replace(/\.$/, "") + `M`
+		);
+	} else if (count >= 1000) {
+		return (
+			parseInt(count / 1000)
+				.toFixed(3)
+				.slice(0, 3)
+				.replace(/\.$/, "") + `K`
+		);
+	}
+
+	return count;
+};
+
 module.exports = {
 	convertMsToMinutes,
 	convertSecToMinutes,
 	formatTime,
 	formatNumberWithTS,
+	convertPlayedCount,
 };

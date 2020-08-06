@@ -38,7 +38,7 @@ export default {
 
   async created() {
     let { data } = await getLatestMvs();
-    // console.log(`Latest Mvs`, data.data);
+    // console.log(`Latest Mvs`, data.data);  // no right duration returned of mv
     this.latestMvs = data.data;
   }
 };
@@ -51,5 +51,8 @@ export default {
   // image size is 250px*140px
   width: 100%;
   @include grid-align-cards(250px);
+  .mv-card {
+    margin: 20px 0;
+  }
 }
 </style>

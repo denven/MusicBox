@@ -25,7 +25,13 @@
     </el-tab-pane>
 
     <el-tab-pane label="Videos" name="videos">
-      <el-table :data="videos.data" stripe style="width: 100%" :row-class-name="setRowIndex">
+      <el-table
+        :data="videos.data"
+        stripe
+        style="width: 100%"
+        :row-class-name="setRowIndex"
+        @row-click="playVideo"
+      >
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Track" width="400px">
           <template slot-scope="scope">
@@ -95,7 +101,7 @@ import {
   getAudioUrl,
   getAudioDetail
 } from "@/network/request";
-import { convertMsToMinutes } from "@/common/helpers";
+import { convertMsToMinutes, formatNumberWithTS } from "@/common/helpers";
 
 export default {
   data() {
@@ -149,6 +155,12 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    playVideo({ index }) {
+      console.log("test video play", index, this.tracks.data[index]);
+      let vid = this.tracks.data[index].id;
+      this.$router.push(`/videos/detail` + `?id=${vid}`);
     },
 
     // keywords is this.$router.query
@@ -205,6 +217,7 @@ export default {
       } else if (typeName === "videos") {
         this.videos.count = data.result.mvs.length;
         this.videos.data = data.result.mvs.map(mv => {
+          console.log("==============Test videos info:===============", mv);
           let { id, name, artists, cover, briefDesc, duration, playCount } = mv;
           let artistsNames = artists.reduce((allNames, item) => {
             allNames = allNames === "" ? item.name : allNames + "," + item.name;
@@ -218,7 +231,7 @@ export default {
             artistsNames,
             briefDesc,
             duration,
-            playCount
+            playCount: formatNumberWithTS(playCount)
           };
         });
       } else if (typeName === "playlists") {
@@ -244,7 +257,7 @@ export default {
             trackCount,
             description,
             bookCount,
-            playCount
+            playCount: formatNumberWithTS(playCount)
           };
         });
       } else if (typeName === "artists") {

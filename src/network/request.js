@@ -48,3 +48,16 @@ export const getSimilarMvs = (mvid) =>
 
 export const getMvComments = (mvid) =>
 	axios.get(`/comment/mv`, { params: { id: mvid } });
+
+// requests for ordinory videos (how to get the vid ????)
+export const getVideoUrl = (vid) =>
+	axios.get(`/video/url`, { params: { id: vid } });
+
+export const getVideoDetail = (vid) =>
+	axios.get(`/video/detail`, { params: { id: vid } });
+
+export const getVideoComments = (vid) =>
+	axios.get(`/comment/video`, { params: { id: vid } });
+
+export const getSimilarVideos = (vid) =>
+	axios.get(`/related/allvideo`, { params: { id: vid } });

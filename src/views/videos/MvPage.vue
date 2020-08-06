@@ -2,7 +2,7 @@
   <div class="mv-wrapper content-vertical-align">
     <div class="mv">
       <div class="mv-player">
-        <video controls autoplay :src="mv.mvUrl"></video>
+        <video controls autoplay :src="mv.mvUrl" ref="video"></video>
       </div>
 
       <div class="basic-info">
@@ -44,44 +44,45 @@
     </div>
 
     <div class="related-mvs">
-      <!-- <MvCard
-        v-for="item in latestMvs"
-        :key="item.id"
-        :height="'140px'"
-        :caption="item.copywriter"
-        :picUrl="item.cover"
-        :playCount="item.playCount"
-        :mvName="item.name"
-        @click.native="playMv(item)"
-      >
-        <p class="artist">by: {{ item.artistName }}</p>
-      </MvCard>-->
+      <div class="one-mv" v-for="item in similarMvs" :key="item.id">
+        <MvCard
+          :height="'140px'"
+          :caption="item.copywriter"
+          :picUrl="item.cover"
+          :playCount="item.playCount"
+          :duration="formatDuration(item.duration)"
+          @click.native="playMv(item.id)"
+        ></MvCard>
 
-      <!-- <div class="one-mv">
-        <MvCard :width="'200px'" :height="'112px'"></MvCard>
-        <div class="mv-meta">
-          <span class="name">1111111111111111111111111111111111111111111111111111111</span>
-          <span class="channel">Ted Ex</span>
+        <div class="mv-source">
+          <span class="name">{{item.name}}</span>
+          <span class="channel">{{'by ' + item.artistName}}</span>
           <div class="views-date">
-            <span class="views">1.1M</span>
-            <span class="date">2 years ago</span>
+            <span class="views">{{ formatNumber(item.playCount) }}</span>
           </div>
         </div>
-      </div>-->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Comment from "@/components/pure-com/Comment";
-// import MvCard from "@/components/pure-com/MvCard";
+import MvCard from "@/components/pure-com/MvCard";
+
 import {
   getMvUrl,
   getMvDetail,
   getSimilarMvs,
   getMvComments,
-  getMvArtistV2
+  getMvArtistV2,
+  getVideoUrl,
+  getVideoDetail,
+  getSimilarVideos,
+  getVideoSocialInfo
 } from "@/network/request";
+
+import { formatNumberWithTS, convertMsToMinutes } from "@/common/helpers";
 
 export default {
   name: "mv",
@@ -93,60 +94,90 @@ export default {
     };
   },
   components: {
-    Comment
-    // MvCard
+    Comment,
+    MvCard
+  },
+  methods: {
+    formatNumber(number) {
+      return formatNumberWithTS(number) + ` views`;
+    },
+
+    formatDuration(duration) {
+      return convertMsToMinutes(duration);
+    },
+
+    playMv(id) {
+      console.log("Play new video==================", id);
+      this.$router.push(`/videos/detail` + `?id=${id}`);
+    },
+
+    async getMvInfo(mvid) {
+      try {
+        let allMvData = await Promise.all([
+          Promise.resolve(getMvUrl(mvid)),
+          Promise.resolve(getMvDetail(mvid)),
+          Promise.resolve(getSimilarMvs(mvid)),
+          Promise.resolve(getMvComments(mvid))
+        ]);
+
+        const mvUrl = allMvData[0].data.data.url;
+        console.log(allMvData[0].data.data.url);
+        const {
+          name,
+          artistName,
+          publishTime,
+          playCount,
+          desc
+        } = allMvData[1].data.data;
+
+        let { data: artistData } = await getMvArtistV2(
+          allMvData[1].data.data.artists[0].id
+        );
+
+        let mvObj = {
+          mvUrl,
+          name,
+          artistName,
+          artistAvatar: artistData.artist.img1v1Url,
+          publishTime,
+          playCount,
+          desc
+        };
+
+        this.mv = {
+          ...mvObj,
+          playCount: formatNumberWithTS(playCount) + ` views`
+        };
+
+        this.similarMvs = allMvData[2].data.mvs;
+        this.comments = allMvData[3].data.comments;
+
+        console.log("ssssssssssssssssssssss", this.similarMvs);
+      } catch {
+        err => console.log("Request error when getting Mv Details", err);
+      }
+    },
+
+    //TODO
+    async getVideoInfo(vid) {
+      try {
+        let allMvData = await Promise.all([
+          Promise.resolve(getVideoUrl(vid)),
+          Promise.resolve(getVideoDetail(vid)),
+          Promise.resolve(getSimilarVideos(vid)),
+          Promise.resolve(getVideoSocialInfo(vid))
+        ]);
+
+        console.log("=======================", allMvData);
+      } catch {
+        err => console.log("Request error when getting Mv Details", err);
+      }
+    }
   },
 
   async created() {
     const mvid = this.$route.query.id;
-
-    try {
-      let allMvData = await Promise.all([
-        Promise.resolve(getMvUrl(mvid)),
-        Promise.resolve(getMvDetail(mvid)),
-        Promise.resolve(getSimilarMvs(mvid)),
-        Promise.resolve(getMvComments(mvid))
-      ]);
-
-      const mvUrl = allMvData[0].data.data.url;
-      console.log(allMvData[0].data.data.url);
-      const {
-        name,
-        artistName,
-        publishTime,
-        playCount,
-        desc
-      } = allMvData[1].data.data;
-
-      let { data: artistData } = await getMvArtistV2(
-        allMvData[1].data.data.artists[0].id
-      );
-
-      let mvObj = {
-        mvUrl,
-        name,
-        artistName,
-        artistAvatar: artistData.artist.img1v1Url,
-        publishTime,
-        playCount,
-        desc
-      };
-
-      this.mv = {
-        ...mvObj,
-        playCount:
-          playCount
-            .toString()
-            .replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, "$1,") + ` views`
-      };
-
-      this.similarMvs = allMvData[2].data.mvs;
-      this.comments = allMvData[3].data.comments;
-
-      console.log(this.comments[0]);
-    } catch {
-      err => console.log("Request error when getting Mv Details", err);
-    }
+    await this.getMvInfo(mvid);
   }
 };
 </script>
@@ -158,11 +189,6 @@ export default {
 .mv-wrapper {
   @include flex-align(row, space-between, flex-start);
 
-  // .mv,
-  // .related-mvs {
-  //   border: 1px solid red;
-  //   height: 1000px;
-  // }
   .mv {
     width: 65%;
     min-width: 300px;
@@ -261,10 +287,26 @@ export default {
     .one-mv {
       @include flex-align(row, space-between);
       width: 100%;
-      height: 200px;
-      .mv-meta {
+
+      &:first-child {
+        margin-top: 20px;
+      }
+
+      .mv-card {
+        min-width: 160px;
+        max-width: 200px;
+      }
+      .mv-source {
         flex: 1;
+        height: 156px;
+        padding: 3px 0 20px 8px;
+        text-align: left;
+        font-size: 14px;
+
         @include flex-align(column, space-between, flex-start);
+        .name {
+          font-weight: bold;
+        }
       }
     }
   }
