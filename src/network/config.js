@@ -7,6 +7,7 @@ const axios = axiosLib.create({
 });
 
 axios.defaults.baseURL = "https://api.mtnhao.com/";
+axios.defaults.timeout = 30000;
 
 // Add interceptor before request
 axios.interceptors.request.use(insertLoader);

@@ -19,18 +19,32 @@ export const getSearchResults = (params) =>
 // why it returns the same playlist?
 export const getToplist = (params) =>
 	axios.get(`/playlist/detail`, { params: params });
+export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
+export const getNewReleases = () => axios.get(`/album/newest`);
 
 // get song media file link address
-export const getAudioUrl = (songId) => {
-	return axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
-};
+export const getAudioUrl = (songId) =>
+	axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
 
 export const getAudioDetail = (songIds) => {
 	return axios.get(`/song/detail`, { params: { ids: songIds } });
 };
 
-export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
-
+// requests for mvs
 export const getLatestMvs = () => axios.get(`/mv/first`);
+export const getMvUrl = (mvid) =>
+	axios.get(`/mv/url`, { params: { id: mvid } });
 
-export const getNewReleases = () => axios.get(`/album/newest`);
+export const getMvDetail = (mvid) =>
+	axios.get(`/mv/detail`, { params: { mvid } });
+
+export const getMvArtist = (id) =>
+	axios.get(`/artist/desc`, { params: { id } });
+
+export const getMvArtistV2 = (id) => axios.get(`/artists`, { params: { id } });
+
+export const getSimilarMvs = (mvid) =>
+	axios.get("/simi/mv", { params: { mvid } });
+
+export const getMvComments = (mvid) =>
+	axios.get(`/comment/mv`, { params: { id: mvid } });

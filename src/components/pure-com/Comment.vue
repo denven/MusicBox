@@ -1,21 +1,17 @@
 <template>
   <div class="comment">
     <div class="author-avatar">
-      <img
-        class="user-avarta"
-        src="https://p1.music.126.net/ROGI7vt4jlH6i-Ue9cigZA==/109951164877283403.jpg?param=120y120"
-        alt
-      />
+      <img class="user-avarta" :src="avatar" alt />
     </div>
     <div class="comment-detail">
       <div class="name-words">
-        <span class="name">评论者:</span>
-        <span>评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容论内容评评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容论内容评评论内容评论内容评论内容评论内容评论内容评论内容评评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容论内容评评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容论内容</span>
+        <span class="name">{{name + ': '}}</span>
+        <span>{{content}}</span>
       </div>
       <div class="date-likes">
-        <span class="date">2020-10-22</span>
+        <span class="date">{{ getCommentTime() }}</span>
         <span class="likes">
-          <i class="iconfont ziyuan">100</i>
+          <i class="iconfont icon-like">{{likedCount}}</i>
         </span>
       </div>
     </div>
@@ -23,8 +19,16 @@
 </template>
 
 <script>
+import { formatTime } from "@/common/helpers";
+
 export default {
-  name: "comments"
+  name: "comment",
+  props: ["name", "avatar", "content", "time", "likedCount"],
+  methods: {
+    getCommentTime() {
+      return formatTime(this.time);
+    }
+  }
 };
 </script>
 
@@ -32,6 +36,7 @@ export default {
 @import "@/assets/styles/mixin.scss";
 
 .comment {
+  margin: 20px 0;
   @include flex-align(row, space-between, flex-start);
   .author-avatar {
     width: 50px;
@@ -58,7 +63,7 @@ export default {
       @include flex-align(row, space-between);
       padding: 20px 0;
       color: #bebebe;
-      border-bottom: 1px solid #bebebe;
+      border-bottom: 1px solid lightgrey;
     }
   }
 }

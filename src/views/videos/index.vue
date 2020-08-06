@@ -38,7 +38,7 @@ export default {
 
   async created() {
     let { data } = await getLatestMvs();
-    console.log(`Latest Mvs`, data.data);
+    // console.log(`Latest Mvs`, data.data);
     this.latestMvs = data.data;
   }
 };
