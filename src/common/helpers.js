@@ -36,4 +36,18 @@ const formatTime = (timestamp) => {
 	return new Date(timestamp).toLocaleDateString("en-US", options);
 };
 
-module.exports = { convertMsToMinutes, convertSecToMinutes, formatTime };
+// format number with thousands separators
+const formatNumberWithTS = (number) => {
+	if (isNaN(number)) {
+		return number.toString();
+	}
+
+	return number.toString().replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, "$1,");
+};
+
+module.exports = {
+	convertMsToMinutes,
+	convertSecToMinutes,
+	formatTime,
+	formatNumberWithTS,
+};
