@@ -46,7 +46,7 @@
     <div class="related-mvs">
       <div class="one-mv" v-for="item in similarMvs" :key="item.id">
         <MvCard
-          :height="'140px'"
+          :height="'120px'"
           :caption="item.copywriter"
           :picUrl="item.cover"
           :playCount="item.playCount"
@@ -151,8 +151,6 @@ export default {
 
         this.similarMvs = allMvData[2].data.mvs;
         this.comments = allMvData[3].data.comments;
-
-        console.log("ssssssssssssssssssssss", this.similarMvs);
       } catch {
         err => console.log("Request error when getting Mv Details", err);
       }
@@ -178,6 +176,13 @@ export default {
   async created() {
     const mvid = this.$route.query.id;
     await this.getMvInfo(mvid);
+  },
+
+  watch: {
+    $route: async function(cur) {
+      const mvid = cur.query.id;
+      await this.getMvInfo(mvid);
+    }
   }
 };
 </script>
@@ -298,7 +303,7 @@ export default {
       }
       .mv-source {
         flex: 1;
-        height: 156px;
+        height: 136px;
         padding: 3px 0 20px 8px;
         text-align: left;
         font-size: 14px;
