@@ -16,6 +16,9 @@ const showLeadboards = () =>
 const showPlaylists = () =>
 	import(/* webpackChunkName: "playlists" */ "@/views/playlists/");
 
+const showArtists = () =>
+	import(/* webpackChunkName: "artists" */ "@/views/artists/");
+
 const showAllAlbums = () =>
 	import(/* webpackChunkName: "albums" */ "@/views/albums/");
 
@@ -67,6 +70,11 @@ const routes = [
 		path: "/videos",
 		name: "LatestMvs",
 		component: showLatestMvs,
+	},
+	{
+		path: "/artists",
+		name: "Artists",
+		component: showArtists,
 	},
 	{
 		path: "/albums",

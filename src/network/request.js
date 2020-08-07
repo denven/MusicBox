@@ -31,6 +31,7 @@ export const getAudioDetail = (songIds) => {
 };
 
 // requests for mvs
+export const getAllMvs = () => axios.get(`/mv/all`);
 export const getLatestMvs = () => axios.get(`/mv/first`);
 export const getMvUrl = (mvid) =>
 	axios.get(`/mv/url`, { params: { id: mvid } });
@@ -61,3 +62,50 @@ export const getVideoComments = (vid) =>
 
 export const getSimilarVideos = (vid) =>
 	axios.get(`/related/allvideo`, { params: { id: vid } });
+
+// Artists related requests
+// 接口地址 : /artist/list
+// 调用例子 : /artist/list?type=1&area=96&initial=b /artist/list?type=2&area=2&initial=b
+// type 取值: -1:全部 1:男歌手 2:女歌手 3:乐队
+// area 取值: -1:全部 7华语 96欧美 8:日本 16韩国 0:其他
+export const getArtistsList = ({ type, area, initial }) =>
+	axios.get(`/artist/list`, { params: { type, area, initial } });
+
+// 说明: 获取歌手热门50首歌曲
+// 必选参数 :id : 歌手 id
+// 接口地址 : /artist/top/song
+// 调用例子 : /artist/top/song?id=6452
+export const getArtistTopTracks = (id) =>
+	axios.get(`/artist/top/song`, { params: { id: id } });
+
+// 获取歌手 mv
+// 说明 : 调用此接口传入歌手id可获得歌手 mv 信息, 具体 mv 播放地址可调用/mv传入此接口获得的 mvid 来拿到 ,
+// 如 : /artist/mv?id=6452,/mv?mvid=5461064
+// 必选参数 : id: 歌手 id, 可由搜索接口获得
+// 接口地址 : /artist/mv
+// 调用例子 : /artist/mv?id=6452
+export const getArtistMvs = (id) =>
+	axios.get(`/artist/mv`, { params: { id: id } });
+
+// 说明 : 调用此接口 , 传入歌手 id, 可获得歌手专辑内容
+// 必选参数 : id: 歌手 id
+// 可选参数 : limit: 取出数量 , 默认为 50
+// offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*50, 其中 50 为 limit 的值 , 默认 为 0
+// 接口地址 : /artist/album
+// 调用例子 : /artist/album?id=6452&limit=30 ( 周杰伦 )
+export const getArtistAlbums = ({ id, limit, offset }) =>
+	axios.get(`/artist/album`, { params: { id, limit, offset } });
+
+// 说明 : 调用此接口 , 传入歌手 id, 可获得歌手描述
+// 必选参数 : id: 歌手 id
+// 接口地址 : /artist/desc
+// 调用例子 : /artist/desc?id=6452 ( 周杰伦 )
+export const getArtistDesc = (id) =>
+	axios.get(`/artist/desc`, { params: { id: id } });
+
+// 说明 : 调用此接口 , 传入歌手 id, 可获得相似歌手
+// 必选参数 : id: 歌手 id
+// 接口地址 : /simi/artist
+// 调用例子 : /simi/artist?id=6452 ( 对应和周杰伦相似歌手 )
+export const getSimilarArtists = (id) =>
+	axios.get(`/simi/artist`, { params: { id: id } });
