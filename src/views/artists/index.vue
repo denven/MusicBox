@@ -53,8 +53,7 @@
 			</div>
 		</div>
 
-		<el-pagination background="#c33f18" layout="prev, pager, next" :total="1000" @current-change="setPageIndex">
-		</el-pagination>
+		<el-pagination background layout="prev, pager, next" :total="1000" @current-change="setPageIndex"> </el-pagination>
 	</div>
 </template>
 
@@ -154,7 +153,6 @@ export default {
 		},
 
 		setPageIndex(pageIdx) {
-			console.log("Page Index Changed:", pageIdx);
 			this.pageIdx = pageIdx;
 			this.filter = { ...this.filter, offset: this.filter.limit * (pageIdx - 1) };
 		},
@@ -162,7 +160,6 @@ export default {
 
 	watch: {
 		filter() {
-			console.log("New filters:", this.filter);
 			this.getArtistsByCategory();
 		},
 	},
@@ -170,10 +167,6 @@ export default {
 	async created() {
 		this.initCategoryTabs();
 		await this.getArtistsByCategory();
-	},
-
-	mounted() {
-		console.log("artists page mounted");
 	},
 };
 </script>

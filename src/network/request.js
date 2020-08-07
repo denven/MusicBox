@@ -20,38 +20,33 @@ export const getToplist = (params) => axios.get(`/playlist/detail`, { params: pa
 export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
 export const getNewReleases = () => axios.get(`/album/newest`);
 
-// get song media file link address
 export const getAudioUrl = (songId) => axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
+export const getAudioDetail = (songIds) => axios.get(`/song/detail`, { params: { ids: songIds } });
 
-export const getAudioDetail = (songIds) => {
-	return axios.get(`/song/detail`, { params: { ids: songIds } });
-};
+// =================  MV realted requests ================================================
 
-// requests for mvs
-export const getAllMvs = () => axios.get(`/mv/all`);
+// area: 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
+// type: 类型,可选值为全部,官方版,原生,现场版,网易出品,不填则为全部
+// order: 排序,可选值为上升最快,最热,最新,不填则为上升最快
+// limit: 取出数量 , 默认为 30
+// offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*50, 其中 50 为 limit 的值 , 默认 为 0
+export const getAllMvs = (params) => axios.get(`/mv/all`, { params: params });
+
 export const getLatestMvs = () => axios.get(`/mv/first`);
 export const getMvUrl = (mvid) => axios.get(`/mv/url`, { params: { id: mvid } });
-
 export const getMvDetail = (mvid) => axios.get(`/mv/detail`, { params: { mvid } });
-
 export const getMvArtist = (id) => axios.get(`/artist/desc`, { params: { id } });
-
 export const getMvArtistV2 = (id) => axios.get(`/artists`, { params: { id } });
-
 export const getSimilarMvs = (mvid) => axios.get("/simi/mv", { params: { mvid } });
-
 export const getMvComments = (mvid) => axios.get(`/comment/mv`, { params: { id: mvid } });
 
 // requests for ordinory videos (how to get the vid ????)
 export const getVideoUrl = (vid) => axios.get(`/video/url`, { params: { id: vid } });
-
 export const getVideoDetail = (vid) => axios.get(`/video/detail`, { params: { id: vid } });
-
 export const getVideoComments = (vid) => axios.get(`/comment/video`, { params: { id: vid } });
-
 export const getSimilarVideos = (vid) => axios.get(`/related/allvideo`, { params: { id: vid } });
 
-// Artists related requests
+// =================  Artists realted requests ================================================
 // 接口地址 : /artist/list
 // 调用例子 : /artist/list?type=1&area=96&initial=b /artist/list?type=2&area=2&initial=b
 // type 取值: -1:全部 1:男歌手 2:女歌手 3:乐队

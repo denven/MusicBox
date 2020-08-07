@@ -20,15 +20,7 @@
 <script>
 export default {
 	name: "MvCard",
-	props: [
-		"width",
-		"height",
-		"caption",
-		"picUrl",
-		"playCount",
-		"mvName",
-		"duration",
-	],
+	props: ["width", "height", "caption", "picUrl", "playCount", "mvName", "duration"],
 	methods: {
 		calcPlayedCount(count) {
 			if (count >= 1000 * 1000) {
@@ -88,7 +80,7 @@ export default {
 			color: white;
 			position: absolute;
 			bottom: 10px;
-			left: 10px;
+			right: 10px;
 		}
 
 		.play-video {
