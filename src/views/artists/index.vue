@@ -7,7 +7,7 @@
 					<li
 						v-for="(area, index) in areaTabs"
 						:key="area"
-						:class="{ active: index === activeIdx.area }"
+						:class="{ active: index === filterIdx.area }"
 						@click="setFilter('area', area, index)"
 					>
 						<span class="button">{{ area }}</span>
@@ -20,7 +20,7 @@
 					<li
 						v-for="(type, index) in typeTabs"
 						:key="type"
-						:class="{ active: index === activeIdx.type }"
+						:class="{ active: index === filterIdx.type }"
 						@click="setFilter('type', type, index)"
 					>
 						<span class="button">{{ type }}</span>
@@ -33,7 +33,7 @@
 					<li
 						v-for="(char, index) in sortTabs"
 						:key="char"
-						:class="{ active: index === activeIdx.initial }"
+						:class="{ active: index === filterIdx.initial }"
 						@click="setFilter('initial', char, index)"
 					>
 						<span class="button">{{ char }}</span>
@@ -52,6 +52,9 @@
 				</div>
 			</div>
 		</div>
+
+		<el-pagination background="#c33f18" layout="prev, pager, next" :total="1000" @current-change="setPageIndex">
+		</el-pagination>
 	</div>
 </template>
 
@@ -79,8 +82,10 @@ export default {
 			artists: [],
 			// type 取值: -1:全部 1:男歌手 2:女歌手 3:乐队
 			// area 取值: -1:全部 7华语 96欧美 8:日本 16韩国 0:其他
-			filter: { type: -1, area: -1, initial: "A" },
-			activeIdx: { area: 0, type: 0, initial: 0 },
+			filter: { type: -1, area: -1, initial: "A", limit: 10, offset: 0 },
+			filterIdx: { area: 0, type: 0, initial: 0 }, // value is the Tabs array index
+
+			curPageIdx: 1, //used for pagination, starts from 1
 
 			areaTabs: [],
 			typeTabs: [],
@@ -96,9 +101,9 @@ export default {
 
 	methods: {
 		async getArtistsByCategory() {
-			let { data } = await getArtistsList(this.filter);
-			this.artists = data.artists;
-			console.log("Test Artists ==========", this.artists);
+			let res = await getArtistsList(this.filter);
+			this.artists = res.data.artists;
+			console.log("Test Artists ==========", res, this.artists);
 		},
 
 		initCategoryTabs() {
@@ -114,38 +119,44 @@ export default {
 
 		setFilter(tabType, keyword, index) {
 			if (tabType === "area" && this.areaTabs.includes(keyword)) {
-				this.activeIdx.area = index;
+				this.filterIdx.area = index;
 			}
-			console.log(tabType, keyword, index);
+
 			if (tabType === "type" && this.typeTabs.includes(keyword)) {
-				this.activeIdx.type = index;
+				this.filterIdx.type = index;
 			}
 
 			if (tabType === "initial" && this.sortTabs.includes(keyword)) {
-				this.activeIdx.initial = index;
+				this.filterIdx.initial = index;
 				this.filter.initial = keyword;
 			}
 
-			this.indexToParams(this.activeIdx);
+			this.indexToParams(this.filterIdx);
 		},
 
 		// DO NOT assign the prop value, the watcher cannot detect changes
-		indexToParams(activeIdx) {
+		indexToParams(filterIdx) {
 			// type 取值: -1:全部 1:男歌手 2:女歌手 3:乐队
-			if (activeIdx.type === 0) {
+			if (filterIdx.type === 0) {
 				this.filter = { ...this.filter, type: -1 };
 			} else {
-				this.filter = { ...this.filter, type: activeIdx.type };
+				this.filter = { ...this.filter, type: filterIdx.type };
 			}
 
 			// area 取值: -1:全部 7华语 96欧美 8:日本 16韩国 0:其他
 
-			if (activeIdx.area === 0) this.filter = { ...this.filter, area: -1 };
-			if (activeIdx.area === 1) this.filter = { ...this.filter, area: 96 };
-			if (activeIdx.area === 2) this.filter = { ...this.filter, area: 7 };
-			if (activeIdx.area === 3) this.filter = { ...this.filter, area: 8 };
-			if (activeIdx.area === 4) this.filter = { ...this.filter, area: 16 };
-			if (activeIdx.area === 5) this.filter = { ...this.filter, area: 0 };
+			if (filterIdx.area === 0) this.filter = { ...this.filter, area: -1 };
+			if (filterIdx.area === 1) this.filter = { ...this.filter, area: 96 };
+			if (filterIdx.area === 2) this.filter = { ...this.filter, area: 7 };
+			if (filterIdx.area === 3) this.filter = { ...this.filter, area: 8 };
+			if (filterIdx.area === 4) this.filter = { ...this.filter, area: 16 };
+			if (filterIdx.area === 5) this.filter = { ...this.filter, area: 0 };
+		},
+
+		setPageIndex(pageIdx) {
+			console.log("Page Index Changed:", pageIdx);
+			this.pageIdx = pageIdx;
+			this.filter = { ...this.filter, offset: this.filter.limit * (pageIdx - 1) };
 		},
 	},
 
