@@ -1,0 +1,15 @@
+// change pagination button background color
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+	background-color: #c33f18 !important;
+}
+
+// change loader default style, temporally not work here
+.el-loading-spinner .path {
+	stroke: $theme-primary-color !important;
+}
+
+.el-loading-spinner,
+.el-loading-text,
+.el-icon-loading {
+	color: $theme-primary-color !important;
+}
