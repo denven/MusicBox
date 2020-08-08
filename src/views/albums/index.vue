@@ -57,6 +57,7 @@ export default {
 			let { data } = await getAllAlbums(this.filter);
 			this.albTotal = data.total;
 			this.newAlbums = data.albums;
+			console.log(data);
 		},
 
 		setFilter(tabType, keyword, index) {
@@ -75,9 +76,9 @@ export default {
 	},
 
 	watch: {
-		filter() {
+		async filter() {
 			console.log("filter changed..............", this.filter);
-			this.getAllAlbumsByCategory();
+			await this.getAllAlbumsByCategory();
 		},
 	},
 

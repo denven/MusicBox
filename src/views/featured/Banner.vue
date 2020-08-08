@@ -1,15 +1,7 @@
 <template>
-	<div
-		class="banners"
-		v-bind:style="'background: url(' + bgImageUrl + ') no-repeat left center;'"
-	>
+	<div class="banners" v-bind:style="'background: url(' + bgImageUrl + ') no-repeat left center;'">
 		<div class="carousel">
-			<el-carousel
-				:interval="5000"
-				arrow="always"
-				height="281px"
-				@change="onBannerChange"
-			>
+			<el-carousel :interval="5000" arrow="always" height="281px" @change="onBannerChange">
 				<el-carousel-item v-for="slide in banners" :key="slide.url">
 					<img v-lazy="slide.imageUrl" />
 				</el-carousel-item>

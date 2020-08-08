@@ -51,7 +51,7 @@
 				:picUrl="item.cover"
 				:playCount="item.playCount"
 				:mvName="item.name"
-				:duration="formatDuration(item.duration)"
+				:duration="$helpers.convertMsToMinutes(item.duration)"
 				@click.native="playMv(item)"
 			>
 				<p class="artist">by: {{ item.artistName }}</p>
@@ -66,7 +66,6 @@
 <script>
 import MvCard from "@/components/pure-com/MvCard";
 import { getAllMvs } from "@/network/request";
-import { convertMsToMinutes } from "@/common/helpers";
 
 export default {
 	components: {
@@ -91,10 +90,6 @@ export default {
 	methods: {
 		playMv(video) {
 			this.$router.push(`/videos/detail` + `?id=${video.id}`);
-		},
-
-		formatDuration(duration) {
-			return convertMsToMinutes(duration);
 		},
 
 		async getAllMvsByCategory() {

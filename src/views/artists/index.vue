@@ -44,7 +44,7 @@
 
 		<div class="artists-cards">
 			<div class="artist-card" v-for="artist in artists" :key="artist.id">
-				<img v-lazy="artist.img1v1Url" alt="" />
+				<img v-lazy="$helpers.getSmallPicture(artist.img1v1Url, 200)" alt="" />
 
 				<div class="artist-links">
 					<span class="artist-name">{{ artist.name }}</span>

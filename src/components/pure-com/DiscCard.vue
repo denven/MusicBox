@@ -3,7 +3,7 @@
 		<div class="card-image">
 			<span class="card-caption">{{ caption }}</span>
 			<div class="disc">
-				<img v-lazy="picUrl" />
+				<img v-lazy="$helpers.getSmallPicture(picUrl, 200)" />
 			</div>
 		</div>
 

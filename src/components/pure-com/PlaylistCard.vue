@@ -2,7 +2,7 @@
 	<div class="card">
 		<div class="card-image">
 			<span class="card-caption">{{ caption }}</span>
-			<img v-lazy="picUrl" />
+			<img v-lazy="$helpers.getSmallPicture(picUrl, 200)" />
 			<div class="played-info">
 				<div class="played-count">
 					<i class="iconfont icon-listen"></i>

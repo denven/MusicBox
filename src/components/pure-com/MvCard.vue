@@ -1,7 +1,7 @@
 <template>
 	<div class="mv-card">
 		<div class="card-image">
-			<img v-lazy="picUrl" :style="{ height: height }" />
+			<img v-lazy="$helpers.getSmallPicture(picUrl, 250, 140)" :style="{ height: height }" />
 			<div class="played-count">
 				<i class="iconfont icon-yiguankan"></i>
 				<span>{{ calcPlayedCount(playCount) }}</span>
