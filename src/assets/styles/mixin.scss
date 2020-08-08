@@ -1,10 +1,5 @@
 // flex layout functions
-@mixin flex-align(
-	$direction: row,
-	$main-axis: space-between,
-	$cross-axis: center,
-	$wrap: nowrap
-) {
+@mixin flex-align($direction: row, $main-axis: space-between, $cross-axis: center, $wrap: nowrap) {
 	display: flex;
 	flex-direction: $direction;
 	justify-content: $main-axis;
