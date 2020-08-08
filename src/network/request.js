@@ -18,7 +18,10 @@ export const getSearchResults = (params) => axios.get(`/search`, { params: param
 // why it returns the same playlist?
 export const getToplist = (params) => axios.get(`/playlist/detail`, { params: params });
 export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
-export const getNewReleases = () => axios.get(`/album/newest`);
+
+// =================  Albums realted requests ================================================
+export const getNewAlbums = () => axios.get(`/album/newest`);
+export const getAllAlbums = (params) => axios.post(`/album/new`, params);
 
 export const getAudioUrl = (songId) => axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
 export const getAudioDetail = (songIds) => axios.get(`/song/detail`, { params: { ids: songIds } });

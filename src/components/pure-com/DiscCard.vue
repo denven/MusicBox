@@ -1,5 +1,5 @@
 <template>
-	<div class="card">
+	<div class="disc-card">
 		<div class="card-image">
 			<span class="card-caption">{{ caption }}</span>
 			<div class="disc">
@@ -23,7 +23,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/styles/mixin.scss";
 
-.card {
+.disc-card {
 	width: 226px;
 	margin: 20px 0;
 	position: relative;
