@@ -1,5 +1,6 @@
 <template>
-	<div class="banners" v-bind:style="'background: url(' + bgImageUrl + ') no-repeat left center;'">
+	<!-- <div class="banners" :style="'background: url(' + bgImageUrl + ') no-repeat left center;'"> -->
+	<div class="banners" :style="{ background: `url(${bgImageUrl})` + ` no-repeat center center / 6000px` }">
 		<div class="carousel">
 			<el-carousel :interval="5000" arrow="always" height="281px" @change="onBannerChange">
 				<el-carousel-item v-for="slide in banners" :key="slide.url">
@@ -26,8 +27,8 @@ export default {
 
 	async created() {
 		let { data } = await getBannerCarousel();
-		// console.log(`banner:`, data);
 		this.banners = data.banners;
+		this.bgImageUrl = this.banners[0].imageUrl + `?imageView&blur=40x20`;
 	},
 
 	methods: {
