@@ -65,10 +65,20 @@ const convertPlayedCount = (count) => {
 	return count;
 };
 
+// generate small picture link adress
+const getSmallPicture = (url, width, height) => {
+	if (!height) {
+		height = width;
+	}
+	let newPicUrl = url + `?param=${width}y${height}`;
+	return newPicUrl;
+};
+
 module.exports = {
 	convertMsToMinutes,
 	convertSecToMinutes,
 	formatTime,
 	formatNumberWithTS,
 	convertPlayedCount,
+	getSmallPicture,
 };
