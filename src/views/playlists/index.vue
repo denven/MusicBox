@@ -1,8 +1,7 @@
 <template>
 	<div class="playlists">
-		<!-- <div class="backdrop" :style="{ background: `url(${bestLists[0].coverImgUrl}) no-repeat top center` }"></div> -->
 		<div class="special-recommend">
-			<img class="backdrop" v-lazy="bestLists[0].coverImgUrl" alt="" />
+			<img class="backdrop" v-lazy="$helpers.getSmallPicture(bestLists[0].coverImgUrl, 200)" alt="" />
 			<div class="backdrop-mask"></div>
 			<div class="playlist-cover">
 				<img v-lazy="$helpers.getSmallPicture(bestLists[0].coverImgUrl, 200)" alt="" />
@@ -19,8 +18,8 @@
 				<el-tab-pane label="Language" name="language">
 					<div class="sub-cats">
 						<span
-							@click="setCategory('language', index)"
-							:class="{ active: curSelected === 'language' + index }"
+							@click="setCategory('language', item.name, index)"
+							:class="{ active: catSelected === 'language' + index }"
 							class="sub-cat"
 							v-for="(item, index) in subCats.language"
 							:key="item.name"
@@ -32,8 +31,8 @@
 				<el-tab-pane label="Genre" name="genre">
 					<div class="sub-cats">
 						<span
-							@click="setCategory('genre', index)"
-							:class="{ active: curSelected === 'genre' + index }"
+							@click="setCategory('genre', item.name, index)"
+							:class="{ active: catSelected === 'genre' + index }"
 							class="sub-cat"
 							v-for="(item, index) in subCats.genre"
 							:key="item.name"
@@ -44,8 +43,8 @@
 				<el-tab-pane label="Occasion" name="occasion">
 					<div class="sub-cats">
 						<span
-							@click="setCategory('occasion', index)"
-							:class="{ active: curSelected === 'occasion' + index }"
+							@click="setCategory('occasion', item.name, index)"
+							:class="{ active: catSelected === 'occasion' + index }"
 							class="sub-cat"
 							v-for="(item, index) in subCats.occasion"
 							:key="item.name"
@@ -56,8 +55,8 @@
 				<el-tab-pane label="Emotion" name="emotion">
 					<div class="sub-cats">
 						<span
-							@click="setCategory('emotion', index)"
-							:class="{ active: curSelected === 'emotion' + index }"
+							@click="setCategory('emotion', item.name, index)"
+							:class="{ active: catSelected === 'emotion' + index }"
 							class="sub-cat"
 							v-for="(item, index) in subCats.emotion"
 							:key="item.name"
@@ -68,9 +67,9 @@
 				<el-tab-pane label="Subject" name="subject">
 					<div class="sub-cats">
 						<span
-							@click="setCategory('subject', index)"
+							@click="setCategory('subject', item.name, index)"
 							class="sub-cat"
-							:class="{ active: curSelected === 'subject' + index }"
+							:class="{ active: catSelected === 'subject' + index }"
 							v-for="(item, index) in subCats.subject"
 							:key="item.name"
 							>{{ item.name }}</span
@@ -82,7 +81,7 @@
 
 		<div class="cards">
 			<PlaylistCard
-				v-for="item in toplist"
+				v-for="item in topLists"
 				:key="item.id"
 				:caption="item.copywriter"
 				:picUrl="item.coverImgUrl"
@@ -103,20 +102,21 @@
 <script>
 import PlaylistCard from "@/components/pure-com/PlaylistCard";
 
-import { getFeaturedList, getAllCategories, getBestPlaylists, getTopPlaylists } from "@/network/request";
+import { getAllCategories, getBestPlaylists, getTopPlaylists } from "@/network/request";
 
 export default {
 	data() {
 		return {
+			filter: { cat: "全部", limit: 10, offset: 0 },
 			bestLists: [],
-			toplist: [],
+			topLists: [],
 			listsTotal: 0,
-			pageIdx: 1,
+			curPageIdx: 1,
 
 			// filter options
 			categories: [],
 			subCats: { language: [], genre: [], occasion: [], emotion: [], subject: [] },
-			curSelected: "",
+			catSelected: "", // selected sub category
 		};
 	},
 
@@ -125,8 +125,22 @@ export default {
 	},
 
 	methods: {
-		setCategory(category, index) {
-			this.curSelected = category + index;
+		setCategory(category, name, index) {
+			if (this.catSelected == category + index) {
+				this.catSelected = "";
+				this.filter.cat = "全部";
+			} else {
+				this.catSelected = category + index;
+				this.filter.cat = name;
+			}
+
+			this.filter = { ...this.filter };
+		},
+
+		setPageIndex(pageIdx) {
+			this.curPageIdx = pageIdx;
+			this.filter.offset = this.filter.limit * (pageIdx - 1);
+			this.filter = { ...this.filter };
 		},
 
 		async getCategories() {
@@ -156,37 +170,33 @@ export default {
 			});
 		},
 
-		async getBestLists() {
-			let { data } = await getBestPlaylists();
+		async getBestLists(filter) {
+			let { data } = await getBestPlaylists({ ...filter, limit: 1 });
 			this.bestLists = data.playlists;
-			console.log("best", data);
 		},
 
-		async getTopLists() {
-			let { data } = await getTopPlaylists();
-			this.toplist = data.playlists;
+		async getTopLists(filter) {
+			let { data } = await getTopPlaylists(filter);
+			this.topLists = data.playlists;
 			this.listsTotal = data.total;
-			console.log("list", this.listsTotal, data);
 		},
+	},
 
-		setPageIndex(pageIdx) {
-			this.pageIdx = pageIdx;
-			// this.filter = { ...this.filter, offset: this.filter.limit * (pageIdx - 1) };
+	watch: {
+		async filter() {
+			await this.getTopLists(this.filter);
+			await this.getBestLists(this.filter);
 		},
 	},
 
 	async created() {
-		let { data } = await getFeaturedList();
 		await this.getCategories();
-		await this.getTopLists();
-		await this.getBestLists();
-		console.log(`toplist`, data.result);
-		// this.toplist = data.result;
+		await this.getTopLists(this.filter);
+		await this.getBestLists(this.filter);
 	},
 };
 </script>
 
-// scoped is needed here
 <style lang="scss" scoped>
 @import "@/assets/styles/mixin.scss";
 @import "@/assets/styles/variables.scss";
