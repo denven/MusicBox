@@ -8,8 +8,11 @@ import "@/assets/styles/reset.scss";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 
-const MINI_B64_IMG =
-	"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+import helpers from "@/common/helpers";
+
+Vue.prototype.$helpers = helpers;
+
+const MINI_B64_IMG = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
