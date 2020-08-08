@@ -1,6 +1,6 @@
 <template>
 	<div class="playlists">
-		<div class="special-recommend">
+		<div class="special-recommend" v-if="bestLists.length > 0">
 			<img class="backdrop" v-lazy="$helpers.getSmallPicture(bestLists[0].coverImgUrl, 200)" alt="" />
 			<div class="backdrop-mask"></div>
 			<div class="playlist-cover">
@@ -107,13 +107,13 @@ import { getAllCategories, getBestPlaylists, getTopPlaylists } from "@/network/r
 export default {
 	data() {
 		return {
-			filter: { cat: "全部", limit: 10, offset: 0 },
 			bestLists: [],
 			topLists: [],
 			listsTotal: 0,
 			curPageIdx: 1,
 
 			// filter options
+			filter: { cat: "全部", limit: 10, offset: 0 },
 			categories: [],
 			subCats: { language: [], genre: [], occasion: [], emotion: [], subject: [] },
 			catSelected: "", // selected sub category
@@ -184,15 +184,15 @@ export default {
 
 	watch: {
 		async filter() {
-			await this.getTopLists(this.filter);
 			await this.getBestLists(this.filter);
+			await this.getTopLists(this.filter);
 		},
 	},
 
 	async created() {
+		await this.getBestLists(this.filter);
 		await this.getCategories();
 		await this.getTopLists(this.filter);
-		await this.getBestLists(this.filter);
 	},
 };
 </script>
