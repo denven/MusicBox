@@ -28,7 +28,13 @@
 			</DiscCard>
 		</div>
 
-		<el-pagination background layout="prev, pager, next" :total="albTotal" @current-change="setPageIndex">
+		<el-pagination
+			v-if="albTotal > 0"
+			background
+			layout="prev, pager, next"
+			:total="albTotal"
+			@current-change="setPageIndex"
+		>
 		</el-pagination>
 	</div>
 </template>
@@ -54,10 +60,12 @@ export default {
 
 	methods: {
 		async getAllAlbumsByCategory() {
-			let { data } = await getAllAlbums(this.filter);
-			this.albTotal = data.total;
-			this.newAlbums = data.albums;
-			console.log(data);
+			// the param `timestamp` is needed here to get latest albums, otherwise,
+			// the server will buffer the data from requests in the past 2 minutes
+			let timestamp = Date.now();
+			let res = await getAllAlbums({ ...this.filter, timestamp });
+			this.albTotal = res.data.total;
+			this.newAlbums = res.data.albums;
 		},
 
 		setFilter(tabType, keyword, index) {
@@ -77,7 +85,6 @@ export default {
 
 	watch: {
 		async filter() {
-			console.log("filter changed..............", this.filter);
 			await this.getAllAlbumsByCategory();
 		},
 	},
@@ -96,6 +103,8 @@ export default {
 	grid-template-columns: 1fr 1fr;
 	justify-content: start;
 	margin-top: 20px;
+	padding-bottom: 10px;
+	border-bottom: 3px solid #e4e6ed;
 
 	.area-tabs {
 		@include flex-align(row, flex-start);
