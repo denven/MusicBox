@@ -4,9 +4,11 @@ import { Loading } from "element-ui";
 
 const axios = axiosLib.create({
 	crossDomain: true,
+	// this setup is not allowed from the server
+	// headers: { "Cache-Control": "no-cache" },
 });
 
-axios.defaults.baseURL = "https://api.mtnhao.com/";
+axios.defaults.baseURL = `${process.env.VUE_APP_API_HOST}`;
 axios.defaults.timeout = 30000;
 
 // Add interceptor before request
