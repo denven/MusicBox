@@ -83,6 +83,7 @@
 			<PlaylistCard
 				v-for="item in topLists"
 				:key="item.id"
+				:playlistId="item.id"
 				:caption="item.copywriter"
 				:picUrl="item.coverImgUrl"
 				:playCount="item.playCount"
@@ -185,7 +186,6 @@ export default {
 			let { data } = await getTopPlaylists(filter);
 			this.topLists = data.playlists;
 			this.listsTotal = data.total;
-			console.log(this.topLists);
 		},
 	},
 
@@ -255,7 +255,7 @@ export default {
 		@include flex-align(column, space-between, flex-start);
 
 		.tag {
-			width: 200px;
+			width: 160px;
 			height: 35px;
 			line-height: 35px;
 			border-radius: 5px;

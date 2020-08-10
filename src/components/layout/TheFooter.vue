@@ -33,8 +33,8 @@
 			</div>
 
 			<ProgressBar
-				:dotSize="10"
-				:barHeight="6"
+				:dotSize="8"
+				:barHeight="4"
 				:barColor="'green'"
 				:barBgColor="'black'"
 				:percent="percentage"
@@ -55,7 +55,7 @@
 			</div>
 			<!-- For volume adjustment -->
 			<ProgressBar
-				:dotSize="12"
+				:dotSize="10"
 				:barHeight="4"
 				:barColor="'#c33f18'"
 				:barBgColor="'grey'"
@@ -94,7 +94,6 @@ export default {
 	methods: {
 		async play() {
 			if (!this.audio) {
-				console.log("Music is not ready yet...");
 				return;
 			}
 
@@ -161,7 +160,7 @@ export default {
 		// Click button to play or pause
 		controlPlay() {
 			if (!this.audio) return;
-			console.log(this.$refs.audio.duration, this.$refs.audio.currentTime);
+			// console.log(this.$refs.audio.duration, this.$refs.audio.currentTime);
 
 			if (this.audio.src) {
 				if (this.isplaying) {
@@ -174,7 +173,6 @@ export default {
 
 		// when getting a percent from progress bar
 		adjustVolume(percent) {
-			console.log(percent);
 			this.$refs.audio.volume = (percent / 100).toFixed(2); // volume： 0-1
 			this.volumeRatio = this.$refs.audio.volume;
 		},

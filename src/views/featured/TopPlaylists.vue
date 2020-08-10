@@ -8,6 +8,7 @@
 			<PlaylistCard
 				v-for="item in toplist"
 				:key="item.id"
+				:playlistId="item.id"
 				:caption="item.copywriter"
 				:picUrl="item.picUrl"
 				:playCount="item.playCount"

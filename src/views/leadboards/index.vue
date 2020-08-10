@@ -4,7 +4,9 @@
 		<div class="leadboard-wrapper">
 			<!-- Left Top Part: Playlist information -->
 			<div class="leadboard-detail" v-if="leadboards.length > 0">
-				<img class="leadboard-image" v-lazy="$helpers.getSmallPicture(curLb.coverImgUrl, 110)" alt="" />
+				<div class="img-wrapper">
+					<img class="leadboard-image" v-lazy="$helpers.getSmallPicture(curLb.coverImgUrl, 110)" alt="" />
+				</div>
 				<div class="leadboard-details">
 					<h3 class="name">{{ curLb.name }}</h3>
 					<div class="update-time">
@@ -259,9 +261,15 @@ export default {
 		@include flex-align(row, flex-start);
 	}
 
-	.leadboard-image {
+	.img-wrapper {
+		width: 110px;
+		height: 110px;
 		margin-right: 15px;
 	}
+
+	// .leadboard-image {
+	// 	margin-right: 15px;
+	// }
 
 	.leadboard-details {
 		height: 110px;

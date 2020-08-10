@@ -1,5 +1,5 @@
 <template>
-	<div class="pl-card">
+	<div class="pl-card" @click="gotoRoute(playlistId)">
 		<div class="card-image">
 			<span class="card-caption">{{ caption }}</span>
 			<img v-lazy="$helpers.getSmallPicture(picUrl, 200)" />
@@ -20,7 +20,7 @@
 <script>
 export default {
 	name: "PlaylistCard",
-	props: ["caption", "picUrl", "playCount", "songName"],
+	props: ["playlistId", "caption", "picUrl", "playCount", "songName"],
 	methods: {
 		calcPlayedCount(count) {
 			if (count >= 1000 * 1000) {
@@ -38,6 +38,10 @@ export default {
 						.replace(/\.$/, "") + `K`
 				);
 			}
+		},
+
+		gotoRoute(id) {
+			this.$router.push({ path: "/playlists/detail", query: { id } });
 		},
 	},
 };

@@ -5,7 +5,9 @@
 			<!-- Page Left Part contains three parts vertically -->
 			<div class="top-info">
 				<div class="pl-detail">
-					<img class="pl-image" v-lazy="$helpers.getSmallPicture(info.coverImgUrl, 208)" alt="" />
+					<div class="img-wrapper">
+						<img class="pl-image" v-lazy="$helpers.getSmallPicture(info.coverImgUrl, 208)" alt="" />
+					</div>
 					<div class="pl-details">
 						<h3 class="name">{{ info.name }}</h3>
 						<div class="creator">
@@ -58,7 +60,7 @@
 			<div class="related" v-if="similarPls.length > 0">
 				<div class="title">Similar Playlists</div>
 				<div class="simi-pls">
-					<div class="one-pl" v-for="pl in similarPls" :key="pl.id">
+					<div class="one-pl" v-for="pl in similarPls" :key="pl.id" @click="gotoRoute(pl.id)">
 						<img v-lazy="$helpers.getSmallPicture(pl.coverImgUrl, 80)" alt="" />
 						<div class="source">
 							<span class="name">{{ pl.name }}</span>
@@ -87,6 +89,7 @@ export default {
 			creator: {},
 			subscribers: [],
 			similarPls: [], //similar playlists
+			playlistId: 0,
 		};
 	},
 
@@ -160,11 +163,22 @@ export default {
 			res = await getPlaylistComments({ id: playlistId });
 			this.comments = res.data.comments;
 		},
+
+		gotoRoute(id) {
+			this.playlistId = id;
+			this.$router.push({ path: "/playlists/detail", query: { id } });
+		},
+	},
+
+	watch: {
+		async playlistId(newId) {
+			await this.getPlaylistInfo(newId);
+		},
 	},
 
 	async created() {
-		const playlistId = this.$route.query.id;
-		await this.getPlaylistInfo(playlistId);
+		this.playlistId = this.$route.query.id;
+		await this.getPlaylistInfo(this.playlistId);
 	},
 };
 </script>
@@ -187,9 +201,15 @@ export default {
 		margin: 0 auto;
 		@include flex-align(row, flex-start);
 
-		.pl-image {
+		// .pl-image {
+		// 	margin-right: 15px;
+		// 	// border-radius: 3px;
+		// }
+
+		.img-wrapper {
+			width: 208px;
+			height: 208px;
 			margin-right: 15px;
-			// border-radius: 3px;
 		}
 
 		.pl-details {
@@ -238,6 +258,10 @@ export default {
 	width: 280px;
 	padding-bottom: 20px;
 	margin-left: 20px;
+
+	.one-pl {
+		cursor: pointer;
+	}
 
 	.title {
 		font-size: 13px;
