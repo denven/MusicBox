@@ -79,7 +79,6 @@ import {
 	getVideoUrl,
 	getVideoDetail,
 	getSimilarVideos,
-	getVideoSocialInfo,
 } from "@/network/request";
 
 export default {
@@ -145,7 +144,7 @@ export default {
 					Promise.resolve(getVideoUrl(vid)),
 					Promise.resolve(getVideoDetail(vid)),
 					Promise.resolve(getSimilarVideos(vid)),
-					Promise.resolve(getVideoSocialInfo(vid)),
+					// Promise.resolve(getVideoSocialInfo(vid)),
 				]);
 
 				console.log("=======================", allMvData);

@@ -136,7 +136,12 @@ export default {
 				const audioUrl = data.data[0].url;
 
 				if (!audioUrl) {
-					return this.$message.error("This track is only available to VIP user！");
+					return this.$message({
+						showClose: true,
+						message: "Sorry, this track is only available to VIP user！",
+						type: "error",
+						offset: 50,
+					});
 				} else {
 					this.$store.state.song = {
 						name: track.name,

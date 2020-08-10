@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="newAlbums.length > 0">
 		<SectionTitle :title="'New Realeases'" :routePath="'/albums'">
 			<i class="iconfont icon-album"></i>
 		</SectionTitle>

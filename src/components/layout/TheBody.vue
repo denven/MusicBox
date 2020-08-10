@@ -105,6 +105,9 @@ export default {
 
 			a.router-link-active {
 				background-color: rgba(0, 0, 0, 0.1);
+				i {
+					color: $theme-primary-color !important;
+				}
 			}
 		}
 	}

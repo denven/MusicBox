@@ -5,6 +5,7 @@ import axios from "./config";
 
 // return apromise
 export const getBannerCarousel = () => axios.post(`/banner?type=0`);
+export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
 
 // 可选参数 :
 // limit : 返回数量 , 默认为 30
@@ -13,15 +14,24 @@ export const getBannerCarousel = () => axios.post(`/banner?type=0`);
 // 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
 export const getSearchResults = (params) => axios.get(`/search`, { params: params });
 
+// Leadboard Requests
 // get leadboards, use `/playlislt/detail?id=xxxx` instead of `/toplist?id=xxxx`
-// export const getToplist = () => axios.get(`/toplist?id=19723756`);
-// why it returns the same playlist?
-export const getToplist = (params) => axios.get(`/playlist/detail`, { params: params });
-export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
+export const getAllLeadboards = () => axios.get(`/toplist`);
+export const getLeadboardDetail = (params) => axios.get(`/playlist/detail`, { params: params });
+
+// Playlists Requests
+export const getAllCategories = (params) => axios.get(`/playlist/catlist`, { params: params });
+export const getBestPlaylists = (params) => axios.get(`/top/playlist/highquality`, { params: params });
+export const getTopPlaylists = (params) => axios.get("/top/playlist", { params: params });
+
+// 推荐歌单接口地址 : /personalized  可选参数 : limit: 默认为 30 (不支持 offset)
+// 推荐新音乐接口地址 : /personalized/newsong
+// 推荐电台接口地址 : /personalized/djprogram
+// 推荐节目接口地址 : /program/recommend
 
 // =================  Albums realted requests ================================================
 export const getNewAlbums = () => axios.get(`/album/newest`);
-export const getAllAlbums = (params) => axios.post(`/album/new`, params);
+export const getAllAlbums = (params) => axios.get(`/album/new`, { params: params });
 
 export const getAudioUrl = (songId) => axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
 export const getAudioDetail = (songIds) => axios.get(`/song/detail`, { params: { ids: songIds } });
@@ -43,7 +53,7 @@ export const getMvArtistV2 = (id) => axios.get(`/artists`, { params: { id } });
 export const getSimilarMvs = (mvid) => axios.get("/simi/mv", { params: { mvid } });
 export const getMvComments = (mvid) => axios.get(`/comment/mv`, { params: { id: mvid } });
 
-// requests for ordinory videos (how to get the vid ????)
+// Requests for ordinory videos (how to get the vid ????)
 export const getVideoUrl = (vid) => axios.get(`/video/url`, { params: { id: vid } });
 export const getVideoDetail = (vid) => axios.get(`/video/detail`, { params: { id: vid } });
 export const getVideoComments = (vid) => axios.get(`/comment/video`, { params: { id: vid } });

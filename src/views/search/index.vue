@@ -124,7 +124,12 @@ export default {
 				const { name, artist } = this.tracks.data[index];
 				console.log(name, artist, picUrl, audioUrl);
 				if (!audioUrl) {
-					return this.$message.error("This track is only available to VIP user！");
+					return this.$message({
+						showClose: true,
+						message: "Sorry, this track is only available to VIP user！",
+						type: "error",
+						offset: 50,
+					});
 				} else {
 					this.$store.state.song = {
 						name,
@@ -198,7 +203,6 @@ export default {
 			} else if (typeName === "videos") {
 				this.videos.count = data.result.mvs.length;
 				this.videos.data = data.result.mvs.map((mv) => {
-					console.log("==============Test videos info:===============", mv);
 					let { id, name, artists, cover, briefDesc, duration, playCount } = mv;
 					let artistsNames = artists.reduce((allNames, item) => {
 						allNames = allNames === "" ? item.name : allNames + "," + item.name;

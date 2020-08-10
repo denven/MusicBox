@@ -1,3 +1,4 @@
+// This is the home page
 <template>
 	<div>
 		<Banner />

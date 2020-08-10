@@ -53,7 +53,14 @@
 			</div>
 		</div>
 
-		<el-pagination background layout="prev, pager, next" :total="1000" @current-change="setPageIndex"> </el-pagination>
+		<el-pagination
+			v-if="artists.length > 0"
+			background
+			layout="prev, pager, next"
+			:total="1000"
+			@current-change="setPageIndex"
+		>
+		</el-pagination>
 	</div>
 </template>
 
@@ -84,8 +91,6 @@ export default {
 			filter: { type: -1, area: -1, initial: "A", limit: 10, offset: 0 },
 			filterIdx: { area: 0, type: 0, initial: 0 }, // value is the Tabs array index
 
-			curPageIdx: 1, //used for pagination, starts from 1
-
 			areaTabs: [],
 			typeTabs: [],
 			sortTabs: [],
@@ -102,7 +107,6 @@ export default {
 		async getArtistsByCategory() {
 			let res = await getArtistsList(this.filter);
 			this.artists = res.data.artists;
-			console.log("Test Artists ==========", res, this.artists);
 		},
 
 		initCategoryTabs() {
@@ -153,7 +157,6 @@ export default {
 		},
 
 		setPageIndex(pageIdx) {
-			this.pageIdx = pageIdx;
 			this.filter = { ...this.filter, offset: this.filter.limit * (pageIdx - 1) };
 		},
 	},
@@ -183,6 +186,8 @@ export default {
 		grid-template-columns: 1fr 1fr;
 		row-gap: 10px;
 		justify-content: start;
+		padding-bottom: 10px;
+		border-bottom: 3px solid #e4e6ed;
 
 		.area-tabs,
 		.type-tabs,

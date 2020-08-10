@@ -91,6 +91,7 @@
 		</div>
 
 		<el-pagination
+			v-if="listsTotal > 0"
 			background
 			layout="prev, pager, next"
 			:total="listsTotal"
@@ -110,7 +111,6 @@ export default {
 			bestLists: [],
 			topLists: [],
 			listsTotal: 0,
-			curPageIdx: 1,
 
 			// filter options
 			filter: { cat: "全部", limit: 10, offset: 0 },
@@ -138,7 +138,6 @@ export default {
 		},
 
 		setPageIndex(pageIdx) {
-			this.curPageIdx = pageIdx;
 			this.filter.offset = this.filter.limit * (pageIdx - 1);
 			this.filter = { ...this.filter };
 		},

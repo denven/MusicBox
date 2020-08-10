@@ -58,8 +58,13 @@
 			</MvCard>
 		</div>
 
-		<el-pagination background layout="prev, pager, next" :total="mvsTotal" @current-change="setPageIndex">
-		</el-pagination>
+		<el-pagination
+			v-if="mvsTotal > 0"
+			background
+			layout="prev, pager, next"
+			:total="mvsTotal"
+			@current-change="setPageIndex"
+		></el-pagination>
 	</div>
 </template>
 
@@ -82,8 +87,6 @@ export default {
 			areaTabs: ["All", "China", "Hongkong", "English", "Japanese", "Korean"],
 			typeTabs: ["All", "Official", "Acoustic", "Live", "Net Ease"],
 			sortTabs: ["Trending", "Hottest", "Latest"],
-
-			curPageIdx: 1, //used for pagination, starts from 1
 		};
 	},
 
@@ -122,7 +125,6 @@ export default {
 		},
 
 		setPageIndex(pageIdx) {
-			this.pageIdx = pageIdx;
 			this.filter = { ...this.filter, offset: this.filter.limit * (pageIdx - 1) };
 		},
 	},
@@ -154,6 +156,8 @@ export default {
 	row-gap: 10px;
 	justify-content: start;
 	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 3px solid #e4e6ed;
 
 	.area-tabs,
 	.type-tabs,

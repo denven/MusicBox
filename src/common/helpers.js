@@ -39,10 +39,18 @@ const formatTime = (timestamp) => {
 // format number with thousands separators
 const formatNumberWithTS = (number) => {
 	if (isNaN(number)) {
-		return number.toString();
+		return number;
 	}
 
 	return number.toString().replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, "$1,");
+};
+
+const encloseNumber = (number) => {
+	if (isNaN(number)) {
+		return number;
+	}
+
+	return `(` + number.toString().replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, "$1,") + `)`;
 };
 
 const convertPlayedCount = (count) => {
@@ -79,6 +87,7 @@ module.exports = {
 	convertSecToMinutes,
 	formatTime,
 	formatNumberWithTS,
+	encloseNumber,
 	convertPlayedCount,
 	getSmallPicture,
 };
