@@ -34,7 +34,7 @@
 
 <script>
 import SectionTitle from "@/components/pure-com/SectionTitle";
-import { getLeadboardDetail, getAudioUrl, getAudioDetail } from "@/network/request";
+import { getPlaylistDetail, getAudioUrl, getAudioDetail } from "@/network/request";
 
 export default {
 	data() {
@@ -80,10 +80,7 @@ export default {
 		},
 
 		gotoRoute(id) {
-			this.$router.push({
-				name: "Leadboards",
-				params: { id },
-			});
+			this.$router.push({ name: "Leadboards", params: { id } });
 		},
 	},
 
@@ -91,10 +88,10 @@ export default {
 	async created() {
 		let timestamp = Date.now();
 		let data = await Promise.all([
-			Promise.resolve(getLeadboardDetail({ id: 60198, limit: 20, timestamp })),
-			Promise.resolve(getLeadboardDetail({ id: 180106, limit: 20, timestamp })),
-			Promise.resolve(getLeadboardDetail({ id: 11641012, limit: 20, timestamp })),
-			Promise.resolve(getLeadboardDetail({ id: 120001, limit: 20, timestamp })),
+			Promise.resolve(getPlaylistDetail({ id: 60198, limit: 20, timestamp })),
+			Promise.resolve(getPlaylistDetail({ id: 180106, limit: 20, timestamp })),
+			Promise.resolve(getPlaylistDetail({ id: 11641012, limit: 20, timestamp })),
+			Promise.resolve(getPlaylistDetail({ id: 120001, limit: 20, timestamp })),
 		]);
 
 		data = data.map((data) => {
@@ -156,9 +153,6 @@ export default {
 		.item-wrapper {
 			flex: 1;
 			@include flex-align(row, space-between, center);
-			// .buttons {
-			//   visibility: hidden;
-			// }
 
 			&:hover {
 				cursor: pointer;

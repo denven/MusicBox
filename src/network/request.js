@@ -17,7 +17,9 @@ export const getSearchResults = (params) => axios.get(`/search`, { params: param
 // Leadboard Requests
 // get leadboards, use `/playlislt/detail?id=xxxx` instead of `/toplist?id=xxxx`
 export const getAllLeadboards = () => axios.get(`/toplist`);
-export const getLeadboardDetail = (params) => axios.get(`/playlist/detail`, { params: params });
+
+// Note: leadboard detail and comments are fetched by playlist APIs
+export const getPlaylistDetail = (params) => axios.get(`/playlist/detail`, { params: params });
 export const getPlaylistComments = (params) => axios.get(`/comment/playlist`, { params: params });
 
 // Playlists Requests

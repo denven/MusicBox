@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { getAllLeadboards, getLeadboardDetail, getPlaylistComments, getAudioUrl } from "@/network/request";
+import { getAllLeadboards, getPlaylistDetail, getPlaylistComments, getAudioUrl } from "@/network/request";
 import Comment from "@/components/pure-com/Comment";
 
 export default {
@@ -130,7 +130,7 @@ export default {
 		},
 
 		async getLeadboardDetail(id) {
-			let { data } = await getLeadboardDetail({ id });
+			let { data } = await getPlaylistDetail({ id });
 			let { shareCount, commentCount, playCount } = data.playlist;
 
 			this.lbTracks = [];
