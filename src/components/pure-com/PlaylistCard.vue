@@ -1,5 +1,5 @@
 <template>
-	<div class="card">
+	<div class="pl-card">
 		<div class="card-image">
 			<span class="card-caption">{{ caption }}</span>
 			<img v-lazy="$helpers.getSmallPicture(picUrl, 200)" />
@@ -47,7 +47,7 @@ export default {
 @import "@/assets/styles/mixin.scss";
 @import "@/assets/styles/variables.scss";
 
-.card {
+.pl-card {
 	width: 200px;
 	margin: 20px 0;
 	position: relative;
@@ -56,6 +56,9 @@ export default {
 
 	.card-image {
 		position: relative;
+		&:hover {
+			cursor: pointer;
+		}
 
 		&:hover .card-caption,
 		&:hover .played-info {
