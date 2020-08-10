@@ -3,7 +3,7 @@
 		<!-- Page Left Part contains three parts vertically -->
 		<div class="leadboard-wrapper">
 			<!-- Left Top Part: Playlist information -->
-			<div class="leadboard-detail">
+			<div class="leadboard-detail" v-if="leadboards.length > 0">
 				<img class="leadboard-image" v-lazy="$helpers.getSmallPicture(curLb.coverImgUrl, 110)" alt="" />
 				<div class="leadboard-details">
 					<h3 class="name">{{ curLb.name }}</h3>
@@ -125,6 +125,8 @@ export default {
 				this.lbTracks.push({ id, name, duration, album, artist, coverUrl });
 			});
 
+			// Add more information to current leadboard (as the results from getAllLeadboards()
+			// request doesn't contain the following attributes)
 			this.curLb = { ...this.curLb, shareCount, commentCount, playCount, tracksCount: this.lbTracks.length };
 		},
 
@@ -201,7 +203,6 @@ export default {
 		let routeLdId = this.$route.params.id || 0;
 
 		for (const index in this.leadboards) {
-			console.log(index, routeLdId, this.leadboards[index].id);
 			if (this.leadboards[index].id === +routeLdId) {
 				this.curSelected = index;
 				break;
