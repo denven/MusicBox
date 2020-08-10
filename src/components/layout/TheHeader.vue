@@ -4,12 +4,11 @@
 			<div class="icon nav-buttons">
 				<router-link to="/">
 					<div class="logo" @keyup.enter="gotoHomePage" title="Return to Home"></div>
-					<!-- <div class="logo" @keyup.enter="gotoHomePage" title="Return to Home"></div> -->
 				</router-link>
 				<i class="icon el-icon-full-screen" @click="toggleFullScreen" title="Toogle Fullscrenn"></i>
 				<i class="icon el-icon-arrow-down"></i>
-				<i class="icon el-icon-arrow-left"></i>
-				<i class="icon el-icon-arrow-right"></i>
+				<i class="icon el-icon-arrow-left" @click="backward" title="Previous Page"></i>
+				<i class="icon el-icon-arrow-right" @click="forward" title="Next Page"></i>
 			</div>
 		</div>
 		<div class="right">
@@ -79,6 +78,12 @@ export default {
 					offset: 50,
 				});
 			}
+		},
+		backward() {
+			this.$router.back();
+		},
+		forward() {
+			this.$router.forward();
 		},
 	},
 };
