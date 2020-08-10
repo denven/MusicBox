@@ -68,6 +68,18 @@
 			</div>
 
 			<!-- Left Bottom Part: Comments-->
+			<div class="ld-comments">
+				<h1 class="comments-title">{{ comments.length + " Comments" }}</h1>
+				<Comment
+					v-for="item in comments"
+					:key="item.time"
+					:content="item.content"
+					:name="item.user.nickname"
+					:avatar="item.user.avatarUrl"
+					:likedCount="item.likedCount"
+					:time="item.time"
+				></Comment>
+			</div>
 		</div>
 
 		<!-- Page Right Part -->
@@ -90,7 +102,8 @@
 </template>
 
 <script>
-import { getAllLeadboards, getLeadboardDetail, getAudioUrl } from "@/network/request";
+import { getAllLeadboards, getLeadboardDetail, getPlaylistComments, getAudioUrl } from "@/network/request";
+import Comment from "@/components/pure-com/Comment";
 
 export default {
 	data() {
@@ -99,7 +112,12 @@ export default {
 			curSelected: 15, // the 15th is US billboard by default
 			curLb: {}, // current selected leadboard
 			lbTracks: [], // tracks in selected leadboard
+			comments: [],
 		};
+	},
+
+	components: {
+		Comment,
 	},
 
 	methods: {
@@ -128,6 +146,11 @@ export default {
 			// Add more information to current leadboard (as the results from getAllLeadboards()
 			// request doesn't contain the following attributes)
 			this.curLb = { ...this.curLb, shareCount, commentCount, playCount, tracksCount: this.lbTracks.length };
+		},
+
+		async getLeadboardComments(id) {
+			let { data } = await getPlaylistComments({ id });
+			this.comments = data.comments;
 		},
 
 		async playAudio(track) {
@@ -159,6 +182,7 @@ export default {
 	watch: {
 		async curSelected() {
 			await this.getLeadboardDetail(this.curLb.id);
+			await this.getLeadboardComments(this.curLb.id);
 		},
 	},
 
@@ -211,6 +235,7 @@ export default {
 
 		this.curLb = this.leadboards[this.curSelected];
 		await this.getLeadboardDetail(this.curLb.id);
+		await this.getLeadboardComments(this.curLb.id);
 	},
 };
 </script>
@@ -326,6 +351,16 @@ export default {
 				}
 			}
 		}
+	}
+}
+
+// Left Part -- Bottome comments styles
+.ld-comments {
+	margin: 30px 0;
+	text-align: left;
+	.comments-title {
+		margin: 10px 0;
+		font-weight: bold;
 	}
 }
 
