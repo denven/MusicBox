@@ -35,7 +35,8 @@ export const getSimilarPlaylists = (params) => axios.get("/related/playlist", { 
 
 // =================  Albums realted requests ================================================
 export const getNewAlbums = () => axios.get(`/album/newest`);
-export const getAllAlbums = (params) => axios.get(`/album/new`, { params: params });
+export const getAllAlbums = (params) =>
+	axios.get(`/album/new`, { baseURL: `${process.env.VUE_APP_API_BACKUP}`, params: params });
 
 export const getAudioUrl = (songId) => axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
 export const getAudioDetail = (songIds) => axios.get(`/song/detail`, { params: { ids: songIds } });
