@@ -23,17 +23,8 @@
 					</td>
 				</tr>
 				<tr v-if="tableData.length > 0">
-					<td class="viewAll">
-						<el-button size="small">View Full List</el-button>
-					</td>
-					<td class="viewAll">
-						<el-button size="small">View Full List</el-button>
-					</td>
-					<td class="viewAll">
-						<el-button size="small">View Full List</el-button>
-					</td>
-					<td class="viewAll">
-						<el-button size="small">View Full List</el-button>
+					<td class="viewAll" v-for="item in leadboards" :key="item.name">
+						<el-button size="small" type="danger" @click="gotoRoute(item.id)">View Full List</el-button>
 					</td>
 				</tr>
 			</tbody>
@@ -86,6 +77,13 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
+		},
+
+		gotoRoute(id) {
+			this.$router.push({
+				name: "Leadboards",
+				params: { id },
+			});
 		},
 	},
 

@@ -48,7 +48,6 @@
 				</div>
 
 				<div class="songs-table">
-					<!-- <el-table :data="tracks.data" stripe style="width: 100%" :row-class-name="setRowIndex" @row-click="playAudio"> -->
 					<el-table stripe style="width: 100%" :data="lbTracks">
 						<el-table-column type="index" width="50"></el-table-column>
 						<el-table-column prop="name" label="Track">
@@ -96,10 +95,10 @@ import { getAllLeadboards, getLeadboardDetail, getAudioUrl } from "@/network/req
 export default {
 	data() {
 		return {
-			leadboards: [],
-			curSelected: 0,
-			curLb: {},
-			lbTracks: [],
+			leadboards: [], // all leadboards
+			curSelected: 15, // the 15th is US billboard by default
+			curLb: {}, // current selected leadboard
+			lbTracks: [], // tracks in selected leadboard
 		};
 	},
 
@@ -127,7 +126,6 @@ export default {
 			});
 
 			this.curLb = { ...this.curLb, shareCount, commentCount, playCount, tracksCount: this.lbTracks.length };
-			console.log("====", this.lbTracks, data);
 		},
 
 		async playAudio(track) {
@@ -199,7 +197,18 @@ export default {
 			});
 		});
 
-		this.setSelected(15); // 15th is US billboard
+		// The featured page route is pushed with `params` not `query` option
+		let routeLdId = this.$route.params.id || 0;
+
+		for (const index in this.leadboards) {
+			console.log(index, routeLdId, this.leadboards[index].id);
+			if (this.leadboards[index].id === +routeLdId) {
+				this.curSelected = index;
+				break;
+			}
+		}
+
+		this.curLb = this.leadboards[this.curSelected];
 		await this.getLeadboardDetail(this.curLb.id);
 	},
 };

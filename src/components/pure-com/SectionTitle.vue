@@ -18,9 +18,13 @@ export default {
 	props: ["title", "routePath"],
 	methods: {
 		gotoRoute() {
-			console.log("goto route", this.routePath);
 			if (!this.routePath) return;
-			this.$router.push(this.routePath);
+
+			if (this.routePath === "/leadboards") {
+				this.$router.push({ name: "Leadboards" });
+			} else {
+				this.$router.push(this.routePath);
+			}
 		},
 	},
 };
