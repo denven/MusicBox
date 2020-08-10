@@ -26,6 +26,7 @@ export const getPlaylistComments = (params) => axios.get(`/comment/playlist`, { 
 export const getAllCategories = (params) => axios.get(`/playlist/catlist`, { params: params });
 export const getBestPlaylists = (params) => axios.get(`/top/playlist/highquality`, { params: params });
 export const getTopPlaylists = (params) => axios.get("/top/playlist", { params: params });
+export const getSimilarPlaylists = (params) => axios.get("/related/playlist", { params: params });
 
 // 推荐歌单接口地址 : /personalized  可选参数 : limit: 默认为 30 (不支持 offset)
 // 推荐新音乐接口地址 : /personalized/newsong

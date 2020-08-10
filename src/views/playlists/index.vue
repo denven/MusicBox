@@ -6,15 +6,15 @@
 			<div class="playlist-cover">
 				<img v-lazy="$helpers.getSmallPicture(bestLists[0].coverImgUrl, 200)" alt="" />
 			</div>
-			<div class="playlist-detail">
-				<span class="tag">Recommeded Playlist</span>
+			<div class="playlist-detail" @click="gotoRoute(bestLists[0].id)">
+				<span class="tag">Recommeded</span>
 				<span class="caption">{{ bestLists[0].name }}</span>
 				<div class="content">{{ bestLists[0].description }}</div>
 			</div>
 		</div>
 
 		<div class="categories">
-			<el-tabs>
+			<el-tabs v-model="activeTab">
 				<el-tab-pane label="Language" name="language">
 					<div class="sub-cats">
 						<span
@@ -87,6 +87,7 @@
 				:picUrl="item.coverImgUrl"
 				:playCount="item.playCount"
 				:songName="item.name"
+				@click.native="gotoRoute(item.id)"
 			></PlaylistCard>
 		</div>
 
@@ -117,6 +118,7 @@ export default {
 			categories: [],
 			subCats: { language: [], genre: [], occasion: [], emotion: [], subject: [] },
 			catSelected: "", // selected sub category
+			activeTab: "language",
 		};
 	},
 
@@ -135,11 +137,16 @@ export default {
 			}
 
 			this.filter = { ...this.filter };
+			this.activeTab = category;
 		},
 
 		setPageIndex(pageIdx) {
 			this.filter.offset = this.filter.limit * (pageIdx - 1);
 			this.filter = { ...this.filter };
+		},
+
+		gotoRoute(id) {
+			this.$router.push({ path: "/playlists/detail", query: { id } });
 		},
 
 		async getCategories() {
@@ -178,6 +185,7 @@ export default {
 			let { data } = await getTopPlaylists(filter);
 			this.topLists = data.playlists;
 			this.listsTotal = data.total;
+			console.log(this.topLists);
 		},
 	},
 
@@ -254,6 +262,7 @@ export default {
 			border: 1px solid grey;
 			font-weight: bold;
 			color: goldenrod;
+			cursor: pointer;
 		}
 
 		.caption {

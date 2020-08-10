@@ -7,11 +7,11 @@
 	flex-wrap: $wrap;
 }
 
-@mixin grid-align-cards($cell-width: 200px) {
+@mixin grid-align-cards($cell-width: 200px, $col-gap: 30px) {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, $cell-width);
 	place-content: space-between;
-	column-gap: 20px;
+	column-gap: $col-gap;
 }
 
 @mixin text-ellipsis() {

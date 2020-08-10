@@ -4,32 +4,25 @@ import VueRouter from "vue-router";
 // for lazy loading
 // this generates a separate chunk (componnet.[hash].js) for this route
 // which is lazy-loaded when the route is visited.
-const showFeatured = () =>
-	import(/* webpackChunkName: "featured" */ "@/views/featured/");
+const showFeatured = () => import(/* webpackChunkName: "featured" */ "@/views/featured/");
 
-const showSearchResults = () =>
-	import(/* webpackChunkName: "search" */ "@/views/search/");
+const showSearchResults = () => import(/* webpackChunkName: "search" */ "@/views/search/");
 
-const showLeadboards = () =>
-	import(/* webpackChunkName: "leadboards" */ "@/views/leadboards/");
+const showLeadboards = () => import(/* webpackChunkName: "leadboards" */ "@/views/leadboards/");
 
-const showPlaylists = () =>
-	import(/* webpackChunkName: "playlists" */ "@/views/playlists/");
+const showPlaylists = () => import(/* webpackChunkName: "playlists" */ "@/views/playlists/");
 
-const showArtists = () =>
-	import(/* webpackChunkName: "artists" */ "@/views/artists/");
+const showPlaylistDetail = () => import(/* webpackChunkName: "playlists-detail" */ "@/views/playlists/PlaylistDetail");
 
-const showAllAlbums = () =>
-	import(/* webpackChunkName: "albums" */ "@/views/albums/");
+const showArtists = () => import(/* webpackChunkName: "artists" */ "@/views/artists/");
 
-const showLatestMvs = () =>
-	import(/* webpackChunkName: "videos" */ "@/views/videos/");
+const showAllAlbums = () => import(/* webpackChunkName: "albums" */ "@/views/albums/");
 
-const showPodcasts = () =>
-	import(/* webpackChunkName: "podcasts" */ "@/views/podcasts/");
+const showLatestMvs = () => import(/* webpackChunkName: "videos" */ "@/views/videos/");
 
-const showMvDetail = () =>
-	import(/* webpackChunkName: "/videos/" */ "@/views/videos/MvPage.vue");
+const showPodcasts = () => import(/* webpackChunkName: "podcasts" */ "@/views/podcasts/");
+
+const showMvDetail = () => import(/* webpackChunkName: "/videos/" */ "@/views/videos/MvPage.vue");
 
 const showHomePage = showFeatured;
 
@@ -92,6 +85,7 @@ const routes = [
 		component: showPodcasts,
 	},
 	{ path: "/videos/detail", name: "mv", component: showMvDetail },
+	{ path: "/playlists/detail", name: "mv", component: showPlaylistDetail },
 
 	// {
 	// 	path: "/latest-releases",
