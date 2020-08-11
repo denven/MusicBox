@@ -49,5 +49,9 @@ export default {
 .cards {
 	width: 100%;
 	@include grid-align-cards(226px);
+	.artist {
+		font-size: 14px;
+		color: #bebebe;
+	}
 }
 </style>

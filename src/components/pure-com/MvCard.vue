@@ -1,6 +1,6 @@
 <template>
 	<div class="mv-card">
-		<div class="card-image">
+		<div class="card-image" @click="playMv(mvId)">
 			<img v-lazy="$helpers.getSmallPicture(picUrl, 250, 140)" :style="{ height: height }" />
 			<div class="played-count">
 				<i class="iconfont icon-yiguankan"></i>
@@ -20,7 +20,7 @@
 <script>
 export default {
 	name: "MvCard",
-	props: ["width", "height", "caption", "picUrl", "playCount", "mvName", "duration"],
+	props: ["width", "height", "caption", "picUrl", "playCount", "mvName", "mvId", "duration"],
 	methods: {
 		calcPlayedCount(count) {
 			if (count >= 1000 * 1000) {
@@ -40,6 +40,10 @@ export default {
 			}
 
 			return count;
+		},
+
+		playMv(mvId) {
+			this.$router.push(`/videos/detail` + `?id=${mvId}`);
 		},
 	},
 };

@@ -39,7 +39,7 @@
 			</div>
 
 			<!-- Left Middle Part: Playlist(tracks) -->
-			<TracksTable :playCount="$helpers.formatNumberWithTS(curLb.playCount)" :tableData="lbTracks" />
+			<TracksTable :showTitle="true" :playCount="$helpers.formatNumberWithTS(curLb.playCount)" :tableData="lbTracks" />
 
 			<!-- Left Bottom Part: Comments-->
 			<div class="ld-comments">

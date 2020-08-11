@@ -43,7 +43,7 @@
 		</div>
 
 		<div class="artists-cards">
-			<div class="artist-card" v-for="artist in artists" :key="artist.id">
+			<div class="artist-card" v-for="artist in artists" :key="artist.id" @click="gotoRoute(artist)">
 				<img v-lazy="$helpers.getSmallPicture(artist.img1v1Url, 200)" alt="" />
 
 				<div class="artist-links">
@@ -65,22 +65,7 @@
 </template>
 
 <script>
-import {
-	getArtistsList,
-	// getArtistTopTracks,
-	// getArtistMvs,
-	// getArtistAlbums,
-	// getArtistDesc,
-	// getSimilarArtists,
-} from "@/network/request";
-
-// const getArtistsList = ({ type, area, initial })
-
-// const getArtistTopTracks = (id)
-// const getArtistMvs = (id)
-// const getArtistAlbums = ({ id, limit, offset })
-// const getArtistDesc = (id)
-// const getSimilarArtists = (id)
+import { getArtistsList } from "@/network/request";
 
 export default {
 	data() {
@@ -158,6 +143,10 @@ export default {
 
 		setPageIndex(pageIdx) {
 			this.filter = { ...this.filter, offset: this.filter.limit * (pageIdx - 1) };
+		},
+
+		gotoRoute(artist) {
+			this.$router.push({ path: "/artists/detail", query: { artist } });
 		},
 	},
 
@@ -254,7 +243,9 @@ export default {
 			img {
 				width: 100%;
 				border-radius: 5px;
+				cursor: pointer;
 			}
+
 			.artist-links {
 				padding: 5px;
 				font-size: 12px;

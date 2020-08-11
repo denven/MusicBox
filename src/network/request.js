@@ -83,7 +83,7 @@ export const getArtistTopTracks = (id) => axios.get(`/artist/top/song`, { params
 // 必选参数 : id: 歌手 id, 可由搜索接口获得
 // 接口地址 : /artist/mv
 // 调用例子 : /artist/mv?id=6452
-export const getArtistMvs = (id) => axios.get(`/artist/mv`, { params: { id: id } });
+export const getArtistMvs = ({ id, limit }) => axios.get(`/artist/mv`, { params: { id, limit } });
 
 // 说明 : 调用此接口 , 传入歌手 id, 可获得歌手专辑内容
 // 必选参数 : id: 歌手 id
@@ -104,3 +104,10 @@ export const getArtistDesc = (id) => axios.get(`/artist/desc`, { params: { id: i
 // 接口地址 : /simi/artist
 // 调用例子 : /simi/artist?id=6452 ( 对应和周杰伦相似歌手 )
 export const getSimilarArtists = (id) => axios.get(`/simi/artist`, { params: { id: id } });
+
+// 调用此接口 , 可获取热门歌手数据
+// 可选参数 : limit: 取出数量 , 默认为 50
+// offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*50, 其中 50 为 limit 的值 , 默认 为 0
+// 接口地址 : /top/artists
+// 调用例子 : /top/artists?offset=0&limit=30
+export const getTopArtists = () => axios.get(`/top/artists`, { params: { limit: 50 } });

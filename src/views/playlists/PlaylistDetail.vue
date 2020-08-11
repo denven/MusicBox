@@ -27,7 +27,7 @@
 				</div>
 			</div>
 			<!-- Left Middle Part: Playlist(tracks) -->
-			<TracksTable :playCount="$helpers.formatNumberWithTS(info.playCount)" :tableData="tracks" />
+			<TracksTable :showTitle="true" :playCount="$helpers.formatNumberWithTS(info.playCount)" :tableData="tracks" />
 
 			<!-- Left Bottom Part: Comments-->
 			<div class="pl-comments">
@@ -259,10 +259,6 @@ export default {
 	padding-bottom: 20px;
 	margin-left: 20px;
 
-	.one-pl {
-		cursor: pointer;
-	}
-
 	.title {
 		font-size: 13px;
 		font-weight: bold;
@@ -286,6 +282,7 @@ export default {
 		.one-pl {
 			@include flex-align(row, flex-start);
 			margin-bottom: 10px;
+			cursor: pointer;
 
 			img {
 				width: 80px;
@@ -307,18 +304,5 @@ export default {
 			}
 		}
 	}
-
-	// <div class="related" v-if="similarPls.length === 0">
-	// 	<div class="title">Similar Playlists</div>
-	// 	<div class="simi-pls">
-	// 		<div class="one-pl" v-for="pl in simmilarPls" :key="pl.id">
-	// 			<img v-lazy="$helpers.getSmallPicture(pl.coverImgUrl, 80)" alt="" />
-	// 			<div class="source">
-	// 				<span class="name">{{ pl.name }}</span>
-	// 				<span class="username">{{ pl.creator.nickname }}</span>
-	// 			</div>
-	// 		</div>
-	// 	</div>
-	// </div>
 }
 </style>

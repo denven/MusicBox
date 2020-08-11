@@ -50,8 +50,8 @@
 					:caption="item.copywriter"
 					:picUrl="item.cover"
 					:playCount="item.playCount"
+					:mvId="item.id"
 					:duration="$helpers.convertMsToMinutes(item.duration)"
-					@click.native="playMv(item.id)"
 				></MvCard>
 
 				<div class="mv-source">
@@ -90,16 +90,13 @@ export default {
 			comments: [],
 		};
 	},
+
 	components: {
 		Comment,
 		MvCard,
 	},
-	methods: {
-		// Switch to play a different Mv in the same page
-		playMv(id) {
-			this.$router.push(`/videos/detail` + `?id=${id}`);
-		},
 
+	methods: {
 		async getMvInfo(mvid) {
 			try {
 				let allMvData = await Promise.all([

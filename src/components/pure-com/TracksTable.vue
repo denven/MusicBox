@@ -1,6 +1,6 @@
 <template>
 	<div class="song-list">
-		<div class="separator">
+		<div class="separator" v-if="showTitle">
 			<div>
 				<span class="title">Tracks List</span><span class="song-count">{{ tableData.length + " tracks" }} </span>
 			</div>
@@ -40,7 +40,7 @@ import { getAudioUrl } from "@/network/request";
 
 export default {
 	name: "TracksTable",
-	props: ["playCount", "tableData"],
+	props: ["showTitle", "playCount", "tableData"],
 	methods: {
 		async playAudio(track) {
 			try {

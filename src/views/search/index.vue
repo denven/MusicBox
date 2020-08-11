@@ -144,7 +144,6 @@ export default {
 		},
 
 		playVideo({ index }) {
-			console.log("row click", index);
 			let vid = this.videos.data[index].id;
 			this.$router.push(`/videos/detail` + `?id=${vid}`);
 		},

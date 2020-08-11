@@ -11,10 +11,10 @@ const showSearchResults = () => import(/* webpackChunkName: "search" */ "@/views
 const showLeadboards = () => import(/* webpackChunkName: "leadboards" */ "@/views/leadboards/");
 
 const showPlaylists = () => import(/* webpackChunkName: "playlists" */ "@/views/playlists/");
-
 const showPlaylistDetail = () => import(/* webpackChunkName: "playlists-detail" */ "@/views/playlists/PlaylistDetail");
 
 const showArtists = () => import(/* webpackChunkName: "artists" */ "@/views/artists/");
+const showArtistDetail = () => import(/* webpackChunkName: "artist-detail" */ "@/views/artists/ArtistDetail");
 
 const showAllAlbums = () => import(/* webpackChunkName: "albums" */ "@/views/albums/");
 
@@ -85,7 +85,8 @@ const routes = [
 		component: showPodcasts,
 	},
 	{ path: "/videos/detail", name: "mv", component: showMvDetail },
-	{ path: "/playlists/detail", name: "mv", component: showPlaylistDetail },
+	{ path: "/playlists/detail", name: "mv-detail", component: showPlaylistDetail },
+	{ path: "/artists/detail", name: "ar-detail", component: showArtistDetail },
 
 	// {
 	// 	path: "/latest-releases",

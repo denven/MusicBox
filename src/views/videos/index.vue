@@ -43,6 +43,7 @@
 		</div>
 
 		<div class="mv-cards">
+			<!-- Remove click event @click.native="playMv(item)" and put it inside the component -->
 			<MvCard
 				v-for="item in pageMvs"
 				:key="item.id"
@@ -51,8 +52,8 @@
 				:picUrl="item.cover"
 				:playCount="item.playCount"
 				:mvName="item.name"
+				:mvId="item.id"
 				:duration="$helpers.convertMsToMinutes(item.duration)"
-				@click.native="playMv(item)"
 			>
 				<p class="artist">by: {{ item.artistName }}</p>
 			</MvCard>
@@ -219,6 +220,11 @@ export default {
 	@include grid-align-cards(250px);
 	.mv-card {
 		margin-bottom: 20px;
+
+		.artist {
+			font-size: 14px;
+			color: #bebebe;
+		}
 	}
 }
 </style>

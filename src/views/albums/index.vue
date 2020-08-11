@@ -147,5 +147,9 @@ export default {
 	width: 100%;
 	@include grid-align-cards(226px);
 	// [class^=]
+	.artist {
+		font-size: 14px;
+		color: #bebebe;
+	}
 }
 </style>

@@ -4,12 +4,13 @@ import { Loading } from "element-ui";
 
 const axios = axiosLib.create({
 	crossDomain: true,
+	// withCredentials: true,
 	// this setup is not allowed from the server
 	// headers: { "Cache-Control": "no-cache" },
 });
 
 axios.defaults.baseURL = `${process.env.VUE_APP_API_HOST}`;
-axios.defaults.timeout = 30000;
+axios.defaults.timeout = 15000;
 
 // Add interceptor before request
 axios.interceptors.request.use(insertLoader);

@@ -29,6 +29,7 @@ export default {
 	position: relative;
 	overflow: hidden;
 	font-size: 14px;
+	text-align: center;
 
 	.card-image {
 		position: relative;
