@@ -147,8 +147,6 @@ export default {
 
 		gotoRoute(artist) {
 			this.$router.push({ name: "ar-detail", params: { artist } });
-			// console.log(artist);
-			// this.$router.push({ path: "/artists/detail", query: { id: artist.id } });
 		},
 	},
 

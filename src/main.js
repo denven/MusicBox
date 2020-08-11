@@ -9,8 +9,10 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 
 import helpers from "@/common/helpers";
+import session from "@/common/session";
 
 Vue.prototype.$helpers = helpers;
+Vue.prototype.$session = session;
 
 const MINI_B64_IMG = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 Vue.config.productionTip = false;

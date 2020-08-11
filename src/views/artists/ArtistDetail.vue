@@ -148,6 +148,14 @@ export default {
 				this.topTracks.push({ id, name, duration, album, artist, coverUrl });
 			});
 
+			// Get data for the right column of page: "Top Artists"
+			// The API to request similar artists doesn't response
+			// let { data: ars } = await getSimilarArtists(this.artist.id);
+			let {
+				data: { artists },
+			} = await getTopArtists();
+			this.topArtists = artists;
+
 			// Get data for "Albums" Tab
 			let {
 				data: { hotAlbums },
@@ -169,14 +177,6 @@ export default {
 				this.labelNames[2] = "Music Videos" + `(${mvs.length})`;
 			}
 
-			// Get data for the right column of page: "Top Artists"
-			// The API to request similar artists doesn't response
-			// let { data: ars } = await getSimilarArtists(this.artist.id);
-			let {
-				data: { artists },
-			} = await getTopArtists();
-			this.topArtists = artists;
-
 			// Get data for "Introduction" Tab
 			// As this will not be displayed once the page loads, so put it at the end to request
 			let {
@@ -188,19 +188,15 @@ export default {
 
 		// Use internal page render instead of route pushing to update
 		async gotoRoute(index) {
-			// This will get the same artist, not
+			// Get the top 50 artists data once to reduce requests
 			if (this.topArsDetail.length === 0) {
 				let { data } = await getArtistsList({ type: -1, area: -1, limit: 50 });
 				this.topArsDetail = data.artists;
-				console.log("new request");
 			}
 
-			// this.$router.push({ name: "ar-detail", params: { artist: data.artists[0] } });
-			// this.$router.push({ path: "/artists/detail", query: { artist: data.artists[0] } });
-
 			this.artist = this.topArsDetail[index];
+			this.$session.setPageData("artist", this.artist);
 			await this.updateArtistData(this.artist.id);
-			// this.$forceUpdate();
 		},
 
 		setAlbumsPage(page) {
@@ -214,23 +210,14 @@ export default {
 		},
 	},
 
-	watch: {
-		"artist.id": {
-			handler: async function() {
-				console.log("hander new from watch", this.artist);
-				await this.updateArtistData(this.artist.id);
-			},
-		},
-
-		$route: async function(artist) {
-			// this.artist = newRoute.query.artist;
-			console.log("watch get new route:", artist);
-			await this.updateArtistData(artist.id);
-		},
-	},
-
 	async created() {
-		this.artist = this.$route.params.artist;
+		// Use sessionStorage to recover page data when user presses F5
+		if (!this.$route.params.artist) {
+			this.artist = this.$session.getPageData("artist");
+		} else {
+			this.artist = this.$route.params.artist;
+			this.$session.setPageData("artist", this.artist);
+		}
 		await this.updateArtistData(this.artist.id);
 	},
 };
