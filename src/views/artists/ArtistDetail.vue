@@ -80,12 +80,12 @@
 				<div class="title">Top 50 Artists</div>
 				<div class="avatars">
 					<img
-						v-for="artist in topArtists"
+						v-for="(artist, index) in topArtists"
 						v-lazy="$helpers.getSmallPicture(artist.img1v1Url, 40)"
 						:title="artist.name"
 						alt=""
 						:key="artist.id"
-						@click="gotoRoute(artist.id)"
+						@click="gotoRoute(index)"
 					/>
 				</div>
 			</div>
@@ -94,7 +94,14 @@
 </template>
 
 <script>
-import { getArtistDesc, getArtistTopTracks, getArtistAlbums, getArtistMvs, getTopArtists } from "@/network/request";
+import {
+	getArtistDesc,
+	getArtistTopTracks,
+	getArtistAlbums,
+	getArtistMvs,
+	getTopArtists,
+	getArtistsList,
+} from "@/network/request";
 import TracksTable from "@/components/pure-com/TracksTable";
 import DiscCard from "@/components/pure-com/DiscCard";
 import MvCard from "@/components/pure-com/MvCard";
@@ -115,6 +122,7 @@ export default {
 
 			detailedDesc: "",
 			topArtists: [], // related artists
+			topArsDetail: [],
 
 			labelNames: ["Tracks(Top 50)", "Albums", "Music Videos", "Introduction"],
 		};
@@ -127,8 +135,72 @@ export default {
 	},
 
 	methods: {
-		gotoRoute(id) {
-			this.$router.push({ path: "/artists/detail", query: { id } });
+		async updateArtistData(artistId) {
+			// Get data for "Top Tracks" Tab
+			let { data } = await getArtistTopTracks(artistId);
+			this.topTracks = [];
+			data.songs.forEach((item) => {
+				let { name, id, dt: duration } = item;
+				duration = this.$helpers.convertMsToMinutes(duration);
+				let album = item.al.name;
+				let artist = item.ar[0].name;
+				let coverUrl = item.al.picUrl;
+				this.topTracks.push({ id, name, duration, album, artist, coverUrl });
+			});
+
+			// Get data for "Albums" Tab
+			let {
+				data: { hotAlbums },
+			} = await getArtistAlbums({ id: artistId, limit: 200 });
+			this.allAlbums = hotAlbums;
+			this.curPageAlbs = hotAlbums.slice(0, this.ALS_PAGE_SIZE);
+
+			if (hotAlbums.length > 0) {
+				this.labelNames[1] = "Albums" + `(${hotAlbums.length})`;
+			}
+
+			// Get data for "Music Videos" Tab
+			let {
+				data: { mvs },
+			} = await getArtistMvs({ id: artistId, limit: 100 });
+			this.relatedMvs = mvs;
+			this.curPageMvs = mvs.slice(0, this.MVS_PAGE_SIZE);
+			if (mvs.length > 0) {
+				this.labelNames[2] = "Music Videos" + `(${mvs.length})`;
+			}
+
+			// Get data for the right column of page: "Top Artists"
+			// The API to request similar artists doesn't response
+			// let { data: ars } = await getSimilarArtists(this.artist.id);
+			let {
+				data: { artists },
+			} = await getTopArtists();
+			this.topArtists = artists;
+
+			// Get data for "Introduction" Tab
+			// As this will not be displayed once the page loads, so put it at the end to request
+			let {
+				data: { briefDesc, introduction },
+			} = await getArtistDesc(artistId);
+			this.introduction = introduction;
+			if (briefDesc) this.introduction.unshift({ ti: "简介", txt: briefDesc });
+		},
+
+		// Use internal page render instead of route pushing to update
+		async gotoRoute(index) {
+			// This will get the same artist, not
+			if (this.topArsDetail.length === 0) {
+				let { data } = await getArtistsList({ type: -1, area: -1, limit: 50 });
+				this.topArsDetail = data.artists;
+				console.log("new request");
+			}
+
+			// this.$router.push({ name: "ar-detail", params: { artist: data.artists[0] } });
+			// this.$router.push({ path: "/artists/detail", query: { artist: data.artists[0] } });
+
+			this.artist = this.topArsDetail[index];
+			await this.updateArtistData(this.artist.id);
+			// this.$forceUpdate();
 		},
 
 		setAlbumsPage(page) {
@@ -142,51 +214,24 @@ export default {
 		},
 	},
 
+	watch: {
+		"artist.id": {
+			handler: async function() {
+				console.log("hander new from watch", this.artist);
+				await this.updateArtistData(this.artist.id);
+			},
+		},
+
+		$route: async function(artist) {
+			// this.artist = newRoute.query.artist;
+			console.log("watch get new route:", artist);
+			await this.updateArtistData(artist.id);
+		},
+	},
+
 	async created() {
-		this.artist = this.$route.query.artist;
-
-		let {
-			data: { briefDesc, introduction },
-		} = await getArtistDesc(this.artist.id);
-		this.introduction = introduction;
-		if (briefDesc) this.introduction.unshift({ ti: "简介", txt: briefDesc });
-
-		let { data } = await getArtistTopTracks(this.artist.id);
-		data.songs.forEach((item) => {
-			let { name, id, dt: duration } = item;
-			duration = this.$helpers.convertMsToMinutes(duration);
-			let album = item.al.name;
-			let artist = item.ar[0].name;
-			let coverUrl = item.al.picUrl;
-			this.topTracks.push({ id, name, duration, album, artist, coverUrl });
-		});
-
-		let {
-			data: { hotAlbums },
-		} = await getArtistAlbums({ id: this.artist.id, limit: 200 });
-		this.allAlbums = hotAlbums;
-		this.curPageAlbs = hotAlbums.slice(0, this.ALS_PAGE_SIZE);
-
-		if (hotAlbums.length > 0) {
-			this.labelNames[1] = "Albums" + `(${hotAlbums.length})`;
-		}
-
-		let {
-			data: { mvs },
-		} = await getArtistMvs({ id: this.artist.id, limit: 100 });
-		this.relatedMvs = mvs;
-		this.curPageMvs = mvs.slice(0, this.MVS_PAGE_SIZE);
-		if (mvs.length > 0) {
-			this.labelNames[2] = "Music Videos" + `(${mvs.length})`;
-		}
-
-		// The API to request similar artists doesn't response
-		// let { data: ars } = await getSimilarArtists(this.artist.id);
-		let {
-			data: { artists },
-		} = await getTopArtists();
-		this.topArtists = artists;
-		console.log(artists);
+		this.artist = this.$route.params.artist;
+		await this.updateArtistData(this.artist.id);
 	},
 };
 </script>
