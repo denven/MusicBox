@@ -136,10 +136,9 @@ export default {
 				commentCount,
 			};
 
-			this.info.tags = data.playlist.tags; //array
-			console.log(data.playlist.tags);
-			this.tracks = [];
+			this.info.tags = data.playlist.tags; //tags is an array
 
+			this.tracks = [];
 			data.playlist.tracks.forEach((item) => {
 				let { name, id, dt: duration } = item;
 				duration = this.$helpers.convertMsToMinutes(duration);
