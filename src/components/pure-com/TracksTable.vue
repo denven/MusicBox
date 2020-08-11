@@ -11,6 +11,11 @@
 
 		<div class="songs-table">
 			<el-table stripe style="width: 100%" :data="tableData">
+				<!-- Mask and replace the default hint text -->
+				<template slot="empty">
+					<p>Requesting Data...</p>
+				</template>
+
 				<el-table-column type="index" width="50"></el-table-column>
 				<el-table-column prop="name" label="Track">
 					<template class="name-wrapper" slot-scope="scope">

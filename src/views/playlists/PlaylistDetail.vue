@@ -28,8 +28,8 @@
 			</div>
 			<!-- Left Middle Part: Playlist(tracks) -->
 			<TracksTable :playCount="$helpers.formatNumberWithTS(info.playCount)" :tableData="tracks" />
-			<!-- Left Bottom Part: Comments-->
 
+			<!-- Left Bottom Part: Comments-->
 			<div class="pl-comments">
 				<h1 class="comments-title">{{ comments.length + " Comments" }}</h1>
 				<Comment
