@@ -17,6 +17,7 @@ const showArtists = () => import(/* webpackChunkName: "artists" */ "@/views/arti
 const showArtistDetail = () => import(/* webpackChunkName: "artist-detail" */ "@/views/artists/ArtistDetail");
 
 const showAllAlbums = () => import(/* webpackChunkName: "albums" */ "@/views/albums/");
+const showAlbumDetail = () => import(/* webpackChunkName: "album-detail" */ "@/views/albums/AlbumDetail");
 
 const showLatestMvs = () => import(/* webpackChunkName: "videos" */ "@/views/videos/");
 
@@ -87,12 +88,7 @@ const routes = [
 	{ path: "/videos/detail", name: "mv", component: showMvDetail },
 	{ path: "/playlists/detail", name: "mv-detail", component: showPlaylistDetail },
 	{ path: "/artists/detail", name: "ar-detail", component: showArtistDetail },
-
-	// {
-	// 	path: "/latest-releases",
-	// 	name: "LatestReleases",
-	// 	component: showLatestReleases,
-	// },
+	{ path: "/albums/detail", name: "al-detail", component: showAlbumDetail },
 ];
 
 const router = new VueRouter({
