@@ -2,7 +2,7 @@
 	<div class="song-list">
 		<div class="separator" v-if="showTitle">
 			<div>
-				<span class="title">Tracks List</span><span class="song-count">{{ tableData.length + " tracks" }} </span>
+				<span class="title">Tracks List</span><span class="song-count">{{ countString }} </span>
 			</div>
 			<span class="play-count" v-if="playCount > 0">
 				Played: <span class="font-bold">{{ playCount }}</span>
@@ -41,6 +41,17 @@ import { getAudioUrl } from "@/network/request";
 export default {
 	name: "TracksTable",
 	props: ["showTitle", "playCount", "tableData"],
+
+	computed: {
+		countString() {
+			if (this.tableData.length > 1) {
+				return this.tableData.length + " tracks";
+			} else {
+				return this.tableData.length + " track";
+			}
+		},
+	},
+
 	methods: {
 		async playAudio(track) {
 			try {
