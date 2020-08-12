@@ -3,7 +3,17 @@
 	<el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
 		<!-- First Tab's table list content -->
 		<el-tab-pane label="Tracks" name="tracks">
-			<el-table :data="tracks.data" stripe style="width: 100%" :row-class-name="setRowIndex" @row-click="playAudio">
+			<el-table
+				:default-sort="{ prop: 'publishTime', order: 'descending' }"
+				:data="tracks.data"
+				stripe
+				style="width: 100%"
+				:row-class-name="setRowIndex"
+				@row-click="playAudio"
+			>
+				<template slot="empty">
+					<p>Requesting Data...</p>
+				</template>
 				<!-- <el-table-column prop="no" label="No."> </el-table-column> -->
 				<el-table-column type="index" width="50"></el-table-column>
 				<el-table-column prop="name" label="Track">
@@ -14,58 +24,96 @@
 				</el-table-column>
 				<el-table-column prop="artist" label="Artist"></el-table-column>
 				<el-table-column prop="album" label="Album"></el-table-column>
+				<el-table-column prop="publishTime" label="Year" sortable width="80px"></el-table-column>
 				<el-table-column prop="duration" label="Duration" width="100px"></el-table-column>
 			</el-table>
 		</el-tab-pane>
 
 		<el-tab-pane label="Videos" name="videos">
-			<el-table :data="videos.data" stripe style="width: 100%" :row-class-name="setRowIndex" @row-click="playVideo">
+			<el-table
+				:default-sort="{ prop: 'playCount', order: 'descending' }"
+				:data="videos.data"
+				stripe
+				style="width: 100%"
+				:row-class-name="setRowIndex"
+				@row-click="playVideo"
+			>
+				<template slot="empty">
+					<p>Requesting Data...</p>
+				</template>
+
 				<el-table-column type="index" width="50"></el-table-column>
-				<el-table-column prop="name" label="Track" width="400px">
+				<el-table-column prop="name" label="Track">
 					<template slot-scope="scope">
 						<i class="iconfont icon-mv3"></i>
 						<span style="margin-left: 10px">{{ scope.row.name }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="artistsNames" label="Artists"></el-table-column>
-				<el-table-column prop="briefDesc" label="Description"></el-table-column>
-				<el-table-column prop="playCount" label="Played" width="150px"></el-table-column>
-				<el-table-column prop="duration" label="Duration" width="100px"></el-table-column>
+				<el-table-column prop="artistsNames" label="Artists" width="200px"></el-table-column>
+				<el-table-column prop="briefDesc" label="Description" width="300px"></el-table-column>
+				<el-table-column prop="playCount" label="Played" width="100px" sortable>
+					<template slot-scope="scope">{{ $helpers.formatNumberWithTS(scope.row.playCount) }} </template>
+				</el-table-column>
+				<el-table-column prop="duration" label="Duration" width="80px"></el-table-column>
 			</el-table>
 		</el-tab-pane>
 
 		<el-tab-pane label="Artists" name="artists">
-			<el-table :data="artists.data" stripe style="width: 100%" :row-class-name="setRowIndex">
-				<el-table-column type="index" width="50"></el-table-column>
-				<el-table-column prop="name" label="Artist"></el-table-column>
-				<el-table-column prop="picUrl" label="picUrl"></el-table-column>
-				<el-table-column prop="img1v1Url" label="img1v1Url"></el-table-column>
-			</el-table>
+			<div class="ar-cards">
+				<ArtistCard
+					v-for="item in artists.data"
+					:key="item.id"
+					:artistId="item.id"
+					:name="item.name"
+					:avatar="item.img1v1Url"
+				/>
+			</div>
 		</el-tab-pane>
 
 		<!-- { id, name, artist, picUrl, blurPicUrl, briefDesc, company, publishTime, }; -->
 		<el-tab-pane label="Albums" name="albums">
-			<el-table :data="albums.data" stripe style="width: 100%" :row-class-name="setRowIndex">
-				<el-table-column type="index" width="50"></el-table-column>
-				<el-table-column prop="name" label="Album"></el-table-column>
-				<el-table-column prop="artist" label="Artist"></el-table-column>
-				<el-table-column prop="picUrl" label="picUrl"></el-table-column>
-				<el-table-column prop="blurPicUrl" label="blurPicUrl"></el-table-column>
-				<el-table-column prop="publishTime" label="publishTime"></el-table-column>
-			</el-table>
+			<div class="al-cards">
+				<DiscCard
+					v-for="item in albums.data"
+					:key="item.id"
+					:caption="item.copywriter"
+					:picUrl="item.picUrl"
+					:albumId="item.id"
+					:songName="item.name"
+				>
+					<p class="artist">by: {{ item.artist }}</p>
+				</DiscCard>
+			</div>
+
+			<!-- <el-pagination
+				v-if="albums.data.length > 0"
+				background
+				layout="prev, pager, next"
+				:total="listsTotal"
+				@current-change="setPageIndex"
+			></el-pagination> -->
 		</el-tab-pane>
 
 		<!-- id, name, cover: coverImgUrl, creator: creator.nickname, track: track.name,
     trackCount, description, bookCount, playCount,-->
 		<el-tab-pane label="Playlists" name="playlists">
-			<el-table :data="playlists.data" stripe style="width: 100%" :row-class-name="setRowIndex">
+			<el-table
+				:default-sort="{ prop: 'playCount', order: 'descending' }"
+				:data="playlists.data"
+				stripe
+				style="width: 100%"
+				:row-class-name="setRowIndex"
+				@row-click="viewPlaylist"
+			>
 				<el-table-column type="index" width="50"></el-table-column>
 				<el-table-column prop="name" label="Name"></el-table-column>
-				<el-table-column prop="creator" label="Creator"></el-table-column>
-				<el-table-column prop="track" label="Track"></el-table-column>
+				<el-table-column prop="creator" label="Creator" width="160px"></el-table-column>
+				<el-table-column prop="track" label="Hit Track" width="240px"></el-table-column>
 				<el-table-column prop="trackCount" label="Tracks" width="100px"></el-table-column>
 				<el-table-column prop="bookCount" label="Suscribed" width="100px"></el-table-column>
-				<el-table-column prop="playCount" label="Played" width="150px"></el-table-column>
+				<el-table-column prop="playCount" label="Played" sortable width="150px">
+					<template slot-scope="scope">{{ $helpers.formatNumberWithTS(scope.row.playCount) }} </template>
+				</el-table-column>
 			</el-table>
 		</el-tab-pane>
 
@@ -73,6 +121,9 @@
     rcmdText, }-->
 		<el-tab-pane label="Podcasts" name="podcasts">
 			<el-table :data="podcasts.data" stripe style="width: 100%" :row-class-name="setRowIndex">
+				<template slot="empty">
+					<p>Requesting Data...</p>
+				</template>
 				<el-table-column type="index" width="50"></el-table-column>
 				<el-table-column prop="name" label="Channel"></el-table-column>
 				<el-table-column prop="djname" label="Creator"></el-table-column>
@@ -85,6 +136,8 @@
 
 <script>
 import { getSearchResults, getAudioUrl, getAudioDetail } from "@/network/request";
+import DiscCard from "@/components/pure-com/DiscCard"; // for albums
+import ArtistCard from "@/components/pure-com/ArtistCard";
 
 export default {
 	data() {
@@ -98,6 +151,11 @@ export default {
 			playlists: { count: 0, data: [] },
 			podcasts: { count: 0, data: [] },
 		};
+	},
+
+	components: {
+		DiscCard,
+		ArtistCard,
 	},
 
 	methods: {
@@ -148,6 +206,11 @@ export default {
 			this.$router.push(`/videos/detail` + `?id=${vid}`);
 		},
 
+		viewPlaylist({ index }) {
+			let id = this.playlists.data[index].id;
+			this.$router.push(`/playlists/detail` + `?id=${id}`);
+		},
+
 		// keywords is this.$router.query
 		async searchByType(typeName) {
 			// 可选参数 :
@@ -191,11 +254,13 @@ export default {
 				this.tracks.count = data.result.songs.length;
 				this.tracks.data = data.result.songs.map((song) => {
 					let { id, name, artists, album, duration } = song;
+					console.log(song);
 					return {
 						id,
 						name,
 						artist: artists[0].name,
 						album: album.name,
+						publishTime: this.$helpers.formatTime(album.publishTime).slice(6, 10),
 						duration: this.$helpers.convertMsToMinutes(duration),
 					};
 				});
@@ -215,7 +280,7 @@ export default {
 						artistsNames,
 						briefDesc,
 						duration,
-						playCount: this.$helpers.formatNumberWithTS(playCount),
+						playCount,
 					};
 				});
 			} else if (typeName === "playlists") {
@@ -230,14 +295,15 @@ export default {
 						track: track.name,
 						trackCount,
 						description,
-						bookCount,
-						playCount: this.$helpers.formatNumberWithTS(playCount),
+						bookCount: this.$helpers.formatNumberWithTS(bookCount),
+						playCount: playCount,
 					};
 				});
 			} else if (typeName === "artists") {
 				this.artists.count = data.result.artistCount;
 				this.artists.data = data.result.artists.map((artist) => {
 					let { id, name, picUrl, img1v1Url, mvSize, albumSize } = artist;
+					console.log({ id, name, picUrl, img1v1Url, mvSize, albumSize });
 					return { id, name, picUrl, img1v1Url, mvSize, albumSize };
 				});
 			} else if (typeName === "albums") {
@@ -321,6 +387,14 @@ el-tabs {
 
 /deep/.el-table .cell {
 	@include text-ellipsis;
+}
+
+.ar-cards {
+	@include grid-align-cards(200px);
+}
+
+.al-cards {
+	@include grid-align-cards(226px);
 }
 
 // td div {
