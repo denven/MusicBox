@@ -1,6 +1,6 @@
 <template>
 	<div class="disc-card">
-		<div class="card-image">
+		<div class="card-image" @click="viewAlbum(albumId)">
 			<span class="card-caption">{{ caption }}</span>
 			<div class="disc">
 				<img v-lazy="$helpers.getSmallPicture(picUrl, 200)" />
@@ -15,7 +15,12 @@
 <script>
 export default {
 	name: "DiscCard",
-	props: ["caption", "picUrl", "songName"],
+	props: ["caption", "picUrl", "songName", "albumId"],
+	methods: {
+		viewAlbum(albumId) {
+			this.$router.push(`/albums/detail` + `?id=${albumId}`);
+		},
+	},
 };
 </script>
 
@@ -33,6 +38,7 @@ export default {
 
 	.card-image {
 		position: relative;
+		cursor: pointer;
 
 		.card-caption {
 			position: absolute;
