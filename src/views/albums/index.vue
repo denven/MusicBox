@@ -22,6 +22,7 @@
 				:key="item.id"
 				:caption="item.copywriter"
 				:picUrl="item.blurPicUrl"
+				:albumId="item.id"
 				:songName="item.name"
 			>
 				<p class="artist">by: {{ item.artist.name }}</p>

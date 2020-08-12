@@ -38,6 +38,13 @@ export const getNewAlbums = () => axios.get(`/album/newest`);
 export const getAllAlbums = (params) =>
 	axios.get(`/album/new`, { baseURL: `${process.env.VUE_APP_API_BACKUP}`, params: params });
 
+//专辑内容：包含了大部分页面需要的内容（含album/detail/dynamic的内容，因此没有必要再次请求dynamic内容）
+export const getAlbumTracks = (id) => axios.get(`/album`, { params: { id } });
+
+export const getAlbumDetail = (id) => axios.get(`/album/detail/dynamic`, { params: { id } });
+export const getAlbumComments = (id) => axios.get(`/comment/album`, { params: { id } });
+
+// =================  Track realted requests ================================================
 export const getAudioUrl = (songId) => axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
 export const getAudioDetail = (songIds) => axios.get(`/song/detail`, { params: { ids: songIds } });
 
