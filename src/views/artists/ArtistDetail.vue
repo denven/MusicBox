@@ -23,6 +23,7 @@
 							:caption="item.copywriter"
 							:picUrl="item.blurPicUrl"
 							:songName="item.name"
+							:albumId="item.id"
 						>
 						</DiscCard>
 					</div>

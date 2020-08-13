@@ -117,7 +117,7 @@ export default {
 					this.btnData.text = "Unfold";
 				}
 			}
-			console.log("clcked", this.btnData);
+			// console.log("clcked", this.btnData);
 		},
 
 		async getAlbumInfo(albumId) {
