@@ -1,3 +1,4 @@
+// disc-card is a component for the cover display and detail entry of an album
 <template>
 	<div class="disc-card">
 		<div class="card-image" @click="viewAlbum(albumId)">

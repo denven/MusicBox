@@ -1,6 +1,7 @@
+// display the search results by categories
 <template>
 	<!-- <el-tabs type="border-card"> -->
-	<el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
+	<el-tabs v-model="activeTab" type="border-card">
 		<!-- First Tab's table list content -->
 		<el-tab-pane label="Tracks" name="tracks">
 			<el-table
@@ -9,7 +10,6 @@
 				stripe
 				style="width: 100%"
 				:row-class-name="setRowIndex"
-				@row-click="playAudio"
 			>
 				<template slot="empty">
 					<p>Requesting Data...</p>
@@ -18,18 +18,27 @@
 				<el-table-column type="index" width="50"></el-table-column>
 				<el-table-column prop="name" label="Track">
 					<template slot-scope="scope">
-						<i class="iconfont icon-bofang"></i>
+						<i class="iconfont icon-bofang" @row-click="playAudio"></i>
 						<span style="margin-left: 10px">{{ scope.row.name }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="artist" label="Artist"></el-table-column>
-				<el-table-column prop="album" label="Album"></el-table-column>
+				<el-table-column prop="artists" label="Artist(s)">
+					<template slot-scope="scope">
+						<ArtistName v-for="item in scope.row.artists" :artist="item" :key="item.id" />
+					</template>
+				</el-table-column>
+				<el-table-column prop="album" label="Album">
+					<template slot-scope="scope">
+						<!-- {{ scope.row.album.name }} -->
+						<AlbumName :album="scope.row.album" />
+					</template>
+				</el-table-column>
 				<el-table-column prop="publishTime" label="Year" sortable width="80px"></el-table-column>
 				<el-table-column prop="duration" label="Duration" width="100px"></el-table-column>
 			</el-table>
 		</el-tab-pane>
 
-		<el-tab-pane label="Videos" name="videos">
+		<el-tab-pane label="Music Videos" name="videos">
 			<el-table
 				:default-sort="{ prop: 'playCount', order: 'descending' }"
 				:data="videos.data"
@@ -42,14 +51,19 @@
 					<p>Requesting Data...</p>
 				</template>
 
+				<!-- <span style="margin-left: 10px">{{ scope.row.name }}</span> -->
 				<el-table-column type="index" width="50"></el-table-column>
 				<el-table-column prop="name" label="Track">
 					<template slot-scope="scope">
 						<i class="iconfont icon-mv3"></i>
-						<span style="margin-left: 10px">{{ scope.row.name }}</span>
+						<MvName :mv="scope.row" />
 					</template>
 				</el-table-column>
-				<el-table-column prop="artistsNames" label="Artists" width="200px"></el-table-column>
+				<el-table-column prop="artists" label="Artist(s)" width="200px">
+					<template slot-scope="scope">
+						<ArtistName v-for="item in scope.row.artists" :artist="item" :key="item.id" />
+					</template>
+				</el-table-column>
 				<el-table-column prop="briefDesc" label="Description" width="300px"></el-table-column>
 				<el-table-column prop="playCount" label="Played" width="100px" sortable>
 					<template slot-scope="scope">{{ $helpers.formatNumberWithTS(scope.row.playCount) }} </template>
@@ -60,13 +74,7 @@
 
 		<el-tab-pane label="Artists" name="artists">
 			<div class="ar-cards">
-				<ArtistCard
-					v-for="item in artists.data"
-					:key="item.id"
-					:artistId="item.id"
-					:name="item.name"
-					:avatar="item.img1v1Url"
-				/>
+				<ArtistCard v-for="item in artists.data" :key="item.id" :artist="item" />
 			</div>
 		</el-tab-pane>
 
@@ -105,6 +113,9 @@
 				:row-class-name="setRowIndex"
 				@row-click="viewPlaylist"
 			>
+				<template slot="empty">
+					<p>Requesting Data...</p>
+				</template>
 				<el-table-column type="index" width="50"></el-table-column>
 				<el-table-column prop="name" label="Name"></el-table-column>
 				<el-table-column prop="creator" label="Creator" width="160px"></el-table-column>
@@ -138,6 +149,9 @@
 import { getSearchResults, getAudioUrl, getAudioDetail } from "@/network/request";
 import DiscCard from "@/components/pure-com/DiscCard"; // for albums
 import ArtistCard from "@/components/pure-com/ArtistCard";
+import ArtistName from "@/components/pure-com/ArtistName";
+import AlbumName from "@/components/pure-com/AlbumName";
+import MvName from "@/components/pure-com/MvName";
 
 export default {
 	data() {
@@ -156,14 +170,17 @@ export default {
 	components: {
 		DiscCard,
 		ArtistCard,
+		ArtistName,
+		AlbumName,
+		MvName,
 	},
 
 	methods: {
-		handleTabClick(tab, event) {
-			console.log("switched to tab:", tab.name, event);
-			// watch activeTab function can be put here
-			return;
-		},
+		// handleTabClick(tab, event) {
+		// 	console.log("switched to tab:", tab.name, event);
+		// 	// watch activeTab function can be put here
+		// 	return;
+		// },
 
 		// record the row index here, as row click event don't pass row index by default
 		setRowIndex({ row, rowIndex }) {
@@ -180,7 +197,7 @@ export default {
 				const audioUrl = res[0].data.data[0].url;
 				const { picUrl } = res[1].data.songs[0].al; //album pic
 				const { name, artist } = this.tracks.data[index];
-				console.log(name, artist, picUrl, audioUrl);
+				// console.log(name, artist, picUrl, audioUrl);
 				if (!audioUrl) {
 					return this.$message({
 						showClose: true,
@@ -254,12 +271,11 @@ export default {
 				this.tracks.count = data.result.songs.length;
 				this.tracks.data = data.result.songs.map((song) => {
 					let { id, name, artists, album, duration } = song;
-					console.log(song);
 					return {
 						id,
 						name,
-						artist: artists[0].name,
-						album: album.name,
+						artists,
+						album,
 						publishTime: this.$helpers.formatTime(album.publishTime).slice(6, 10),
 						duration: this.$helpers.convertMsToMinutes(duration),
 					};
@@ -268,18 +284,17 @@ export default {
 				this.videos.count = data.result.mvs.length;
 				this.videos.data = data.result.mvs.map((mv) => {
 					let { id, name, artists, cover, briefDesc, duration, playCount } = mv;
-					let artistsNames = artists.reduce((allNames, item) => {
-						allNames = allNames === "" ? item.name : allNames + "," + item.name;
-						return allNames;
-					}, "");
-					duration = this.$helpers.convertMsToMinutes(duration);
+					// let artistsNames = artists.reduce((allNames, item) => {
+					// 	allNames = allNames === "" ? item.name : allNames + "," + item.name;
+					// 	return allNames;
+					// }, "");
 					return {
 						id,
 						name,
 						cover,
-						artistsNames,
+						artists, //artistsNames,
 						briefDesc,
-						duration,
+						duration: this.$helpers.convertMsToMinutes(duration),
 						playCount,
 					};
 				});
@@ -301,11 +316,8 @@ export default {
 				});
 			} else if (typeName === "artists") {
 				this.artists.count = data.result.artistCount;
-				this.artists.data = data.result.artists.map((artist) => {
-					let { id, name, picUrl, img1v1Url, mvSize, albumSize } = artist;
-					console.log({ id, name, picUrl, img1v1Url, mvSize, albumSize });
-					return { id, name, picUrl, img1v1Url, mvSize, albumSize };
-				});
+				this.artists.data = data.result.artists;
+				// console.log(this.artists.data);
 			} else if (typeName === "albums") {
 				this.albums.count = data.result.albumCount;
 				this.albums.data = data.result.albums.map((album) => {
@@ -339,10 +351,6 @@ export default {
 					};
 				});
 			}
-			// } else if (typeName === "all") {
-			// }
-
-			// console.log(typeName, data);
 		},
 	},
 
@@ -395,6 +403,10 @@ el-tabs {
 
 .al-cards {
 	@include grid-align-cards(226px);
+	.artist {
+		font-size: 14px;
+		color: #bebebe;
+	}
 }
 
 // td div {

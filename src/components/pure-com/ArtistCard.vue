@@ -1,9 +1,8 @@
 <template>
-	<div class="artist-card" @click="viewArtist(artistId)">
-		<img v-lazy="$helpers.getSmallPicture(avatar, 200)" alt="" />
-
+	<div class="artist-card" @click="viewArtist(artist)">
+		<img v-lazy="$helpers.getSmallPicture(artist.picUrl, 200)" alt="" />
 		<div class="artist-links">
-			<span class="artist-name">{{ name }}</span>
+			<span class="artist-name">{{ artist.name }}</span>
 			<i class="iconfont icon-home_page" title="Personal Website"></i>
 		</div>
 	</div>
@@ -12,10 +11,11 @@
 <script>
 export default {
 	name: "ArtistCard",
-	props: ["artistId", "name", "avatar"],
+	props: { artist: { type: Object } },
 	methods: {
-		viewArtist(artistId) {
-			this.$router.push(`/artists/detail` + `?id=${artistId}`);
+		viewArtist(artist) {
+			// this.$router.push(`/artists/detail` + `?id=${artistId}`);
+			this.$router.push({ name: "ar-detail", params: { artist } });
 		},
 	},
 };

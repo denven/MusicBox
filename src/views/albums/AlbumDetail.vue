@@ -12,8 +12,8 @@
 							<img class="avatar" v-lazy="$helpers.getSmallPicture(info.avatarUrl, 30)" alt="" />
 							<span class="ar-name"> {{ info.arName }}</span>
 						</div>
-						<div class="date">Published at: {{ $helpers.formatTime(info.publishTime) }}</div>
-						<div class="company">Company: {{ info.company }}</div>
+						<div class="date" v-if="info.publishTime">Published at: {{ $helpers.formatTime(info.publishTime) }}</div>
+						<div class="company" v-if="info.company">Company: {{ info.company }}</div>
 						<GroupButtons
 							:subCount="$helpers.encloseNumber(info.likedCount)"
 							:shareCount="$helpers.encloseNumber(info.shareCount)"
@@ -22,13 +22,11 @@
 					</div>
 				</div>
 				<div class="al-desc" v-if="info.description">
-					<div class="text" :class="{ 'show-more': btnData.bshow }">
+					<div :class="{ 'text show-more': btnData.bshow, text: !btnData.bshow }">
 						<span class="title">Description:</span>
 						{{ info.description }}
 					</div>
-					<el-button size="mini" type="success" v-if="info.description.length > 130" @click="showMore"
-						>{{ btnData.text }}
-					</el-button>
+					<el-button size="mini" type="success" v-if="btnData.bShow" @click="showMore">{{ btnData.text }} </el-button>
 				</div>
 			</div>
 
@@ -99,7 +97,7 @@ export default {
 			subscribers: [],
 			otherAlbums: [],
 			albumId: 0,
-			btnData: { bShow: true, text: "Unflod" },
+			btnData: { bShow: false, text: "Unflod" },
 		};
 	},
 
@@ -112,11 +110,12 @@ export default {
 
 	methods: {
 		showMore() {
-			this.btnData.bShow = !this.btnData.bShow;
 			if (this.btnData.bShow) {
-				this.btnData.text = "Unfold";
-			} else {
-				this.btnData.text = "Fold";
+				if (this.btnData.text === "Unfold") {
+					this.btnData.text = "Fold";
+				} else {
+					this.btnData.text = "Unfold";
+				}
 			}
 			console.log("clcked", this.btnData);
 		},
@@ -141,7 +140,6 @@ export default {
 				shareCount,
 				description,
 			};
-			console.log(description.length);
 
 			this.tracks = [];
 			data.songs.forEach((item) => {
@@ -156,6 +154,12 @@ export default {
 			let {
 				data: { hotAlbums },
 			} = await getArtistAlbums({ id: artist.id, limit: 200 });
+			// remove the current album in the array(its not necessary to dispaly it at the right part again)
+			for (let i = 0; i < hotAlbums.length; i++) {
+				if (hotAlbums[i].name === this.info.name) {
+					hotAlbums.splice(i, 1);
+				}
+			}
 			this.otherAlbums = hotAlbums;
 
 			const {
@@ -179,6 +183,11 @@ export default {
 	async created() {
 		this.albumId = this.$route.query.id;
 		await this.getAlbumInfo(this.albumId);
+		if (this.info.description.length > 130) {
+			this.btnData.bShow = true;
+		} else {
+			this.btnData.bShow = false;
+		}
 	},
 };
 </script>
