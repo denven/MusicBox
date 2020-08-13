@@ -22,11 +22,8 @@
 					</div>
 				</div>
 				<div class="al-desc" v-if="info.description">
-					<div :class="{ 'text show-more': btnData.bshow, text: !btnData.bshow }">
-						<span class="title">Description:</span>
-						{{ info.description }}
-					</div>
-					<el-button size="mini" type="success" v-if="btnData.bShow" @click="showMore">{{ btnData.text }} </el-button>
+					<div class="title">Description:</div>
+					<ExpandText :text="info.description" :maxLength="130" />
 				</div>
 			</div>
 
@@ -87,6 +84,7 @@ import DiscCard from "@/components/pure-com/DiscCard";
 import GroupButtons from "@/components/pure-com/GroupButtons";
 import TracksTable from "@/components/pure-com/TracksTable";
 import Comment from "@/components/pure-com/Comment";
+import ExpandText from "@/components/pure-com/ExpandText";
 
 export default {
 	data() {
@@ -97,7 +95,6 @@ export default {
 			subscribers: [],
 			otherAlbums: [],
 			albumId: 0,
-			btnData: { bShow: false, text: "Unflod" },
 		};
 	},
 
@@ -106,18 +103,17 @@ export default {
 		GroupButtons,
 		TracksTable,
 		Comment,
+		ExpandText,
 	},
 
 	methods: {
-		showMore() {
-			if (this.btnData.bShow) {
-				if (this.btnData.text === "Unfold") {
-					this.btnData.text = "Fold";
-				} else {
-					this.btnData.text = "Unfold";
-				}
+		toggleTextExpand() {
+			this.btnData.bExpanded = !this.btnData.bExpanded;
+			if (this.btnData.text === "Expand") {
+				this.btnData.text = "Fold";
+			} else {
+				this.btnData.text = "Expand";
 			}
-			// console.log("clcked", this.btnData);
 		},
 
 		async getAlbumInfo(albumId) {
@@ -183,11 +179,6 @@ export default {
 	async created() {
 		this.albumId = this.$route.query.id;
 		await this.getAlbumInfo(this.albumId);
-		if (this.info.description.length > 130) {
-			this.btnData.bShow = true;
-		} else {
-			this.btnData.bShow = false;
-		}
 	},
 };
 </script>
@@ -253,27 +244,13 @@ export default {
 	.al-desc {
 		font-size: 13px;
 		line-height: 1.5;
-		max-lines: 2;
 		width: 800px;
 		margin: 15px auto;
 		text-align: left;
-		@include flex-align(column, space-between, flex-start);
 
-		.show-more {
-			-webkit-line-clamp: 0 !important;
-		}
-
-		.text {
-			.title {
-				font-weight: bold;
-				margin-bottom: 5px;
-			}
-			@include text-ellipsis-ml(2);
-		}
-
-		button {
-			width: 60px;
-			align-self: flex-end;
+		.title {
+			font-weight: bold;
+			padding-bottom: 5px;
 		}
 	}
 }
