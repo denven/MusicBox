@@ -7,7 +7,11 @@
 </template>
 
 <script>
-import { getAudioUrl } from "@/network/request";
+import {
+  getAudioUrl,
+  getAudioDetail,
+  checkAudioValid
+} from "@/network/request";
 
 export default {
   name: "TrackButton",
@@ -19,8 +23,13 @@ export default {
     async playAudio(track) {
       try {
         let { data } = await getAudioUrl(track.id);
-        const audioUrl = data.data[0].url;
+        if (!track.coverUrl) {
+          let { data } = await getAudioDetail(track.id);
+          track.coverUrl = data.songs[0].al.picUrl;
+          track.artists = data.songs[0].ar;
+        }
 
+        const audioUrl = data.data[0].url;
         if (!audioUrl) {
           return this.$message({
             showClose: true,
@@ -29,12 +38,22 @@ export default {
             offset: 50
           });
         } else {
-          this.$store.state.song = {
-            name: track.name,
-            artist: track.artists.map(item => item.name).join(","),
-            audioUrl,
-            picUrl: track.album.picUrl
-          };
+          let { data } = await checkAudioValid(track.id);
+          if (data.success) {
+            this.$store.state.song = {
+              name: track.name,
+              artist: track.artists.map(item => item.name).join(","),
+              audioUrl,
+              picUrl: track.coverUrl
+            };
+          } else {
+            return this.$message({
+              showClose: true,
+              message: "Sorry, this track is only available to VIP user！",
+              type: "error",
+              offset: 50
+            });
+          }
         }
       } catch (error) {
         console.log(error);

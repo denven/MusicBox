@@ -66,11 +66,9 @@
 import {
   getAllLeadboards,
   getPlaylistDetail,
-  getPlaylistComments,
-  getAudioUrl
+  getPlaylistComments
 } from "@/network/request";
 import TracksTable from "@/components/pure-com/TracksTable";
-
 import Comment from "@/components/pure-com/Comment";
 
 export default {
@@ -126,31 +124,6 @@ export default {
     async getLeadboardComments(id) {
       let { data } = await getPlaylistComments({ id });
       this.comments = data.comments;
-    },
-
-    async playAudio(track) {
-      try {
-        let { data } = await getAudioUrl(track.id);
-        const audioUrl = data.data[0].url;
-
-        if (!audioUrl) {
-          return this.$message({
-            showClose: true,
-            message: "Sorry, this track is only available to VIP user！",
-            type: "error",
-            offset: 50
-          });
-        } else {
-          this.$store.state.song = {
-            name: track.name,
-            artist: track.artist,
-            audioUrl,
-            picUrl: track.coverUrl
-          };
-        }
-      } catch (error) {
-        console.log(error);
-      }
     }
   },
 

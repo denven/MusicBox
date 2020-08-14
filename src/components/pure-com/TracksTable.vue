@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import { getAudioUrl } from "@/network/request";
 import TrackButton from "@/components/pure-com/TrackButton";
 import ArtistName from "@/components/pure-com/ArtistName";
 import AlbumName from "@/components/pure-com/AlbumName";
@@ -68,33 +67,6 @@ export default {
         return this.tableData.length + " tracks";
       } else {
         return this.tableData.length + " track";
-      }
-    }
-  },
-
-  methods: {
-    async playAudio(track) {
-      try {
-        let { data } = await getAudioUrl(track.id);
-        const audioUrl = data.data[0].url;
-
-        if (!audioUrl) {
-          return this.$message({
-            showClose: true,
-            message: "Sorry, this track is only available to VIP user！",
-            type: "error",
-            offset: 50
-          });
-        } else {
-          this.$store.state.song = {
-            name: track.name,
-            artist: track.artist,
-            audioUrl,
-            picUrl: track.coverUrl
-          };
-        }
-      } catch (error) {
-        console.log(error);
       }
     }
   }

@@ -137,11 +137,7 @@
 </template>
 
 <script>
-import {
-  getSearchResults,
-  getAudioUrl,
-  getAudioDetail
-} from "@/network/request";
+import { getSearchResults } from "@/network/request";
 import DiscCard from "@/components/pure-com/DiscCard"; // for albums
 import ArtistCard from "@/components/pure-com/ArtistCard";
 import ArtistName from "@/components/pure-com/ArtistName";
@@ -184,37 +180,6 @@ export default {
     // record the row index here, as row click event don't pass row index by default
     setRowIndex({ row, rowIndex }) {
       row.index = rowIndex;
-    },
-
-    async playAudio({ index }) {
-      try {
-        let res = await Promise.all([
-          Promise.resolve(getAudioUrl(this.tracks.data[index].id)),
-          Promise.resolve(getAudioDetail(this.tracks.data[index].id))
-        ]);
-
-        const audioUrl = res[0].data.data[0].url;
-        const { picUrl } = res[1].data.songs[0].al; //album pic
-        const { name, artist } = this.tracks.data[index];
-        // console.log(name, artist, picUrl, audioUrl);
-        if (!audioUrl) {
-          return this.$message({
-            showClose: true,
-            message: "Sorry, this track is only available to VIP user！",
-            type: "error",
-            offset: 50
-          });
-        } else {
-          this.$store.state.song = {
-            name,
-            artist,
-            audioUrl,
-            picUrl
-          };
-        }
-      } catch (error) {
-        console.log(error);
-      }
     },
 
     playVideo({ index }) {

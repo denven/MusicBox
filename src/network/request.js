@@ -45,8 +45,9 @@ export const getAlbumDetail = (id) => axios.get(`/album/detail/dynamic`, { param
 export const getAlbumComments = (id) => axios.get(`/comment/album`, { params: { id } });
 
 // =================  Track realted requests ================================================
-export const getAudioUrl = (songId) => axios.get(`/song/url`, { params: { id: songId, br: 999000 } });
+export const getAudioUrl = (id) => axios.get(`/song/url`, { params: { id, br: 999000 } });
 export const getAudioDetail = (songIds) => axios.get(`/song/detail`, { params: { ids: songIds } });
+export const checkAudioValid = (id) => axios.get(`/check/music`, { params: { id } });
 
 // =================  MV realted requests ================================================
 
