@@ -1,6 +1,7 @@
 <template>
 	<div class="body">
-		<ul class="nav">
+		<MenuToggle @toggle="setMenuStatus" />
+		<ul class="nav" v-if="bShowMenu">
 			<!-- Use iconfont icons -->
 			<li class="nav-item">
 				<!-- 0.Discover Music contains playlists, albums, leadboards -->
@@ -62,9 +63,24 @@
 
 <script>
 // import Featured from "@/views/featured/";
+import MenuToggle from "@/components/pure-com/MenuToggle";
 
 export default {
-	// components: { Featured },
+	components: {
+		MenuToggle,
+	},
+
+	data() {
+		return {
+			bShowMenu: true,
+		};
+	},
+
+	methods: {
+		setMenuStatus(menuStatus) {
+			this.bShowMenu = menuStatus;
+		},
+	},
 };
 </script>
 
@@ -78,6 +94,9 @@ export default {
 	height: calc(100vh - #{$header-height});
 	background-color: beige;
 	padding-top: $header-height;
+	position: relative;
+
+	display: flex;
 
 	@include flex-align(row, space-between, flex-start);
 
@@ -86,6 +105,7 @@ export default {
 		height: 100%;
 		background-color: #ededed;
 		padding-top: 10px;
+		transition: all 3s linear 0s;
 
 		li {
 			width: 100%;
@@ -113,8 +133,9 @@ export default {
 	}
 
 	.content {
-		float: 1;
-		width: calc(100% - 200px);
+		// float: 1;
+		flex: 1;
+		// width: calc(100% - 200px);
 		height: 100%;
 		overflow: auto;
 	}

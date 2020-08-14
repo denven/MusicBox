@@ -235,6 +235,7 @@ export default {
 
 .left-part {
 	flex: 1;
+	min-width: 300px; //needed to avoid right part auto shrink
 	text-align: left;
 
 	.artist-name {
@@ -292,6 +293,7 @@ export default {
 
 // Right Part styles
 .right-part {
+	// flex-shrink: 0;  //if left part grows, this property setting will not work
 	width: 280px;
 	padding-bottom: 20px;
 	margin-left: 20px;

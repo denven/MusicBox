@@ -132,7 +132,6 @@ export default {
 
 	watch: {
 		filter() {
-			console.log("filter changed..............");
 			this.getAllMvsByCategory();
 		},
 	},
@@ -214,6 +213,7 @@ export default {
 		@include flex-align(row, flex-start);
 	}
 }
+
 .mv-cards {
 	// image size is 250px*140px
 	width: 100%;

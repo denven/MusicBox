@@ -195,6 +195,7 @@ export default {
 // Left Part -- Top area styles
 .al-wrapper {
 	flex: 1;
+	min-width: 300px;
 
 	.al-detail {
 		width: 800px;

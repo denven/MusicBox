@@ -229,6 +229,7 @@ export default {
 // Left Part -- Top area styles
 .leadboard-wrapper {
 	flex: 1;
+	min-width: 800px;
 
 	.leadboard-detail {
 		width: 800px;
@@ -241,10 +242,6 @@ export default {
 		height: 110px;
 		margin-right: 15px;
 	}
-
-	// .leadboard-image {
-	// 	margin-right: 15px;
-	// }
 
 	.leadboard-details {
 		height: 110px;
@@ -293,6 +290,7 @@ export default {
 // Right Part styles
 .leadboard-list {
 	width: 280px;
+
 	padding-bottom: 20px;
 	margin-left: 20px;
 
@@ -320,6 +318,7 @@ export default {
 			@include flex-align(column, space-between, flex-start);
 			.name {
 				font-weight: 600;
+				flex-shrink: 0;
 			}
 			.upate-freq {
 				color: lightgray;

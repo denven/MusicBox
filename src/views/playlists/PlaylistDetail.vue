@@ -194,16 +194,13 @@ export default {
 // Left Part -- Top area styles
 .pl-wrapper {
 	flex: 1;
+	min-width: 300px;
 
+	// Left Part Styles
 	.pl-detail {
 		width: 800px;
 		margin: 0 auto;
 		@include flex-align(row, flex-start);
-
-		// .pl-image {
-		// 	margin-right: 15px;
-		// 	// border-radius: 3px;
-		// }
 
 		.img-wrapper {
 			width: 208px;
@@ -239,16 +236,16 @@ export default {
 				@include text-ellipsis-ml(2);
 			}
 		}
-	}
-}
 
-// Left Part -- Bottome comments styles
-.pl-comments {
-	margin: 30px 0;
-	text-align: left;
-	.comments-title {
-		margin: 10px 0;
-		font-weight: bold;
+		// Left Part -- Bottome comments styles
+		.pl-comments {
+			margin: 30px 0;
+			text-align: left;
+			.comments-title {
+				margin: 10px 0;
+				font-weight: bold;
+			}
+		}
 	}
 }
 
@@ -257,6 +254,7 @@ export default {
 	width: 280px;
 	padding-bottom: 20px;
 	margin-left: 20px;
+	flex-shrink: 0;
 
 	.title {
 		font-size: 13px;

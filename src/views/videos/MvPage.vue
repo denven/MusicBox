@@ -70,16 +70,7 @@
 import Comment from "@/components/pure-com/Comment";
 import MvCard from "@/components/pure-com/MvCard";
 
-import {
-	getMvUrl,
-	getMvDetail,
-	getSimilarMvs,
-	getMvComments,
-	getMvArtistV2,
-	getVideoUrl,
-	getVideoDetail,
-	getSimilarVideos,
-} from "@/network/request";
+import { getMvUrl, getMvDetail, getSimilarMvs, getMvComments, getMvArtistV2 } from "@/network/request";
 
 export default {
 	name: "mv",
@@ -133,22 +124,6 @@ export default {
 				(err) => console.log("Request error when getting Mv Details", err);
 			}
 		},
-
-		//TODO
-		async getVideoInfo(vid) {
-			try {
-				let allMvData = await Promise.all([
-					Promise.resolve(getVideoUrl(vid)),
-					Promise.resolve(getVideoDetail(vid)),
-					Promise.resolve(getSimilarVideos(vid)),
-					// Promise.resolve(getVideoSocialInfo(vid)),
-				]);
-
-				console.log("=======================", allMvData);
-			} catch {
-				(err) => console.log("Request error when getting Mv Details", err);
-			}
-		},
 	},
 
 	async created() {
@@ -173,7 +148,8 @@ export default {
 	@include flex-align(row, space-between, flex-start);
 
 	.mv {
-		width: 65%;
+		// width: 65%;
+		flex: 1;
 		min-width: 300px;
 		margin: 20px 20px 20px 0;
 		text-align: left;
@@ -265,8 +241,8 @@ export default {
 	}
 
 	.related-mvs {
-		flex: 1;
-		min-width: 400px;
+		// flex: 1;
+		width: 350px;
 		.one-mv {
 			@include flex-align(row, space-between);
 			width: 100%;
