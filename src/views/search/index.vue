@@ -20,7 +20,7 @@
         </el-table-column>
         <el-table-column prop="artists" label="Artist(s)">
           <template slot-scope="scope">
-            <ArtistName v-for="(item, index) in scope.row.artists" :artist="item" :key="item.id">
+            <ArtistName v-for="(item, index) in scope.row.artists" :artist="item" updateAvatar :key="item.id">
               <span v-if="index < scope.row.artists.length - 1">,</span>
             </ArtistName>
           </template>
@@ -38,7 +38,7 @@
 
     <el-tab-pane label="Music Videos" name="videos">
       <el-table :default-sort="{ prop: 'playCount', order: 'descending' }" :data="videos.data" stripe
-        style="width: 100%" :row-class-name="setRowIndex" @row-click="playVideo">
+        style="width: 100%" :row-class-name="setRowIndex">
         <template slot="empty">
           <p>Requesting Data...</p>
         </template>
@@ -47,13 +47,13 @@
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Track">
           <template slot-scope="scope">
-            <i class="iconfont icon-mv3"></i>
+            <i class="iconfont icon-mv3" @click="playVideo(scope.row)"></i>
             <MvName :mv="scope.row" />
           </template>
         </el-table-column>
         <el-table-column prop="artists" label="Artist(s)" width="200px">
           <template slot-scope="scope">
-            <ArtistName v-for="item in scope.row.artists" :artist="item" :key="item.id" />
+            <ArtistName v-for="item in scope.row.artists" :artist="item" updateAvatar :key="item.id" />
           </template>
         </el-table-column>
         <el-table-column prop="briefDesc" label="Description" width="300px"></el-table-column>
@@ -285,6 +285,7 @@ export default {
       } else if (typeName === "videos") {
         this.videos.count = data.result.mvs.length;
         this.videos.data = data.result.mvs.map(mv => {
+          console.log(mv);
           let { id, name, artists, cover, briefDesc, duration, playCount } = mv;
           // let artistsNames = artists.reduce((allNames, item) => {
           // 	allNames = allNames === "" ? item.name : allNames + "," + item.name;
