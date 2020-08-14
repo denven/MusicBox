@@ -94,6 +94,7 @@ const routes = [
 const router = new VueRouter({
 	routes,
 	mode: "history", //do not show # in URL(otherwise it will call location.hash() to use hash mode)
+	// duplicateNavigationPolicy: "reload",
 });
 
 export default router;

@@ -107,25 +107,34 @@ export default {
   methods: {
     async updateArtistData(artistId) {
       // Get data for "Top Tracks" Tab
-      let { data } = await getArtistTopTracks(artistId);
-      this.topTracks = [];
-      data.songs.forEach(item => {
-        // Note: The mvid is not `mvid` in song object here, it's mvid in other song or track object.
-        let { name, id, dt: duration, mv } = item;
-        duration = this.$helpers.convertMsToMinutes(duration);
-        let album = item.al; //item.al.name;
-        let artists = item.ar; // this array contains artists with name and id only
-        let coverUrl = item.al.picUrl;
-        this.topTracks.push({
-          id,
-          name,
-          duration,
-          mv,
-          album,
-          artists,
-          coverUrl
+      try {
+        let { data } = await getArtistTopTracks(artistId);
+        this.topTracks = [];
+        data.songs.forEach(item => {
+          // Note: The mvid is not `mvid` in song object here, it's mvid in other song or track object.
+          let { name, id, dt: duration, mv } = item;
+          duration = this.$helpers.convertMsToMinutes(duration);
+          let album = item.al; //item.al.name;
+          let artists = item.ar; // this array contains artists with name and id only
+          let coverUrl = item.al.picUrl;
+          this.topTracks.push({
+            id,
+            name,
+            duration,
+            mv,
+            album,
+            artists,
+            coverUrl
+          });
         });
-      });
+      } catch (error) {
+        return this.$message({
+          showClose: true,
+          message: "Sorry, failed to get data！",
+          type: "error",
+          offset: 50
+        });
+      }
 
       // Get data for the right column of page: "Top Artists"
       // The API to request similar artists doesn't response
@@ -175,7 +184,13 @@ export default {
 
       this.artist = this.topArsDetail[index];
       this.$session.setPageData("artist", this.artist);
-      await this.updateArtistData(this.artist.id);
+      // await this.updateArtistData(this.artist.id);  // commented here, let route watcher to update data
+      this.$router.push({
+        path: "/artists/detail",
+        name: "ar-detail",
+        query: { id: this.artist.id },
+        params: { artist: this.artist }
+      });
     },
 
     setAlbumsPage(page) {
@@ -198,36 +213,36 @@ export default {
   // as the click of artistname in the Table will push to the same route( to this current page again)
   // we need the route watch here to achieve same route navigation, otherwise it won't work
   // however, if the route is pushed by name, not path, this doesn't work
-  beforeRouteUpdate(to, from, next) {
-    console.log("******************Before route update*******************");
-    console.log(to, from, next);
-  },
+  // beforeRouteUpdate(to, from, next) {
+  //   console.log("******************Before route update*******************");
+  //   console.log(to, from, next);
+  // },
 
-  beforeRouteEnter(to, from, next) {
-    console.log("*****************Before route enter********************");
-    console.log("to", to);
-    console.log("from", from);
-    console.log("next", next);
-    next(vm => console.log(vm));
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   console.log("*****************Before route enter********************");
+  //   console.log("to", to);
+  //   console.log("from", from);
+  //   console.log("next", next);
+  //   next(vm => console.log(vm));
+  // },
 
-  beforeRouteLeave(to, from, next) {
-    console.log("****************Before route Leaves*********");
-    console.log(this, "beforeRouteLeave");
-    console.log("to", to);
-    console.log("from", from);
-    console.log("next", next);
-    next();
-  },
+  // beforeRouteLeave(to, from, next) {
+  //   console.log("****************Before route Leaves*********");
+  //   console.log(this, "beforeRouteLeave");
+  //   console.log("to", to);
+  //   console.log("from", from);
+  //   console.log("next", next);
+  //   next();
+  // },
 
   watch: {
-    // watch the same route internal changes
-    // however, if the route is pushed by name, not path, this doesn't work as well
-    $route: async function(cur, prev) {
-      console.log("route watch:", cur, prev);
-      const { artist } = cur.params;
-      this.$router.go(0);
-      await this.updateArtistData(artist);
+    // watch the same route internal changes:
+    // however, if the route is pushed by name and params this won't work;
+    // this only works when the route params is pushed with name, path and query property,
+    // if path or query are omitted from the options, it doesn't work
+    $route: async function(cur) {
+      this.artist = cur.params.artist;
+      await this.updateArtistData(this.artist.id);
     }
   },
 

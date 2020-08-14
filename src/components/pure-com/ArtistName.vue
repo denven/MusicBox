@@ -13,7 +13,8 @@ import { getSearchResults } from "@/network/request";
 export default {
   name: "ArtistName",
   props: {
-    artist: { type: Object, default: () => ({ name: "", picUrl: "" }) }
+    artist: { type: Object, default: () => ({ name: "", picUrl: "" }) },
+    updateAvatar: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -35,23 +36,31 @@ export default {
 
       if (artists.length > 0) {
         this.arRequest = artists[0];
-        // console.log("Patching artist information:", this.artist);
+        console.log("Patching artist information:", this.artist);
       }
     },
 
     async viewDetail() {
-      if (!this.artist.picUrl) {
-        // console.log("No picUrl, need patching:", this.artist.picUrl);
+      console.log("view detail================", this.artist);
+      if (this.updateAvatar) {
+        console.log("view detail and update picUrl", this.artist);
         await this.getArtistDetail();
       } else {
         this.arRequest = this.artist;
       }
 
-      this.$router.push({
-        name: "ar-detail",
-        params: { artist: this.arRequest }
-      });
-      // }
+      // Note: name, path, params, query the 4 proerties in the push object must all be defined here
+      // if we push to the same route, and want parameters be persistant(can be passed) in params proerty
+      try {
+        await this.$router.push({
+          name: "ar-detail",
+          path: "/artists/detail",
+          query: { id: this.arRequest.id },
+          params: { artist: this.arRequest }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
 
@@ -59,7 +68,8 @@ export default {
     diableRoute() {
       // Let artistname be clickable in all the pages except ArtistDetail Page, as it navigates
       // to the same route in this page, and cannot be watched when using params to pass artist data
-      return this.$route.name === "ar-detail";
+      // return this.$route.name === "ar-detail";
+      return false;
     }
   }
 };

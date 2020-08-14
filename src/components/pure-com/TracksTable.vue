@@ -32,7 +32,6 @@
         <!-- 3: album -->
         <el-table-column prop="album" label="Album" width="220px">
           <!-- {{ scope.row.album.name }} -->
-
           <template slot-scope="scope">
             <AlbumName :album="scope.row.album" />
           </template>
@@ -40,7 +39,7 @@
         <!-- 4: artists -->
         <el-table-column prop="artists" label="Artist(s)" width="150px">
           <template slot-scope="scope">
-            <ArtistName v-for="(item, index) in scope.row.artists" :artist="item" :key="item.id">
+            <ArtistName v-for="(item, index) in scope.row.artists" :artist="item" :key="item.id" :updateAvatar="true">
               <span v-if="index < scope.row.artists.length - 1">,</span>
             </ArtistName>
           </template>
