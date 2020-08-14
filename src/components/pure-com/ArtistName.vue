@@ -1,50 +1,104 @@
 <template>
-	<span class="artist-name">
-		<span class="name"> {{ artist.name }}</span>
-		<img v-lazy="$helpers.getSmallPicture(artist.picUrl, 200)" alt="" />
-	</span>
+  <!-- To avoid vue warning of name undefined -->
+  <span class="artist-name" v-if="artist">
+    <span class="name" :class="{disabled: diableRoute}" @click="viewDetail"> {{ artist.name }}</span>
+    <slot class="slot"> </slot>
+    <img v-lazy="$helpers.getSmallPicture(artist.picUrl, 200)" alt="" />
+  </span>
 </template>
 
 <script>
-export default {
-	name: "AlbumName",
-	props: { artist: { type: Object } },
+import { getSearchResults } from "@/network/request";
 
-	// methods: {
-	// 	viewDetail(artist) {
-	// 		this.$router.push({ name: "ar-detail", params: { artist } });
-	// 	},
-	// },
+export default {
+  name: "ArtistName",
+  props: {
+    artist: { type: Object, default: () => ({ name: "", picUrl: "" }) }
+  },
+  data() {
+    return {
+      arRequest: {}
+      // diableRoute: false
+    };
+  },
+  methods: {
+    async getArtistDetail() {
+      let { data } = await getSearchResults({
+        type: 100, // search singers only
+        limit: 100,
+        keywords: this.artist.name
+      });
+
+      let artists = data.result.artists.filter(
+        item => item.name === this.artist.name && item.id === this.artist.id
+      );
+
+      if (artists.length > 0) {
+        this.arRequest = artists[0];
+        // console.log("Patching artist information:", this.artist);
+      }
+    },
+
+    async viewDetail() {
+      if (!this.artist.picUrl) {
+        // console.log("No picUrl, need patching:", this.artist.picUrl);
+        await this.getArtistDetail();
+      } else {
+        this.arRequest = this.artist;
+      }
+
+      this.$router.push({
+        name: "ar-detail",
+        params: { artist: this.arRequest }
+      });
+      // }
+    }
+  },
+
+  computed: {
+    diableRoute() {
+      // Let artistname be clickable in all the pages except ArtistDetail Page, as it navigates
+      // to the same route in this page, and cannot be watched when using params to pass artist data
+      return this.$route.name === "ar-detail";
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .artist-name {
-	position: relative;
-	.name {
-		padding-right: 5px;
-		color: #517eaf;
-		// cursor: pointer;
-	}
+  position: relative;
+  .name {
+    color: #517eaf;
+  }
 
-	img {
-		width: 200px;
-		height: 200px;
-		display: none;
-	}
+  // .slot {
+  // 	padding-right: 5px;
+  // }
 
-	&:hover {
-		.name {
-			text-decoration: underline;
-		}
-		img {
-			display: block;
-			position: absolute;
-			bottom: -202px;
-			left: 0;
-			z-index: 100;
-			border-radius: 4px;
-		}
-	}
+  img {
+    width: 200px;
+    height: 200px;
+    display: none;
+  }
+
+  &:hover {
+    .name {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .disabled {
+      text-decoration: none !important;
+      cursor: default;
+    }
+    img {
+      display: block;
+      position: absolute;
+      bottom: -202px;
+      left: 0;
+      z-index: 100;
+      border-radius: 4px;
+    }
+  }
 }
 </style>
