@@ -14,6 +14,7 @@ export default new Vuex.Store({
 		},
 		// for search results
 		curSearchTab: "tracks",
+		videoPlaying: false,
 	},
 	mutations: {},
 	actions: {},

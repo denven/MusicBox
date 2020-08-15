@@ -129,7 +129,12 @@ export default {
 
   async created() {
     const mvid = this.$route.query.id;
+    this.$store.state.videoPlaying = true; // this will notice audio to stop play
     await this.getMvInfo(mvid);
+  },
+
+  destroyed() {
+    this.$store.state.videoPlaying = false;
   },
 
   watch: {
