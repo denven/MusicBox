@@ -41,9 +41,7 @@ export default {
     },
 
     async viewDetail() {
-      console.log("view detail================", this.artist);
       if (this.updateAvatar) {
-        console.log("view detail and update picUrl", this.artist);
         await this.getArtistDetail();
       } else {
         this.arRequest = this.artist;

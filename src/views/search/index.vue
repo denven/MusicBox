@@ -42,7 +42,6 @@
         <template slot="empty">
           <p>Requesting Data...</p>
         </template>
-
         <!-- <span style="margin-left: 10px">{{ scope.row.name }}</span> -->
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Track">
@@ -99,8 +98,10 @@
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="name" label="Name">
           <template slot-scope="scope">
-            <i class="iconfont icon-gedan" @click="viewPlaylist(scope.row)"> </i>
-            <span class="pl-name">{{ scope.row.name }}</span>
+            <span @click="viewPlaylist(scope.row)">
+              <i class="iconfont icon-gedan"></i> <span class="pl-name">{{ scope.row.name }}</span>
+            </span>
+
           </template>
         </el-table-column>
         <el-table-column prop="creator" label="Creator" width="160px"></el-table-column>
@@ -250,7 +251,6 @@ export default {
       } else if (typeName === "videos") {
         this.videos.count = data.result.mvs.length;
         this.videos.data = data.result.mvs.map(mv => {
-          console.log(mv);
           let { id, name, artists, cover, briefDesc, duration, playCount } = mv;
           // let artistsNames = artists.reduce((allNames, item) => {
           // 	allNames = allNames === "" ? item.name : allNames + "," + item.name;
@@ -374,12 +374,12 @@ export default {
     if (this.$store.state.curSearchTab != "tracks") {
       this.activeTab = this.$store.state.curSearchTab;
     }
-  },
-
-  destroyed() {
-    // Let the initial search tab keep "tracks" search by default
-    this.$store.state.curSearchTab = "tracks";
   }
+
+  // destroyed() {
+  //   // Let the initial search tab keep "tracks" search by default
+  //   this.$store.state.curSearchTab = "tracks";
+  // }
 };
 </script>
 
