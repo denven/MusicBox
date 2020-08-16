@@ -13,7 +13,8 @@
             <div class="creator">
               <img v-lazy="$helpers.getSmallPicture(creator.avatarUrl, 30)" alt="" class="avatar" />
               <span class="username">{{ creator.nickname }}</span>
-              <span class="date"> created at {{ $helpers.formatTime(info.createTime) }}</span>
+              <span class="date" v-if="info.createTime">
+                {{ `created at ` + $helpers.formatTime(info.createTime, 'date') }}</span>
             </div>
             <GroupButtons :subCount="$helpers.encloseNumber(info.subscribedCount)"
               :shareCount="$helpers.encloseNumber(info.shareCount)"
@@ -214,6 +215,11 @@ export default {
         img {
           border-radius: 50%;
         }
+
+        .username {
+          color: #517eaf;
+        }
+
         span {
           padding-left: 10px;
         }

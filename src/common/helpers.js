@@ -23,7 +23,9 @@ const convertSecToMinutes = (duration) => {
 	return `${min}:${sec}`;
 };
 
-const formatTime = (timestamp) => {
+const formatTime = (timestamp, fmt) => {
+	if (isNaN(timestamp)) return "";
+
 	const options = {
 		year: "numeric",
 		month: "2-digit",
@@ -32,6 +34,17 @@ const formatTime = (timestamp) => {
 		minute: "2-digit",
 		second: "2-digit",
 	};
+
+	if (fmt === "year") {
+		return new Date(timestamp).toLocaleDateString("en-US", options).slice(6, 10);
+	}
+
+	if (fmt === "date") {
+		return new Date(timestamp).toLocaleDateString("en-US", options).slice(0, 10);
+	}
+	if (fmt === "time") {
+		return new Date(timestamp).toLocaleDateString("en-US", options).slice(12);
+	}
 
 	return new Date(timestamp).toLocaleDateString("en-US", options);
 };

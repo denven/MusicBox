@@ -10,7 +10,7 @@
         <div class="leaderboard-details">
           <h3 class="name">{{ curLb.name }}</h3>
           <div class="update-time">
-            <i class="iconfont icon-clock2">{{ `最后更新: ` + $helpers.formatTime(curLb.updateTime) }}
+            <i class="iconfont icon-clock2">{{ `最后更新: ` + $helpers.formatTime(curLb.updateTime, 'date') }}
               {{ $helpers.encloseNumber(curLb.updateFrequency) }}
             </i>
           </div>

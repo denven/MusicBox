@@ -14,7 +14,8 @@
                 <ArtistName :artist="info.artist" />
               </span>
             </div>
-            <div class="date" v-if="info.publishTime">Published at: {{ $helpers.formatTime(info.publishTime) }}</div>
+            <div class="date" v-if="info.publishTime">Published at: {{ $helpers.formatTime(info.publishTime, 'date') }}
+            </div>
             <div class="company" v-if="info.company">Company: {{ info.company }}</div>
             <GroupButtons :subCount="$helpers.encloseNumber(info.likedCount)"
               :shareCount="$helpers.encloseNumber(info.shareCount)"
@@ -61,7 +62,7 @@
             <img v-lazy="$helpers.getSmallPicture(al.picUrl, 80)" alt="" />
             <div class="source">
               <span class="name">{{ al.name }}</span>
-              <span class="date">Date: {{ $helpers.formatTime(al.publishTime).slice(0, 10) }}</span>
+              <span class="date">Date: {{ $helpers.formatTime(al.publishTime, 'date') }}</span>
               <span class="company" v-if="al.company">Company: {{ al.company }}</span>
             </div>
           </div>

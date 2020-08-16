@@ -242,9 +242,7 @@ export default {
             artists,
             album,
             mvid,
-            publishTime: this.$helpers
-              .formatTime(album.publishTime)
-              .slice(6, 10),
+            publishTime: this.$helpers.formatTime(album.publishTime, "year"),
             duration: this.$helpers.convertMsToMinutes(duration)
           };
         });
