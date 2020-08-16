@@ -54,7 +54,7 @@
 			</div> -->
       <div class="related" v-if="otherAlbums.length > 0">
         <div class="title">
-          Other Albums from <span> {{ info.arName }}</span>
+          Other Albums from <span> {{ info.artist.name }}</span>
         </div>
         <div class="other-als">
           <div class="one-al" v-for="al in otherAlbums" :key="al.id" @click="gotoRoute(al.id)">
