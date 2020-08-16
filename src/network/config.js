@@ -1,4 +1,5 @@
-import * as axiosLib from "axios";
+// import * as axiosLib from "axios";
+const axiosLib = require("axios");
 
 import { Loading } from "element-ui";
 

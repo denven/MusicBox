@@ -1,12 +1,18 @@
-import Vue from "vue";
+// import Vue from "vue";
+// import router from "./router";
+// import vueLazyload from "vue-lazyload";
+// import ElementUI from "element-ui";
+
+const Vue = require("vue");
+const vueLazyload = require("vue-lazyload");
+const ElementUI = require("element-ui");
+
 import App from "./App.vue";
-import router from "./router";
 import store from "./store";
-import vueLazyload from "vue-lazyload";
+import router from "./router";
 
 import "@/assets/styles/reset.scss";
-import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
+// import "element-ui/lib/theme-chalk/index.css";
 
 import helpers from "@/common/helpers";
 import session from "@/common/session";

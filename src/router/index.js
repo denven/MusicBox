@@ -1,5 +1,8 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+// import Vue from "vue";
+// import VueRouter from "vue-router";
+
+const Vue = require("vue");
+const VueRouter = require("vue-router");
 
 // for lazy loading
 // this generates a separate chunk (componnet.[hash].js) for this route
