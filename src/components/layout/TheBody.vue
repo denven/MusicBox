@@ -4,16 +4,16 @@
     <ul class="nav" v-if="bShowMenu">
       <!-- Use iconfont icons -->
       <li class="nav-item">
-        <!-- 0.Discover Music contains playlists, albums, leadboards -->
+        <!-- 0.Discover Music contains playlists, albums, leaderboards -->
         <router-link to="/featured">
           <i class="iconfont icon-rebang">Featured</i>
         </router-link>
       </li>
 
-      <!-- 1. Leadboards by category id -->
+      <!-- 1. Leaderboards by category id -->
       <li class="nav-item">
-        <router-link to="/leadboards">
-          <i class="iconfont icon-paihangbang1">Leadboards</i>
+        <router-link to="/leaderboards">
+          <i class="iconfont icon-paihangbang1">Leaderboards</i>
         </router-link>
       </li>
 

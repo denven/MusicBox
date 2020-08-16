@@ -8,9 +8,11 @@
           <DiscCard :picUrl="info.blurPicUrl" :albumId="info.id" />
           <div class="al-info">
             <h3 class="name">{{ info.name }}</h3>
-            <div class="artist">
-              <img class="avatar" v-lazy="$helpers.getSmallPicture(info.avatarUrl, 30)" alt="" />
-              <span class="ar-name"> {{ info.arName }}</span>
+            <div class="artist" v-if="info.artist">
+              <img class="avatar" v-lazy="$helpers.getSmallPicture(info.artist.picUrl, 30)" alt="" />
+              <span class="ar-name">
+                <ArtistName :artist="info.artist" />
+              </span>
             </div>
             <div class="date" v-if="info.publishTime">Published at: {{ $helpers.formatTime(info.publishTime) }}</div>
             <div class="company" v-if="info.company">Company: {{ info.company }}</div>
@@ -76,6 +78,7 @@ import {
   getArtistAlbums
 } from "@/network/request";
 import DiscCard from "@/components/pure-com/DiscCard";
+import ArtistName from "@/components/pure-com/ArtistName";
 import GroupButtons from "@/components/pure-com/GroupButtons";
 import TracksTable from "@/components/pure-com/TracksTable";
 import Comment from "@/components/pure-com/Comment";
@@ -95,6 +98,7 @@ export default {
 
   components: {
     DiscCard,
+    ArtistName,
     GroupButtons,
     TracksTable,
     Comment,
@@ -125,14 +129,15 @@ export default {
       } = data.album;
 
       const { commentCount, likedCount, shareCount } = info;
-      const { name: arName, picUrl: avatarUrl } = artist;
+      // const { name: arName, picUrl: avatarUrl } = artist;
 
       this.info = {
         id,
         name,
         blurPicUrl,
-        arName,
-        avatarUrl,
+        // arName,
+        // avatarUrl,
+        artist,
         company,
         publishTime,
         commentCount,

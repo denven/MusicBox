@@ -1,13 +1,13 @@
 <template>
-  <div class="leadboards" ref="wrapper">
+  <div class="leaderboards" ref="wrapper">
     <!-- Page Left Part contains three parts vertically -->
-    <div class="leadboard-wrapper">
+    <div class="leaderboard-wrapper">
       <!-- Left Top Part: Playlist information -->
-      <div class="leadboard-detail" v-if="leadboards.length > 0">
+      <div class="leaderboard-detail" v-if="leaderboards.length > 0">
         <div class="img-wrapper">
-          <img class="leadboard-image" v-lazy="$helpers.getSmallPicture(curLb.coverImgUrl, 110)" alt="" />
+          <img class="leaderboard-image" v-lazy="$helpers.getSmallPicture(curLb.coverImgUrl, 110)" alt="" />
         </div>
-        <div class="leadboard-details">
+        <div class="leaderboard-details">
           <h3 class="name">{{ curLb.name }}</h3>
           <div class="update-time">
             <i class="iconfont icon-clock2">{{ `最后更新: ` + $helpers.formatTime(curLb.updateTime) }}
@@ -49,11 +49,11 @@
     </div>
 
     <!-- Page Right Part -->
-    <div class="leadboard-list">
-      <div v-for="(item, index) in leadboards" class="leadboard-card" @click="setSelected(index)"
+    <div class="leaderboard-list">
+      <div v-for="(item, index) in leaderboards" class="leaderboard-card" @click="setSelected(index)"
         :class="{ 'active-card': index == curSelected }" :key="item.updateTime">
         <img class="leadbaord-cover" v-lazy="$helpers.getSmallPicture(item.coverImgUrl, 50)" alt="" />
-        <div class="leadboard-desc">
+        <div class="leaderboard-desc">
           <div class="name">{{ item.name }}</div>
           <div class="update-freq">{{ item.updateFrequency }}</div>
         </div>
@@ -64,7 +64,7 @@
 
 <script>
 import {
-  getAllLeadboards,
+  getAllLeaderboards,
   getPlaylistDetail,
   getPlaylistComments
 } from "@/network/request";
@@ -74,10 +74,10 @@ import Comment from "@/components/pure-com/Comment";
 export default {
   data() {
     return {
-      leadboards: [], // all leadboards
+      leaderboards: [], // all leaderboards
       curSelected: 15, // the 15th is US billboard by default
-      curLb: {}, // current selected leadboard
-      lbTracks: [], // tracks in selected leadboard
+      curLb: {}, // current selected leaderboard
+      lbTracks: [], // tracks in selected leaderboard
       comments: []
     };
   },
@@ -90,13 +90,13 @@ export default {
   methods: {
     setSelected(index) {
       this.curSelected = index;
-      this.curLb = this.leadboards[index];
+      this.curLb = this.leaderboards[index];
       this.$nextTick(() => {
         this.$refs.wrapper.scrollIntoView({ behavior: "smooth" });
       });
     },
 
-    async getLeadboardDetail(id) {
+    async getLeaderboardDetail(id) {
       let { data } = await getPlaylistDetail({ id });
       let { shareCount, commentCount, playCount } = data.playlist;
 
@@ -110,7 +110,7 @@ export default {
         this.lbTracks.push({ id, name, duration, album, artists, coverUrl });
       });
 
-      // Add more information to current leadboard (as the results from getAllLeadboards()
+      // Add more information to current leaderboard (as the results from getAllLeaderboards()
       // request doesn't contain the following attributes)
       this.curLb = {
         ...this.curLb,
@@ -121,7 +121,7 @@ export default {
       };
     },
 
-    async getLeadboardComments(id) {
+    async getLeaderboardComments(id) {
       let { data } = await getPlaylistComments({ id });
       this.comments = data.comments;
     }
@@ -129,13 +129,13 @@ export default {
 
   watch: {
     async curSelected() {
-      await this.getLeadboardDetail(this.curLb.id);
-      await this.getLeadboardComments(this.curLb.id);
+      await this.getLeaderboardDetail(this.curLb.id);
+      await this.getLeaderboardComments(this.curLb.id);
     }
   },
 
   async created() {
-    let { data } = await getAllLeadboards();
+    let { data } = await getAllLeaderboards();
 
     data.list.forEach(list => {
       let {
@@ -154,7 +154,7 @@ export default {
         ToplistType
       } = list;
 
-      this.leadboards.push({
+      this.leaderboards.push({
         updateFrequency,
         trackUpdateTime,
         updateTime,
@@ -174,16 +174,16 @@ export default {
     // The featured page route is pushed with `params` not `query` option
     let routeLdId = this.$route.params.id || 0;
 
-    for (const index in this.leadboards) {
-      if (this.leadboards[index].id === +routeLdId) {
+    for (const index in this.leaderboards) {
+      if (this.leaderboards[index].id === +routeLdId) {
         this.curSelected = index;
         break;
       }
     }
 
-    this.curLb = this.leadboards[this.curSelected];
-    await this.getLeadboardDetail(this.curLb.id);
-    await this.getLeadboardComments(this.curLb.id);
+    this.curLb = this.leaderboards[this.curSelected];
+    await this.getLeaderboardDetail(this.curLb.id);
+    await this.getLeaderboardComments(this.curLb.id);
   }
 };
 </script>
@@ -192,17 +192,17 @@ export default {
 @import "@/assets/styles/mixin.scss";
 @import "@/assets/styles/variables.scss";
 
-.leadboards {
+.leaderboards {
   padding-top: 20px;
   @include flex-align(row, flex-start, flex-start);
 }
 
 // Left Part -- Top area styles
-.leadboard-wrapper {
+.leaderboard-wrapper {
   flex: 1;
   min-width: 800px;
 
-  .leadboard-detail {
+  .leaderboard-detail {
     width: 800px;
     margin: 0 auto;
     @include flex-align(row, flex-start);
@@ -214,7 +214,7 @@ export default {
     margin-right: 15px;
   }
 
-  .leadboard-details {
+  .leaderboard-details {
     height: 110px;
     padding: 3px 0;
     text-align: left;
@@ -259,7 +259,7 @@ export default {
 }
 
 // Right Part styles
-.leadboard-list {
+.leaderboard-list {
   width: 280px;
 
   padding-bottom: 20px;
@@ -269,7 +269,7 @@ export default {
     background-color: rgba(0, 0, 0, 0.1);
   }
 
-  .leadboard-card {
+  .leaderboard-card {
     @include flex-align(row, flex-start);
     margin-bottom: 10px;
     cursor: pointer;
@@ -281,7 +281,7 @@ export default {
       padding-right: 10px;
     }
 
-    .leadboard-desc {
+    .leaderboard-desc {
       padding: 5px 0;
       height: 50px;
       font-size: 14px;

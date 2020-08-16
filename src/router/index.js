@@ -8,7 +8,7 @@ const showFeatured = () => import(/* webpackChunkName: "featured" */ "@/views/fe
 
 const showSearchResults = () => import(/* webpackChunkName: "search" */ "@/views/search/");
 
-const showLeadboards = () => import(/* webpackChunkName: "leadboards" */ "@/views/leadboards/");
+const showLeaderboards = () => import(/* webpackChunkName: "leaderboards" */ "@/views/leaderboards/");
 
 const showPlaylists = () => import(/* webpackChunkName: "playlists" */ "@/views/playlists/");
 const showPlaylistDetail = () => import(/* webpackChunkName: "playlists-detail" */ "@/views/playlists/PlaylistDetail");
@@ -76,9 +76,9 @@ const routes = [
 		component: showAllAlbums,
 	},
 	{
-		path: "/leadboards",
-		name: "Leadboards",
-		component: showLeadboards,
+		path: "/leaderboards",
+		name: "Leaderboards",
+		component: showLeaderboards,
 	},
 	{
 		path: "/podcasts",

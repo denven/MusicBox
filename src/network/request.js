@@ -14,11 +14,11 @@ export const getFeaturedList = () => axios.get(`/personalized?limit=15`);
 // 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
 export const getSearchResults = (params) => axios.get(`/search`, { params: params });
 
-// Leadboard Requests
-// get leadboards, use `/playlislt/detail?id=xxxx` instead of `/toplist?id=xxxx`
-export const getAllLeadboards = () => axios.get(`/toplist`);
+// Leaderboard Requests
+// get leaderboards, use `/playlislt/detail?id=xxxx` instead of `/toplist?id=xxxx`
+export const getAllLeaderboards = () => axios.get(`/toplist`);
 
-// Note: leadboard detail and comments are fetched by playlist APIs
+// Note: leaderboard detail and comments are fetched by playlist APIs
 export const getPlaylistDetail = (params) => axios.get(`/playlist/detail`, { params: params });
 export const getPlaylistComments = (params) => axios.get(`/comment/playlist`, { params: params });
 

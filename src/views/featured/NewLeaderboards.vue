@@ -1,11 +1,11 @@
 <template>
-  <div id="newleadboards" v-if="tableData.length > 0">
-    <SectionTitle :title="'Latest Leadboards'" :routePath="'/leadboards'">
+  <div id="newleaderboards" v-if="tableData.length > 0">
+    <SectionTitle :title="'Latest Leaderboards'" :routePath="'/leaderboards'">
       <i class="iconfont icon-paihangbang1"></i>
     </SectionTitle>
     <table class="el-table">
       <thead>
-        <th v-for="item in leadboards" :key="item.id">{{ item.name }}</th>
+        <th v-for="item in leaderboards" :key="item.id">{{ item.name }}</th>
       </thead>
       <tbody>
         <tr v-for="(rowData, rowIdx) in tableData" :key="rowIdx">
@@ -24,7 +24,7 @@
           </td>
         </tr>
         <tr v-if="tableData.length > 0">
-          <td class="viewAll" v-for="item in leadboards" :key="item.name">
+          <td class="viewAll" v-for="item in leaderboards" :key="item.name">
             <el-button size="small" type="danger" @click="gotoRoute(item.id)">View Full List</el-button>
           </td>
         </tr>
@@ -42,7 +42,7 @@ import { getPlaylistDetail } from "@/network/request";
 export default {
   data() {
     return {
-      leadboards: [],
+      leaderboards: [],
       tableData: []
     };
   },
@@ -54,11 +54,11 @@ export default {
 
   methods: {
     gotoRoute(id) {
-      this.$router.push({ name: "Leadboards", params: { id } });
+      this.$router.push({ name: "Leaderboards", params: { id } });
     }
   },
 
-  // leadboards ids: 60198, 180106, 11641012, 120001
+  // leaderboards ids: 60198, 180106, 11641012, 120001
   async created() {
     let timestamp = Date.now();
     let data = await Promise.all([
@@ -83,7 +83,7 @@ export default {
       return { id, name, desc, coverImgUrl, trackIds, tracks, playCount };
     });
 
-    this.leadboards = data;
+    this.leaderboards = data;
 
     for (let i = 0; i < 20; i++) {
       this.tableData.push([
@@ -110,10 +110,10 @@ export default {
       ]);
     }
 
-    this.leadboards[0].name = "Billboard(Weekly)";
-    this.leadboards[1].name = "UK Charts(Weekly)";
-    this.leadboards[2].name = "iTunes(Weekly)";
-    this.leadboards[3].name = "Hit FM Top(Weekly)";
+    this.leaderboards[0].name = "Billboard(Weekly)";
+    this.leaderboards[1].name = "UK Charts(Weekly)";
+    this.leaderboards[2].name = "iTunes(Weekly)";
+    this.leaderboards[3].name = "Hit FM Top(Weekly)";
   }
 };
 </script>
@@ -122,7 +122,7 @@ export default {
 @import "@/assets/styles/mixin.scss";
 @import "@/assets/styles/variables.scss";
 
-#newleadboards {
+#newleaderboards {
   .playlist {
     display: flex;
     span.no {
