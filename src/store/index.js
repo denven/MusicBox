@@ -18,7 +18,14 @@ export default new Vuex.Store({
 		curSearchTab: "tracks",
 		videoPlaying: false,
 	},
-	mutations: {},
+	mutations: {
+		updateSongInfo(state, song) {
+			state.song = song;
+		},
+		setVideoPlayingStatus(state, status) {
+			state.videoPlaying = status;
+		},
+	},
 	actions: {},
 	modules: {},
 });
