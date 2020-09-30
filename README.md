@@ -4,7 +4,9 @@ A free music web app(desktop version) implemented by Vue.js, mimic of NetEase Mu
 
 ## Deployment
 
-AWS EC2: http://ec2-54-191-119-231.us-west-2.compute.amazonaws.com:5600/
+AWS EC2: http://ec2-54-213-26-33.us-west-2.compute.amazonaws.com:5600/
+
+> Reminder: This address may not be available due to an unsual AWS EC2 instance failure during these days.
 
 ## Stack
 
