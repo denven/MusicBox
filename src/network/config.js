@@ -11,7 +11,7 @@ const axios = axiosLib.create({
 });
 
 axios.defaults.baseURL = `${process.env.VUE_APP_API_HOST}`;
-axios.defaults.timeout = 15000;
+axios.defaults.timeout = 10000;
 
 // Add interceptor before request
 axios.interceptors.request.use(insertLoader);

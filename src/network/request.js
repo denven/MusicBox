@@ -35,8 +35,9 @@ export const getSimilarPlaylists = (params) => axios.get("/related/playlist", { 
 
 // =================  Albums realted requests ================================================
 export const getNewAlbums = () => axios.get(`/album/newest`);
-export const getAllAlbums = (params) =>
-	axios.get(`/album/new`, { baseURL: `${process.env.VUE_APP_API_BACKUP}`, params: params });
+export const getAllAlbums = (params) => axios.get(`/album/new`, { params });
+//export const getAllAlbums = (params) =>
+//	axios.get(`/album/new`, { baseURL: `${process.env.VUE_APP_API_BACKUP}`, params: params });
 
 //专辑内容：包含了大部分页面需要的内容（含album/detail/dynamic的内容，因此没有必要再次请求dynamic内容）
 export const getAlbumTracks = (id) => axios.get(`/album`, { params: { id } });
